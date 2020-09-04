@@ -11,454 +11,504 @@ export class OrderComponent implements OnInit {
 
   items: Array<Object> = [
     {
-      "id": 3569,
-      "name": "Mini Taro balls",
-      "image": "http://placehold.it/200x200",
-      "description": "Esse quis aliqua dolor anim adipisicing pariatur veniam velit enim amet. Ex sint ullamco veniam esse ex Lorem anim voluptate esse. Fugiat Lorem nisi Lorem exercitation dolor tempor amet ut. Aliqua exercitation consequat mollit tempor ea sunt id labore nisi fugiat mollit. Incididunt est proident officia anim voluptate reprehenderit nisi nostrud.\r\n",
+      "id": 3486,
+      "name": "Taro",
+      "image": "http://placehold.it/180x180",
+      "description": "Velit labore voluptate reprehenderit excepteur est sint ipsum. Minim irure cillum sit magna excepteur officia ullamco elit ullamco. Labore amet pariatur proident in sit anim nostrud ad eu esse excepteur anim commodo exercitation. Amet fugiat tempor laboris elit et nisi occaecat sunt laboris ipsum in deserunt. Minim et culpa anim aliquip pariatur consequat. Deserunt duis elit voluptate irure eu ad laborum eu est. Nisi voluptate Lorem voluptate commodo minim culpa sit.\r\n",
+      "cost": 3.7,
+      "package_info": "1.2kg/bag 12bags/ctn",
+      "sku": 7,
+      "unit": "bag"
+    },
+    {
+      "id": 7818,
+      "name": "Refined Sugar",
+      "image": "http://placehold.it/180x180",
+      "description": "Esse ut dolore consectetur non ex. Eiusmod labore excepteur sint ea nulla cupidatat nulla minim. Sit incididunt sunt ea ea esse deserunt nulla tempor tempor enim laboris magna. Veniam est excepteur laborum incididunt veniam aliquip cupidatat tempor et Lorem reprehenderit dolor sint culpa. Nostrud elit sit magna esse mollit pariatur cupidatat proident et exercitation dolor proident ullamco ullamco. Ex consequat nulla nisi et proident sint labore labore ut reprehenderit veniam nostrud aute. Mollit enim deserunt in enim reprehenderit et aliqua.\r\n",
+      "cost": 1.5,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 5,
+      "unit": "bottle"
+    },
+    {
+      "id": 6426,
+      "name": "Q Mochi - Brown Sugar ",
+      "image": "http://placehold.it/180x180",
+      "description": "Aliquip deserunt Lorem quis aliqua minim tempor Lorem veniam velit minim culpa. Non voluptate magna Lorem in fugiat est sit ad aute deserunt. Anim et minim pariatur et ipsum minim excepteur enim tempor ipsum dolore deserunt consequat sint. Dolor ipsum pariatur laborum ea enim aute magna commodo dolore est occaecat ipsum fugiat consequat. Irure cupidatat voluptate dolor aliquip cupidatat id laborum nostrud id. Anim eiusmod non minim duis do elit eiusmod anim elit consequat labore elit proident laborum. Aliquip voluptate in irure et nulla sunt non in ullamco veniam sit nisi.\r\n",
+      "cost": 2.6,
+      "package_info": "1.2kg/bag 12bags/ctn",
+      "sku": 3,
+      "unit": "bottle"
+    },
+    {
+      "id": 3254,
+      "name": "Barley",
+      "image": "http://placehold.it/180x180",
+      "description": "Quis eiusmod tempor qui proident laboris aute. Consequat nostrud ullamco enim commodo eu minim. Non sunt fugiat magna fugiat dolore amet et minim ea culpa nulla. Quis consectetur laboris dolor mollit quis aute. Incididunt voluptate ad ex cillum sunt pariatur. Est incididunt velit ea do ad sunt ipsum. Reprehenderit id nulla fugiat excepteur cillum veniam officia et minim laboris pariatur incididunt.\r\n",
+      "cost": 4.2,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 2,
+      "unit": "bottle"
+    },
+    {
+      "id": 9206,
+      "name": "Lemon Syrup",
+      "image": "http://placehold.it/300x300",
+      "description": "Anim qui labore cillum deserunt fugiat enim pariatur labore esse aliqua veniam eiusmod. Amet consequat fugiat et est magna minim mollit adipisicing reprehenderit et occaecat non. Ipsum esse nisi enim ad cillum duis dolor eu adipisicing incididunt tempor adipisicing adipisicing.\r\n",
+      "cost": 2,
+      "package_info": "1.2kg/bag 12bags/ctn",
+      "sku": 6,
+      "unit": "box"
+    },
+    {
+      "id": 5265,
+      "name": "Passion Fruit Syrup",
+      "image": "http://placehold.it/300x300",
+      "description": "Eu eu nostrud eu Lorem consequat irure ea proident cupidatat. Mollit qui consectetur exercitation incididunt. Aliqua cupidatat non in in cillum irure elit elit magna eiusmod ex velit. Laborum veniam Lorem ipsum velit fugiat amet ad excepteur.\r\n",
+      "cost": 3.5,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 6,
+      "unit": "bottle"
+    },
+    {
+      "id": 9819,
+      "name": "Brown Sugar & Peanut Mochi",
+      "image": "https://loremflickr.com/200/200",
+      "description": "Proident deserunt reprehenderit aliqua nulla duis fugiat ipsum consectetur Lorem irure dolor id. Officia tempor ut irure et adipisicing cillum id non. Et laboris quis deserunt laboris ad Lorem ad culpa duis incididunt. Et elit officia dolor sunt et aliquip. Quis incididunt id ad cillum non reprehenderit exercitation nulla commodo ipsum deserunt aliquip. Amet do nostrud elit dolore. Nostrud non dolore sint tempor id enim.\r\n",
+      "cost": 3.3,
+      "package_info": "1kg/bag 6bags/ctn",
+      "sku": 1,
+      "unit": "bag"
+    },
+    {
+      "id": 1018,
+      "name": "Brown Sugar & Sesame Mochi",
+      "image": "http://placehold.it/180x180",
+      "description": "Voluptate ullamco dolore aliquip tempor proident dolore tempor. Cillum aliqua ipsum consectetur esse cillum sit commodo sunt anim. Deserunt sit aliquip Lorem ad in nostrud. Occaecat ipsum consectetur exercitation minim.\r\n",
+      "cost": 1.5,
+      "package_info": "1.2kg/bag 12bags/ctn",
+      "sku": 5,
+      "unit": "bottle"
+    },
+    {
+      "id": 1751,
+      "name": "Brown Sugar & Peanut Mochi",
+      "image": "http://placehold.it/180x180",
+      "description": "Dolor incididunt sunt ut ipsum proident amet officia exercitation dolore sint ipsum. In consequat occaecat consequat qui voluptate non ad velit elit dolore. Irure esse et id tempor ex magna voluptate nostrud sit est minim aliquip. Deserunt elit pariatur mollit eu excepteur reprehenderit mollit voluptate veniam aliqua aliqua cupidatat non duis. Dolor fugiat mollit anim non dolore labore nulla. Excepteur nostrud Lorem irure cupidatat consequat voluptate id consectetur duis. Mollit dolore enim sit Lorem consectetur anim.\r\n",
+      "cost": 2.6,
+      "package_info": "1kg/bag 6bags/ctn",
+      "sku": 5,
+      "unit": "box"
+    },
+    {
+      "id": 9139,
+      "name": "Mung Bean Cake",
+      "image": "https://picsum.photos/200/200",
+      "description": "Et incididunt magna deserunt culpa nulla laborum laboris anim commodo consectetur minim. Adipisicing aliquip enim pariatur quis minim ea sint mollit voluptate duis excepteur proident. Sint velit dolor nisi reprehenderit qui.\r\n",
+      "cost": 3.7,
+      "package_info": "1kg/bag 6bags/ctn",
+      "sku": 7,
+      "unit": "bag"
+    },
+    {
+      "id": 3791,
+      "name": "Refined Sugar",
+      "image": "https://picsum.photos/200/200",
+      "description": "Nisi mollit nostrud pariatur sit aliquip aliqua aliqua labore voluptate do. Anim ea nostrud nisi esse ad laboris officia consectetur excepteur ea est. Qui velit ut excepteur id incididunt laboris mollit dolor deserunt enim officia mollit. Tempor deserunt consequat occaecat pariatur ea elit ea veniam nostrud mollit qui commodo cillum.\r\n",
+      "cost": 1.5,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 6,
+      "unit": "box"
+    },
+    {
+      "id": 3252,
+      "name": "Refined Sugar",
+      "image": "https://loremflickr.com/200/200",
+      "description": "Consectetur ullamco nostrud non fugiat duis dolore quis aute incididunt elit aliqua consectetur. Velit pariatur qui sit eu. Labore est minim id ad ea consequat fugiat pariatur reprehenderit voluptate ut quis in ad. Aliqua ex occaecat cupidatat nostrud reprehenderit.\r\n",
       "cost": 4.2,
       "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 6
+      "sku": 1,
+      "unit": "box"
     },
     {
-      "id": 1838,
-      "name": "Q Mochi - Original",
+      "id": 1293,
+      "name": "Raw Soy Milk",
+      "image": "http://placehold.it/180x180",
+      "description": "Pariatur ullamco occaecat qui sit non incididunt laboris cillum. Non reprehenderit aliquip nulla nostrud. Ipsum duis proident pariatur voluptate sit veniam officia in aute velit culpa dolore Lorem.\r\n",
+      "cost": 3.3,
+      "package_info": "1.2kg/bag 12bags/ctn",
+      "sku": 6,
+      "unit": "bag"
+    },
+    {
+      "id": 7675,
+      "name": "Passion Fruit Syrup",
       "image": "https://loremflickr.com/200/200",
-      "description": "Voluptate adipisicing qui proident exercitation nulla in consectetur cillum velit commodo. Culpa ullamco et sunt incididunt sunt exercitation adipisicing sint in adipisicing fugiat. Do culpa eu culpa incididunt laborum nisi irure reprehenderit. Esse aliquip cupidatat do exercitation veniam reprehenderit id sit officia amet minim nisi ex sit.\r\n",
+      "description": "Excepteur id consectetur consectetur sit irure cupidatat pariatur ullamco culpa consectetur occaecat elit. Occaecat duis labore occaecat elit aliquip duis velit qui qui. Tempor sunt elit cillum aliquip anim dolore elit incididunt quis culpa minim adipisicing excepteur. Labore incididunt veniam est dolore occaecat anim minim irure ullamco. Sunt est elit velit magna amet magna anim eiusmod mollit tempor tempor sit sint minim. Occaecat laborum et sunt nisi cupidatat ut officia exercitation do consectetur dolore ut ex. Occaecat nulla ex occaecat ut consectetur aliqua anim consectetur est fugiat laborum excepteur nostrud duis.\r\n",
       "cost": 2,
       "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 5
+      "sku": 2,
+      "unit": "box"
     },
     {
-      "id": 1647,
+      "id": 7385,
       "name": "Rice balls",
       "image": "http://placehold.it/300x300",
-      "description": "Nostrud cupidatat consectetur culpa est laboris velit qui ut excepteur id incididunt proident. Culpa enim amet amet velit commodo occaecat est voluptate aliqua qui eu. Exercitation anim in fugiat elit irure. Aliqua labore cupidatat nostrud qui ea consequat anim deserunt proident velit consequat id enim. Officia elit proident magna velit occaecat est dolore dolore ea quis duis. Eiusmod minim sunt pariatur ullamco. Ex dolore laborum exercitation in veniam id labore.\r\n",
-      "cost": 2,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 1
-    },
-    {
-      "id": 3114,
-      "name": "Q Mochi - Brown Sugar ",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Sint sunt ea dolore amet labore culpa velit nulla veniam nisi aliqua id. Laboris aliqua reprehenderit voluptate aute nisi sint voluptate qui. Voluptate sunt magna nisi elit elit amet aliquip pariatur dolor ullamco. Occaecat ad veniam cupidatat amet minim excepteur aliqua consectetur irure. Quis adipisicing velit reprehenderit commodo eiusmod eiusmod consequat culpa non. Reprehenderit do esse eiusmod eu aute consectetur ad.\r\n",
-      "cost": 1.5,
-      "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 4
-    },
-    {
-      "id": 1443,
-      "name": "Barley",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Consectetur laborum cillum amet labore ut est officia voluptate irure consequat cillum elit laboris. Laboris enim aliqua adipisicing velit anim. Ullamco anim enim laboris sit. Anim enim exercitation qui fugiat esse mollit culpa deserunt elit cillum culpa. Eu irure irure laborum laborum nostrud proident et esse ea do.\r\n",
-      "cost": 3.7,
-      "package_info": "1kg/bag 6bags/ctn",
-      "sku": 5
-    },
-    {
-      "id": 3124,
-      "name": "Raw Soy Milk",
-      "image": "http://placehold.it/180x180",
-      "description": "Eu fugiat magna laborum aute nostrud esse nostrud. Adipisicing esse excepteur exercitation est enim voluptate do ipsum excepteur fugiat anim enim adipisicing. Consequat aute occaecat voluptate sunt dolor.\r\n",
-      "cost": 1.5,
+      "description": "Amet ea cillum ullamco aliquip enim adipisicing sint irure aliquip deserunt proident. Esse ipsum veniam excepteur laboris consectetur. Labore veniam anim consectetur quis ea ea amet incididunt do nisi. Exercitation et consequat magna eiusmod sunt aliquip dolore laborum laboris adipisicing sit. Eiusmod adipisicing ullamco laboris ut qui dolore nulla nulla sit laboris est aute dolore.\r\n",
+      "cost": 3.3,
       "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 7
+      "sku": 1,
+      "unit": "bag"
     },
     {
-      "id": 8969,
+      "id": 7400,
       "name": "Passion Fruit Syrup",
       "image": "https://picsum.photos/200/200",
-      "description": "Eu magna ipsum sit deserunt pariatur culpa nisi adipisicing proident. Qui veniam ipsum ex et. Minim mollit magna velit excepteur amet velit sit. Occaecat ea nostrud mollit enim aliquip veniam veniam Lorem exercitation nisi ad aute aute. Aute do elit eiusmod laboris ullamco aute esse incididunt dolor sunt Lorem exercitation. Sit nulla ut ut nulla ea excepteur deserunt proident nostrud Lorem magna in aliqua sit.\r\n",
+      "description": "Nulla veniam proident eiusmod commodo occaecat amet commodo incididunt. Do magna incididunt id nostrud nostrud amet non fugiat nostrud tempor cupidatat nostrud. Ea tempor aute ullamco reprehenderit fugiat aute minim id pariatur veniam duis laborum. Culpa eiusmod eu sit laborum enim velit minim aliqua.\r\n",
       "cost": 1.5,
       "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 5
+      "sku": 7,
+      "unit": "bag"
     },
     {
-      "id": 2705,
-      "name": "Q Mochi - Brown Sugar ",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Ullamco labore id dolor quis nulla excepteur ut pariatur deserunt deserunt. Exercitation elit dolor sit esse et anim eu proident. Sint enim dolor est esse aliquip officia cupidatat velit Lorem. Sint officia eiusmod officia ullamco do in quis consectetur proident sint ullamco. Dolore pariatur aute ea culpa ea laborum est nisi officia amet et consequat. Ea pariatur dolore exercitation aliquip velit in. Dolor elit est veniam aliqua ex proident cillum aliqua proident anim eiusmod ad anim officia.\r\n",
-      "cost": 2.6,
-      "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 2
-    },
-    {
-      "id": 2152,
-      "name": "Sweet potato Taro balls",
+      "id": 7425,
+      "name": "Mung Bean Cake",
       "image": "http://placehold.it/180x180",
-      "description": "Est exercitation do commodo sint nulla dolore dolore aute eu sint ad laboris. Nisi nostrud magna et Lorem. Id aliqua voluptate esse eiusmod. Ex commodo pariatur eiusmod ullamco. Pariatur veniam aliqua consectetur minim reprehenderit mollit cupidatat. Cupidatat officia incididunt voluptate magna duis id consequat dolore ullamco laborum. Fugiat nisi nostrud nisi ex cillum in minim nostrud.\r\n",
+      "description": "Cillum dolor aliquip exercitation veniam sint. Commodo consequat esse minim voluptate dolore et mollit enim. Ullamco voluptate exercitation non laboris exercitation incididunt eu et Lorem reprehenderit cupidatat. Laboris irure occaecat commodo ea aute culpa culpa labore aliqua ad est.\r\n",
       "cost": 1.5,
-      "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 3
+      "package_info": "1kg/bag 6bags/ctn",
+      "sku": 6,
+      "unit": "bag"
     },
     {
-      "id": 4951,
-      "name": "Lemon Syrup",
-      "image": "http://placehold.it/180x180",
-      "description": "Ut consectetur anim laborum amet aliqua ex pariatur. Enim officia sint excepteur irure excepteur. Labore commodo sunt nulla excepteur consectetur laboris quis aute. Magna aliqua mollit mollit labore nisi. Exercitation ut consectetur esse duis quis. Duis nisi exercitation Lorem culpa irure reprehenderit consequat incididunt id.\r\n",
-      "cost": 2.6,
-      "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 7
-    },
-    {
-      "id": 3369,
-      "name": "Sesame Rice Balls",
-      "image": "http://placehold.it/200x200",
-      "description": "Mollit duis commodo pariatur voluptate laboris nulla ad ullamco commodo sit voluptate ad veniam. Laboris officia ea exercitation in consequat sit et tempor ex esse fugiat. Anim amet commodo proident aute cillum reprehenderit adipisicing occaecat sint dolore occaecat.\r\n",
-      "cost": 3.5,
-      "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 3
-    },
-    {
-      "id": 7911,
-      "name": "Refined Sugar",
-      "image": "https://loremflickr.com/200/200",
-      "description": "In Lorem ut minim ullamco proident incididunt anim tempor ea eiusmod dolore nostrud esse anim. Pariatur nisi enim ad dolor pariatur ea ut nulla labore. Enim minim elit amet consequat sint laboris cupidatat. Tempor qui fugiat id officia laborum ipsum mollit eu eiusmod nostrud. Non cillum magna sint non quis ipsum incididunt mollit ut aliqua id. Enim sint ea deserunt ea ex adipisicing cillum ipsum labore non fugiat eu.\r\n",
-      "cost": 1.5,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 6
-    },
-    {
-      "id": 7455,
-      "name": "Q Mochi - Brown Sugar ",
-      "image": "http://placehold.it/300x300",
-      "description": "Velit consectetur sit amet ad ut velit. Est ipsum amet reprehenderit ad velit et ad do. Sunt ex laboris ex est id fugiat mollit eiusmod ipsum ea qui qui. Et aliqua sit aute sit. Occaecat occaecat ad officia commodo enim sunt incididunt consectetur laboris excepteur.\r\n",
-      "cost": 1.5,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 5
-    },
-    {
-      "id": 9220,
+      "id": 9876,
       "name": "Brown Sugar & Peanut Mochi",
       "image": "http://placehold.it/200x200",
-      "description": "Fugiat consectetur sit esse incididunt est aute ex ut tempor cillum sint occaecat. Est tempor eu adipisicing tempor laborum et tempor laborum sunt. Quis quis dolore consectetur consequat labore velit est Lorem non commodo. Ullamco incididunt reprehenderit irure anim minim incididunt ad magna commodo do consequat consectetur cupidatat. Non eiusmod veniam et id Lorem id labore nulla do minim consequat labore sit.\r\n",
-      "cost": 1.5,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 1
-    },
-    {
-      "id": 3893,
-      "name": "Mung Bean Cake",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Aute dolor sunt sunt ex dolore magna culpa exercitation elit aliquip eiusmod. Minim adipisicing voluptate magna fugiat ad reprehenderit tempor est exercitation. Minim cupidatat culpa cillum reprehenderit culpa commodo laborum consectetur qui et. Commodo in excepteur ex laboris cillum laborum velit officia labore.\r\n",
-      "cost": 2,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 6
-    },
-    {
-      "id": 6586,
-      "name": "Raw Soy Milk",
-      "image": "http://placehold.it/300x300",
-      "description": "Veniam sunt eu qui aliquip pariatur esse eiusmod irure. Ut irure dolor consectetur nulla aute excepteur pariatur velit anim. Lorem ullamco eiusmod incididunt qui cillum quis laborum. Ad pariatur excepteur nulla sunt deserunt velit non nulla. Est officia et enim aliqua proident velit pariatur adipisicing velit laborum. Est sint excepteur eu ad velit aute sunt et qui cupidatat excepteur veniam. Cupidatat laboris velit ex ea est.\r\n",
+      "description": "Aliquip voluptate dolore proident magna. Magna do labore pariatur incididunt officia fugiat laborum et fugiat veniam voluptate. Aliquip quis commodo aliquip anim cupidatat. Voluptate deserunt ipsum ea nisi occaecat mollit aliquip amet. Ullamco amet cillum eiusmod sunt elit. Ex exercitation pariatur esse officia occaecat qui velit duis amet nisi.\r\n",
       "cost": 3.5,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 6
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 2,
+      "unit": "bag"
     },
     {
-      "id": 5886,
-      "name": "Sesame Rice Balls",
-      "image": "http://placehold.it/180x180",
-      "description": "Nisi ut est incididunt et dolore culpa ea do cupidatat consectetur est. Culpa qui aute proident consequat duis ea laborum occaecat et commodo velit. Ea consequat id sunt ipsum proident mollit adipisicing laboris.\r\n",
-      "cost": 3.7,
-      "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 4
-    },
-    {
-      "id": 4151,
-      "name": "Brown Sugar & Sesame Mochi",
-      "image": "https://picsum.photos/200/200",
-      "description": "Cillum voluptate excepteur nostrud irure cillum aliqua exercitation aute cillum ut minim voluptate minim. Est voluptate sint tempor proident aliquip. Culpa proident ex do nisi laboris laboris. Reprehenderit commodo elit Lorem incididunt exercitation veniam duis. Mollit sint deserunt incididunt est non excepteur id laborum enim.\r\n",
-      "cost": 3.7,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 7
-    },
-    {
-      "id": 1812,
-      "name": "Sweet potato Taro balls",
+      "id": 5624,
+      "name": "Passion Fruit Syrup",
       "image": "http://placehold.it/200x200",
-      "description": "Quis nulla aliquip proident officia pariatur ipsum sint minim amet deserunt ut voluptate exercitation ipsum. Do do occaecat elit irure Lorem officia in commodo non fugiat aliqua. Consequat enim ea labore consequat nisi nisi et amet ea et. Eiusmod ea non cillum proident ullamco aliqua aliqua cillum sit cupidatat reprehenderit incididunt incididunt est.\r\n",
-      "cost": 3.3,
+      "description": "Deserunt minim in occaecat proident. Esse eiusmod ad aliquip consequat ea deserunt. In aliquip id exercitation aute tempor et pariatur est nisi cupidatat. Labore anim ex commodo quis exercitation enim dolore enim culpa voluptate cillum cupidatat ad nulla. Et duis mollit consectetur cupidatat velit deserunt cillum labore minim aliquip minim.\r\n",
+      "cost": 2.6,
       "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 4
+      "sku": 1,
+      "unit": "bag"
     },
     {
-      "id": 5961,
+      "id": 3098,
+      "name": "Barley",
+      "image": "https://loremflickr.com/200/200",
+      "description": "Mollit aliqua duis eu dolor qui in qui reprehenderit voluptate. Aliquip cupidatat id deserunt occaecat mollit commodo ipsum eu. Adipisicing fugiat cillum dolor cillum aliqua. Consectetur elit do qui non aute velit adipisicing in id. Mollit anim in ad qui elit voluptate cupidatat ullamco ipsum. Excepteur est irure anim consectetur tempor do aliqua nulla aliquip ea aliquip. Amet minim non aute officia mollit dolore sint mollit Lorem deserunt.\r\n",
+      "cost": 3.7,
+      "package_info": "1kg/bag 6bags/ctn",
+      "sku": 3,
+      "unit": "box"
+    },
+    {
+      "id": 4832,
+      "name": "Q Mochi - Brown Sugar ",
+      "image": "http://placehold.it/180x180",
+      "description": "Nulla minim dolore irure id incididunt culpa quis nostrud. Ullamco minim ut sint culpa. Eiusmod cupidatat eiusmod consequat magna Lorem eu dolore dolore est aliquip. Ad aliqua nostrud nulla consectetur culpa. Commodo qui laboris aliqua duis pariatur consectetur ea. Irure eu laborum officia culpa culpa aute officia aute et. Ut laborum adipisicing esse id tempor laboris laboris esse Lorem ex commodo nisi nisi.\r\n",
+      "cost": 3.7,
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 6,
+      "unit": "box"
+    },
+    {
+      "id": 5591,
+      "name": "Passion Fruit Syrup",
+      "image": "https://picsum.photos/200/200",
+      "description": "Est velit cupidatat aliquip id aliquip sunt sunt quis dolore aliqua consectetur nulla fugiat in. Irure do laborum magna officia nisi quis. Dolor nisi nostrud minim labore cillum pariatur dolor. Excepteur sunt ea in qui sunt et quis duis exercitation incididunt magna ea. Qui eiusmod tempor occaecat commodo reprehenderit fugiat fugiat sit sit dolor dolore ex culpa do.\r\n",
+      "cost": 4.2,
+      "package_info": "12pcs/box 18boxes/ctn",
+      "sku": 4,
+      "unit": "bag"
+    },
+    {
+      "id": 9910,
+      "name": "Mung Bean Cake",
+      "image": "http://placehold.it/300x300",
+      "description": "Ad magna sunt cupidatat qui excepteur sit nostrud ea adipisicing pariatur labore laborum. Eiusmod non commodo cillum sint aute eiusmod ad pariatur nulla ad dolore magna. Consectetur minim Lorem tempor nostrud. Occaecat dolore cillum magna enim adipisicing ut Lorem pariatur quis sint enim. Sit labore tempor dolor eu. Consequat nisi enim aliquip magna enim adipisicing culpa veniam velit pariatur. Pariatur tempor do est reprehenderit ex duis velit proident qui ex enim Lorem laboris aliquip.\r\n",
+      "cost": 3.3,
+      "package_info": "1.2kg/bag 12bags/ctn",
+      "sku": 7,
+      "unit": "bag"
+    },
+    {
+      "id": 5750,
+      "name": "Jelly Noodle",
+      "image": "http://placehold.it/200x200",
+      "description": "Consectetur tempor ex esse veniam ad deserunt. Deserunt velit dolore officia commodo pariatur fugiat cillum. Minim amet ipsum cupidatat minim cillum duis exercitation est tempor irure nostrud. Eiusmod nisi dolore dolore excepteur ex sint et officia officia. Nulla ex ea aliquip ut consequat amet culpa. Aliqua est aliqua ut adipisicing excepteur elit.\r\n",
+      "cost": 3.5,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 7,
+      "unit": "bag"
+    },
+    {
+      "id": 4678,
+      "name": "Brown Sugar & Peanut Mochi",
+      "image": "http://placehold.it/180x180",
+      "description": "Sit ipsum id enim cupidatat fugiat in duis commodo commodo nulla fugiat fugiat consectetur pariatur. Esse sunt in mollit et voluptate. Eiusmod est in officia quis aliqua reprehenderit quis mollit consectetur mollit Lorem. Occaecat incididunt est quis do eiusmod culpa.\r\n",
+      "cost": 4.2,
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 1,
+      "unit": "bag"
+    },
+    {
+      "id": 5269,
+      "name": "Refined Sugar",
+      "image": "https://picsum.photos/200/200",
+      "description": "Minim proident laboris proident cupidatat. Quis occaecat ea exercitation in laborum dolore incididunt amet commodo. Sint do nulla irure magna irure voluptate adipisicing exercitation amet aliquip adipisicing. Voluptate dolor dolore veniam minim dolor sunt id cupidatat. Consectetur ex tempor fugiat nostrud mollit sunt.\r\n",
+      "cost": 3.5,
+      "package_info": "1kg/bag 6bags/ctn",
+      "sku": 4,
+      "unit": "box"
+    },
+    {
+      "id": 2441,
+      "name": "Lemon Syrup",
+      "image": "https://picsum.photos/200/200",
+      "description": "Nostrud exercitation dolor ad consequat cupidatat cillum amet. Do veniam officia labore pariatur et dolor magna consectetur. Aliquip amet eu do Lorem amet consectetur eu voluptate.\r\n",
+      "cost": 3.5,
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 1,
+      "unit": "bottle"
+    },
+    {
+      "id": 1076,
       "name": "Jelly Noodle",
       "image": "http://placehold.it/300x300",
-      "description": "Pariatur qui elit id anim occaecat labore esse nostrud duis tempor magna laboris nulla. Consectetur veniam ullamco eu mollit ullamco nostrud nisi. Sint enim deserunt qui ad anim sint aliqua velit ut id id ex aliqua. Quis do ullamco sunt anim laborum consectetur laboris amet eiusmod.\r\n",
-      "cost": 1.5,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 1
-    },
-    {
-      "id": 8440,
-      "name": "Passion Fruit Syrup",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Magna labore laboris exercitation ut. Tempor aliquip Lorem aute aliqua ea enim labore nulla. Labore et proident anim laboris sit non. Cillum culpa adipisicing ex laborum. Adipisicing irure deserunt quis Lorem elit tempor adipisicing eu duis nisi voluptate sit velit est. Sunt dolor occaecat consequat commodo reprehenderit labore aute eiusmod dolor nulla quis occaecat nisi.\r\n",
-      "cost": 2.6,
-      "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 6
-    },
-    {
-      "id": 6859,
-      "name": "Passion Fruit Syrup",
-      "image": "http://placehold.it/180x180",
-      "description": "Reprehenderit id aliquip aute eiusmod commodo voluptate do nostrud veniam mollit. Minim aute ea sunt consectetur. Culpa amet esse cupidatat elit. Nostrud fugiat ut incididunt ipsum adipisicing id dolore. Consequat dolor do est ex laborum irure Lorem voluptate veniam et nisi enim. Labore laboris ullamco et aliqua minim. Pariatur tempor cupidatat ex excepteur occaecat fugiat esse duis irure veniam.\r\n",
-      "cost": 2.6,
-      "package_info": "1kg/bag 6bags/ctn",
-      "sku": 3
-    },
-    {
-      "id": 3716,
-      "name": "Refined Sugar",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Dolore exercitation nulla pariatur et non cupidatat commodo occaecat. Mollit quis in ut enim tempor ipsum labore ad sint adipisicing ea deserunt. Et magna magna magna elit esse laboris deserunt. Ad est veniam pariatur commodo Lorem consequat laborum. Eiusmod adipisicing eu minim quis esse do dolor ullamco cupidatat labore duis velit. Consectetur esse Lorem proident velit sunt tempor incididunt labore.\r\n",
-      "cost": 4.2,
-      "package_info": "1kg/bag 6bags/ctn",
-      "sku": 6
-    },
-    {
-      "id": 8555,
-      "name": "Sesame Rice Balls",
-      "image": "http://placehold.it/180x180",
-      "description": "Nisi Lorem sit dolore elit occaecat in aliquip aliquip est ad labore veniam do. Pariatur dolor minim non laboris amet cupidatat. Labore occaecat sint est dolore est consectetur aute excepteur ea veniam deserunt do ad eiusmod.\r\n",
+      "description": "Ullamco exercitation irure est occaecat sit proident deserunt dolore culpa. Eu proident excepteur aliqua elit elit deserunt aute. Cillum id irure occaecat consectetur ipsum ad ex exercitation. Esse ex anim in tempor dolore nisi ut deserunt magna anim laboris amet anim. Magna nisi fugiat sit dolore exercitation non anim esse exercitation.\r\n",
       "cost": 3.5,
-      "package_info": "1kg/bag 6bags/ctn",
-      "sku": 5
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 4,
+      "unit": "box"
     },
     {
-      "id": 2388,
+      "id": 1305,
+      "name": "Sweet potato Taro balls",
+      "image": "http://placehold.it/300x300",
+      "description": "Cillum ut deserunt consequat Lorem amet ad quis proident minim deserunt nisi culpa. Lorem ullamco labore voluptate fugiat. Ex eiusmod minim amet sint veniam eu officia non mollit anim dolor occaecat duis. Minim fugiat sunt irure magna minim nisi veniam sint exercitation minim officia Lorem. Dolor laboris elit sint elit incididunt incididunt sint ea excepteur nostrud.\r\n",
+      "cost": 1.5,
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 7,
+      "unit": "bottle"
+    },
+    {
+      "id": 3632,
+      "name": "Taro balls",
+      "image": "http://placehold.it/200x200",
+      "description": "Cupidatat tempor dolor tempor aute. Minim et sit consequat dolor deserunt reprehenderit nostrud ad. Excepteur aute ullamco velit consequat quis ad aliquip nulla aute veniam. Qui eu qui dolor exercitation proident sit eu deserunt.\r\n",
+      "cost": 3.7,
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 6,
+      "unit": "bag"
+    },
+    {
+      "id": 2301,
+      "name": "Lemon Syrup",
+      "image": "http://placehold.it/300x300",
+      "description": "Ea nostrud magna dolor exercitation velit aliqua aute laboris eiusmod anim sunt deserunt deserunt mollit. Incididunt laborum mollit proident minim minim occaecat dolor. Do qui et laborum non. Exercitation ea excepteur voluptate in enim dolor dolore est est reprehenderit ullamco. Nostrud pariatur reprehenderit duis dolore ullamco voluptate aliqua officia eiusmod voluptate laborum. Consequat nisi eiusmod exercitation ea duis commodo dolor in dolor enim nulla aliquip.\r\n",
+      "cost": 3.7,
+      "package_info": "1kg/bag 6bags/ctn",
+      "sku": 2,
+      "unit": "bottle"
+    },
+    {
+      "id": 6539,
+      "name": "Q Mochi - Brown Sugar ",
+      "image": "https://loremflickr.com/200/200",
+      "description": "Qui non nisi aliqua officia culpa amet. Mollit do nostrud et labore sit ex id enim eiusmod commodo proident sit culpa adipisicing. Elit ullamco et eu do Lorem in ut aute.\r\n",
+      "cost": 1.5,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 2,
+      "unit": "bag"
+    },
+    {
+      "id": 5386,
+      "name": "Jelly Noodle",
+      "image": "http://placehold.it/180x180",
+      "description": "Laborum amet reprehenderit aliquip exercitation aute laborum officia quis eiusmod culpa elit. Sunt officia commodo magna fugiat sint proident laborum sit aute culpa. Laboris nostrud ad exercitation qui ad sunt pariatur cupidatat elit consectetur proident aliqua. Sint ut nulla voluptate labore cupidatat adipisicing elit adipisicing veniam. Cupidatat deserunt officia reprehenderit ullamco veniam laboris sunt exercitation.\r\n",
+      "cost": 3.5,
+      "package_info": "12pcs/box 18boxes/ctn",
+      "sku": 5,
+      "unit": "bag"
+    },
+    {
+      "id": 1965,
+      "name": "Rice balls",
+      "image": "https://picsum.photos/200/200",
+      "description": "Ut Lorem nulla laborum nisi. Ad aliquip est ipsum ad non nulla incididunt sint ipsum. Enim laborum Lorem ut ex amet cillum. Ipsum sunt enim in ad nostrud id do culpa. Mollit ut Lorem occaecat ex ex proident quis duis fugiat mollit. Laboris veniam pariatur velit enim.\r\n",
+      "cost": 3.5,
+      "package_info": "12pcs/box 18boxes/ctn",
+      "sku": 7,
+      "unit": "bag"
+    },
+    {
+      "id": 4113,
+      "name": "Lemon Syrup",
+      "image": "https://picsum.photos/200/200",
+      "description": "Ipsum magna excepteur quis tempor excepteur ullamco et non cillum. Culpa dolor pariatur ut sit ex deserunt labore minim ipsum officia et nostrud ea. Ex esse magna pariatur laboris fugiat minim anim ipsum reprehenderit non culpa. Nisi id ex deserunt enim ea elit sunt excepteur dolore magna dolor dolore elit elit.\r\n",
+      "cost": 1.5,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 4,
+      "unit": "box"
+    },
+    {
+      "id": 9929,
+      "name": "Mini Taro balls",
+      "image": "http://placehold.it/300x300",
+      "description": "Eu consectetur magna irure nulla ad ullamco officia cupidatat adipisicing incididunt non nostrud ex. Commodo sint ipsum enim cillum eiusmod. Lorem cillum veniam laboris labore. Irure eu mollit sint laboris nostrud sint.\r\n",
+      "cost": 2,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 3,
+      "unit": "bottle"
+    },
+    {
+      "id": 4102,
+      "name": "Mung Bean Cake",
+      "image": "http://placehold.it/200x200",
+      "description": "Ex mollit irure nisi aliqua sunt excepteur ad tempor. Deserunt dolore sit velit ex quis. Mollit ea eu laborum deserunt ex dolor mollit non officia duis. Ex veniam exercitation irure velit Lorem officia aute ipsum enim irure irure ex. Est cupidatat et cillum aliquip sunt tempor eiusmod pariatur. Commodo do magna duis nisi fugiat consequat sit pariatur. Ex elit minim velit consequat nisi aute Lorem nostrud pariatur quis cillum eiusmod culpa sit.\r\n",
+      "cost": 3.5,
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 4,
+      "unit": "box"
+    },
+    {
+      "id": 1349,
+      "name": "Q Mochi - Original",
+      "image": "http://placehold.it/180x180",
+      "description": "In eu dolor non ex ullamco ipsum. Ut enim mollit nisi dolor excepteur nisi id dolor. Commodo labore occaecat anim reprehenderit sunt ad sunt eiusmod in aute mollit. Magna eu reprehenderit nostrud sint non cillum pariatur eu id occaecat exercitation.\r\n",
+      "cost": 3.3,
+      "package_info": "1kg/bag 6bags/ctn",
+      "sku": 1,
+      "unit": "bottle"
+    },
+    {
+      "id": 1405,
+      "name": "Brown Sugar & Sesame Mochi",
+      "image": "http://placehold.it/300x300",
+      "description": "Ipsum occaecat exercitation ipsum in quis proident. Lorem sunt sint adipisicing tempor cillum elit veniam sit ipsum proident. Magna amet id aliquip dolore qui eiusmod ad ipsum esse veniam. Quis occaecat officia veniam voluptate nulla mollit do incididunt veniam ut fugiat id culpa. Anim Lorem esse nisi velit exercitation reprehenderit. Consequat eiusmod exercitation commodo minim enim exercitation. Veniam quis aliqua ad laborum magna dolore do incididunt.\r\n",
+      "cost": 2.6,
+      "package_info": "1.2kg/bag 12bags/ctn",
+      "sku": 5,
+      "unit": "bottle"
+    },
+    {
+      "id": 7156,
+      "name": "Lemon Syrup",
+      "image": "http://placehold.it/200x200",
+      "description": "Consequat deserunt laboris id amet deserunt. Cillum laborum sunt aute dolor ut est id magna sint ipsum labore magna sint. Fugiat consequat ut proident sit eiusmod commodo. Cillum duis mollit consequat consectetur eiusmod non. Ex eu est ullamco occaecat et reprehenderit amet aliqua. Nisi minim eiusmod nulla aute ex.\r\n",
+      "cost": 3.3,
+      "package_info": "12pcs/box 18boxes/ctn",
+      "sku": 4,
+      "unit": "bag"
+    },
+    {
+      "id": 7361,
+      "name": "Raw Soy Milk",
+      "image": "https://loremflickr.com/200/200",
+      "description": "Id cupidatat culpa pariatur ea anim qui est sunt nisi mollit ad ad id. Officia laborum enim non elit mollit eiusmod exercitation voluptate cupidatat aute eu. Ad eiusmod ut fugiat veniam quis fugiat occaecat aute ullamco magna dolor elit culpa consectetur. Dolor officia duis duis mollit irure occaecat id.\r\n",
+      "cost": 2.6,
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 6,
+      "unit": "bottle"
+    },
+    {
+      "id": 5212,
+      "name": "Rice balls",
+      "image": "http://placehold.it/180x180",
+      "description": "Ea reprehenderit voluptate nulla eu proident aliquip do dolore et consectetur mollit enim. Aliqua aliquip fugiat cillum aliqua minim minim adipisicing ex do nisi ullamco. Qui incididunt amet excepteur incididunt nulla aliqua tempor nisi enim laborum aliquip. Dolor nulla eiusmod minim cupidatat commodo. Reprehenderit enim minim commodo culpa in aute tempor sunt dolor reprehenderit.\r\n",
+      "cost": 2,
+      "package_info": "12pcs/box 18boxes/ctn",
+      "sku": 2,
+      "unit": "box"
+    },
+    {
+      "id": 4064,
       "name": "Mini Taro balls",
       "image": "https://picsum.photos/200/200",
-      "description": "Amet fugiat ex nostrud ad incididunt ea nisi incididunt laborum eiusmod. Culpa laboris amet in officia consectetur deserunt laboris aliqua voluptate. Ex elit consequat veniam officia sit aute aliqua non incididunt ut. Anim ut elit commodo exercitation nisi cillum elit. Dolor eiusmod do ex et minim ullamco ad ullamco. Adipisicing esse irure occaecat sint pariatur ad qui quis aliqua dolor id officia.\r\n",
-      "cost": 1.5,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 3
-    },
-    {
-      "id": 8660,
-      "name": "Brown Sugar & Peanut Mochi",
-      "image": "http://placehold.it/180x180",
-      "description": "Incididunt laboris dolore eu veniam minim do. Excepteur incididunt id in dolore minim. Cupidatat culpa consectetur in occaecat ut cupidatat sunt veniam aliqua. Deserunt nisi quis esse est sint non ipsum sint ullamco consequat enim. Do non mollit elit ipsum nisi ad ex minim elit. Enim irure eu dolor sunt. Eu sint deserunt est veniam proident et officia dolor enim occaecat velit minim adipisicing.\r\n",
-      "cost": 2,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 6
-    },
-    {
-      "id": 5274,
-      "name": "Taro balls",
-      "image": "https://picsum.photos/200/200",
-      "description": "Do aliqua eu eu minim adipisicing elit commodo minim in nostrud labore elit amet. Enim sunt ad aliqua consequat laborum labore nisi pariatur quis et et cupidatat. In reprehenderit amet in fugiat labore. Ipsum ipsum adipisicing irure sunt fugiat adipisicing amet fugiat. Pariatur eiusmod laboris sit reprehenderit tempor sit consequat eu consequat veniam.\r\n",
-      "cost": 3.3,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 7
-    },
-    {
-      "id": 7535,
-      "name": "Sesame Rice Balls",
-      "image": "https://picsum.photos/200/200",
-      "description": "Pariatur laboris consequat incididunt cillum cillum eiusmod. Id esse tempor do ea incididunt eu ut do proident ex dolore laboris. Non est minim consequat consequat cillum deserunt eu. Aliquip aliqua incididunt quis minim commodo dolor nostrud anim adipisicing ullamco veniam. Cupidatat occaecat ea officia incididunt sit commodo. Ullamco est do consequat veniam qui minim duis dolore enim nostrud culpa nisi. Sunt incididunt enim officia sit enim reprehenderit dolore.\r\n",
-      "cost": 3.7,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 6
-    },
-    {
-      "id": 8709,
-      "name": "Taro balls",
-      "image": "http://placehold.it/300x300",
-      "description": "Proident laborum deserunt fugiat proident tempor laboris deserunt nisi esse amet. Proident dolore irure magna duis dolore. Magna incididunt aliquip exercitation fugiat anim dolor magna. Nulla eiusmod tempor exercitation anim dolor dolor ea tempor ad elit dolor eu ut dolore. Elit ad ad sunt dolor excepteur quis non ex minim Lorem. Do mollit eu est nisi sint. Id reprehenderit exercitation exercitation elit cillum do do enim sunt commodo.\r\n",
-      "cost": 2.6,
-      "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 6
-    },
-    {
-      "id": 9256,
-      "name": "Brown Sugar & Peanut Mochi",
-      "image": "http://placehold.it/200x200",
-      "description": "Ad ea cillum officia exercitation esse. Fugiat in fugiat do sint ullamco adipisicing. Consequat sint officia fugiat mollit laborum veniam aliqua cupidatat. Laboris cupidatat laborum qui cillum occaecat excepteur sunt. Sunt sunt reprehenderit sint ipsum cillum reprehenderit minim non.\r\n",
-      "cost": 3.7,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 1
-    },
-    {
-      "id": 9274,
-      "name": "Jelly Noodle",
-      "image": "http://placehold.it/300x300",
-      "description": "Do cupidatat eu aliqua in nostrud. Minim duis incididunt voluptate ad pariatur laborum. Nulla cupidatat nulla fugiat anim qui excepteur. Minim nisi nulla qui deserunt veniam commodo ullamco officia pariatur. Mollit ullamco dolor sit qui consectetur laboris eu non magna enim magna in. Ad id fugiat sit do.\r\n",
+      "description": "Labore ex sint ad nisi aliquip do dolor nisi dolor est amet proident incididunt laborum. Fugiat mollit duis magna minim proident excepteur elit in labore nulla enim. Adipisicing deserunt laborum est laboris duis.\r\n",
       "cost": 3.5,
-      "package_info": "1kg/bag 6bags/ctn",
-      "sku": 3
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 6,
+      "unit": "box"
     },
     {
-      "id": 4480,
-      "name": "Q Mochi - Brown Sugar ",
-      "image": "http://placehold.it/180x180",
-      "description": "Ullamco ullamco ipsum culpa voluptate nulla veniam eu veniam. Et adipisicing sint velit in fugiat occaecat dolor magna aute dolor magna. Ipsum eiusmod amet nisi nisi do amet pariatur qui in. Tempor consectetur veniam voluptate aliquip voluptate commodo amet elit labore. Consectetur laboris ad velit culpa cupidatat quis ex aute deserunt sit ex. Proident incididunt labore aliqua excepteur. Duis consequat pariatur eiusmod nostrud sint ullamco commodo velit qui nisi commodo quis commodo.\r\n",
-      "cost": 3.7,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 1
-    },
-    {
-      "id": 6797,
-      "name": "Lemon Syrup",
-      "image": "http://placehold.it/200x200",
-      "description": "Laborum labore ex aliqua voluptate duis proident consequat culpa ut id irure. Ex sunt anim culpa amet anim proident ex cillum voluptate dolore dolor tempor eu. Exercitation ullamco deserunt eu adipisicing ut deserunt ipsum ea. Culpa quis nostrud consequat magna. Lorem amet nisi deserunt sit et eiusmod quis cupidatat et esse et Lorem id proident. Laborum id laboris sunt mollit eu sunt.\r\n",
-      "cost": 4.2,
-      "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 2
-    },
-    {
-      "id": 6472,
-      "name": "Jelly Noodle",
-      "image": "https://picsum.photos/200/200",
-      "description": "Tempor ut proident cillum dolore proident. Culpa magna officia excepteur aliqua duis laboris sunt officia quis laborum commodo magna dolore. Enim sunt excepteur culpa elit tempor nostrud. Nisi Lorem in anim amet duis ad laborum ipsum excepteur labore sit sint ex.\r\n",
-      "cost": 2.6,
-      "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 4
-    },
-    {
-      "id": 8346,
-      "name": "Q Mochi - Brown Sugar ",
+      "id": 6063,
+      "name": "Rice balls",
       "image": "https://loremflickr.com/200/200",
-      "description": "Irure sunt amet cillum esse non. Duis aute nisi esse magna pariatur proident quis do. Irure minim eiusmod nisi nulla ea velit. Sunt elit consectetur reprehenderit labore est. Do aliquip esse ipsum irure ad duis id fugiat. Labore ad in non amet nostrud reprehenderit fugiat quis labore ex cupidatat enim proident cillum. Labore dolore ex fugiat proident.\r\n",
-      "cost": 2.6,
-      "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 5
-    },
-    {
-      "id": 1606,
-      "name": "Q Mochi - Brown Sugar ",
-      "image": "http://placehold.it/200x200",
-      "description": "Nostrud Lorem deserunt amet est amet ut pariatur. Occaecat enim culpa dolore nostrud dolor. Aliqua qui exercitation exercitation sit quis officia anim do deserunt adipisicing dolor tempor. Tempor reprehenderit non Lorem ex aute dolor nisi irure non eu eu. Fugiat fugiat dolore consequat duis aute. Excepteur nulla voluptate dolor elit Lorem nostrud ea.\r\n",
-      "cost": 4.2,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 6
-    },
-    {
-      "id": 8029,
-      "name": "Brown Sugar & Peanut Mochi",
-      "image": "http://placehold.it/200x200",
-      "description": "Ex ut magna commodo cillum. Amet elit fugiat Lorem reprehenderit est. Esse sint cillum consequat aute culpa eiusmod.\r\n",
-      "cost": 3.5,
-      "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 1
-    },
-    {
-      "id": 4851,
-      "name": "Passion Fruit Syrup",
-      "image": "http://placehold.it/300x300",
-      "description": "Anim laborum laboris non sit ut mollit est. Laborum amet eiusmod enim eu aliquip tempor in non. Culpa fugiat non ad enim ipsum velit cupidatat. Mollit voluptate consequat cupidatat sit ut esse pariatur commodo. Nulla ipsum pariatur laboris consectetur ut nisi dolor culpa ea est aliquip sit laborum.\r\n",
-      "cost": 3.5,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 1
-    },
-    {
-      "id": 5597,
-      "name": "Taro",
-      "image": "http://placehold.it/180x180",
-      "description": "Pariatur incididunt officia magna dolor do elit culpa. Adipisicing ex adipisicing ipsum cupidatat minim officia sint Lorem deserunt commodo Lorem eu pariatur. Ipsum enim aute eiusmod quis. Qui occaecat fugiat mollit non eiusmod deserunt velit. Eiusmod ex consectetur velit nulla nisi irure Lorem sunt reprehenderit. Voluptate id laboris nulla eu veniam Lorem qui eiusmod laborum incididunt ullamco ex. Anim dolore qui laborum consequat consectetur adipisicing proident eu.\r\n",
-      "cost": 3.7,
-      "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 6
-    },
-    {
-      "id": 4408,
-      "name": "Raw Soy Milk",
-      "image": "http://placehold.it/300x300",
-      "description": "Velit et ipsum deserunt duis ut veniam esse cupidatat labore labore eiusmod officia reprehenderit. Amet ad eu enim quis duis. Nostrud excepteur do mollit reprehenderit. Elit sint do sint mollit in tempor amet sint. Magna proident aliqua laborum aute labore. Culpa deserunt veniam esse minim id adipisicing magna. Ullamco excepteur ad consequat tempor ex irure est id in mollit id mollit est reprehenderit.\r\n",
-      "cost": 3.5,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 6
-    },
-    {
-      "id": 7930,
-      "name": "Q Mochi - Original",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Ad commodo cupidatat ipsum velit cillum cillum labore. Voluptate Lorem nulla id irure exercitation officia exercitation eu non. Aliquip anim qui non tempor cupidatat ex magna irure. Ex irure minim aliquip nisi pariatur sunt id. Cupidatat minim ex esse esse dolore irure dolore. Laboris consequat esse proident consectetur enim exercitation ut commodo excepteur fugiat elit sunt aute.\r\n",
+      "description": "Voluptate culpa cillum mollit voluptate cillum dolor. Commodo sit magna laboris enim occaecat adipisicing sint. Incididunt pariatur laboris id nulla pariatur pariatur elit deserunt reprehenderit. Labore aute duis ullamco nisi adipisicing consectetur aute eiusmod cupidatat consequat aliquip consequat esse ullamco. Ut commodo enim in dolore ad non. Irure laborum mollit nisi dolor nisi velit ullamco aute quis. Commodo sunt labore velit nostrud quis pariatur.\r\n",
       "cost": 2.6,
       "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 7
+      "sku": 6,
+      "unit": "box"
     },
     {
-      "id": 9895,
-      "name": "Taro",
+      "id": 9431,
+      "name": "Brown Sugar & Sesame Mochi",
       "image": "http://placehold.it/300x300",
-      "description": "Non ut in ullamco consequat occaecat exercitation Lorem tempor. Anim proident amet ex tempor ipsum do. Voluptate aute officia laboris eiusmod quis qui voluptate fugiat in deserunt. Magna proident eu voluptate laborum quis voluptate. Occaecat qui enim non esse ullamco fugiat do.\r\n",
+      "description": "Excepteur ad commodo dolor dolore pariatur consequat amet minim aute est elit. Nisi do et sunt irure exercitation esse laborum adipisicing consectetur amet officia culpa velit culpa. Consequat enim minim aliquip deserunt amet in cillum adipisicing laboris aute.\r\n",
       "cost": 1.5,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 5
+      "package_info": "0.6kg/bag 24bags/ctn",
+      "sku": 7,
+      "unit": "bottle"
     },
     {
-      "id": 3656,
-      "name": "Refined Sugar",
-      "image": "https://picsum.photos/200/200",
-      "description": "Voluptate mollit magna sunt occaecat aute culpa eu minim. Enim sit culpa id reprehenderit labore nostrud ipsum. Do quis magna qui deserunt sunt eu quis ad qui voluptate voluptate in aute. Et voluptate esse officia ea occaecat sunt est aliquip veniam exercitation duis. Non tempor laboris ea voluptate esse ullamco.\r\n",
-      "cost": 3.3,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 4
-    },
-    {
-      "id": 4238,
-      "name": "Passion Fruit Syrup",
-      "image": "http://placehold.it/300x300",
-      "description": "Aute magna occaecat aute elit et. Irure aute commodo incididunt proident ex esse dolor enim consectetur occaecat consequat magna. Sunt amet tempor eiusmod quis labore velit do duis adipisicing eu. Sunt excepteur officia anim esse eiusmod laborum irure et exercitation laboris qui. Consequat cupidatat aute minim non nostrud ut consectetur minim non do.\r\n",
-      "cost": 4.2,
-      "package_info": "1.2kg/bag 12bags/ctn",
-      "sku": 4
-    },
-    {
-      "id": 2218,
-      "name": "Sesame Rice Balls",
-      "image": "http://placehold.it/200x200",
-      "description": "Ex dolore nulla et ullamco ex veniam. Ut proident aliquip pariatur id. In id exercitation do eiusmod laborum consequat qui eiusmod exercitation ad.\r\n",
-      "cost": 3.5,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 3
-    },
-    {
-      "id": 3554,
+      "id": 2799,
       "name": "Mung Bean Cake",
-      "image": "http://placehold.it/180x180",
-      "description": "Officia esse reprehenderit ut aliqua labore dolor non laborum minim mollit dolor. Enim adipisicing aliqua cupidatat eiusmod anim veniam cillum voluptate. Duis qui nostrud enim fugiat eu enim dolore mollit in eu sunt. Do velit qui cillum eu excepteur sunt in nostrud ipsum excepteur ullamco ad eiusmod. Deserunt pariatur et ut sunt duis dolore officia proident qui irure veniam quis.\r\n",
-      "cost": 2.6,
-      "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 6
+      "image": "https://loremflickr.com/200/200",
+      "description": "Occaecat qui do quis duis ipsum in. Amet ullamco fugiat dolor laboris laborum enim. Ad magna aute exercitation enim cillum consectetur. Voluptate consectetur aliqua ipsum elit exercitation ipsum. Pariatur qui non cupidatat commodo deserunt est sint. Elit cillum ad Lorem dolor laboris pariatur ad et in ipsum est ea. Nostrud exercitation sunt do adipisicing commodo nostrud aute veniam deserunt.\r\n",
+      "cost": 3.7,
+      "package_info": "1.2kg/bag 12bags/ctn",
+      "sku": 2,
+      "unit": "box"
     },
     {
-      "id": 9596,
-      "name": "Barley",
-      "image": "http://placehold.it/180x180",
-      "description": "Esse tempor officia ex ipsum ad enim. Commodo proident anim nostrud consequat. Velit sint dolor adipisicing enim consequat irure enim duis mollit culpa.\r\n",
-      "cost": 4.2,
-      "package_info": "12pcs/box 18boxes/ctn",
-      "sku": 2
-    },
-    {
-      "id": 4066,
-      "name": "Taro",
+      "id": 6796,
+      "name": "Mini Taro balls",
       "image": "http://placehold.it/200x200",
-      "description": "Fugiat Lorem laborum elit ullamco id nisi dolor non. Magna irure laboris dolor est. Aute consectetur dolor dolor excepteur fugiat laboris aliquip velit sunt. Tempor nulla fugiat irure pariatur proident veniam ex duis officia in officia. Consectetur aliqua cillum duis exercitation in labore amet tempor pariatur non nostrud. Consectetur eiusmod anim cupidatat Lorem irure mollit nulla nisi anim veniam esse.\r\n",
-      "cost": 3.5,
-      "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 5
-    },
-    {
-      "id": 2913,
-      "name": "Passion Fruit Syrup",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Laborum magna aliqua ad sunt incididunt enim laboris magna commodo ut esse. Occaecat occaecat adipisicing aliqua cillum labore velit et tempor aliqua. Voluptate tempor aliquip commodo ut cillum est et tempor. Sit id enim duis ex laboris amet Lorem officia. Culpa esse eiusmod nulla quis quis enim in occaecat enim duis occaecat. Eiusmod anim reprehenderit labore elit commodo non in cillum incididunt irure magna nulla. Enim excepteur mollit esse labore quis elit non laboris nostrud quis.\r\n",
-      "cost": 3.5,
+      "description": "Elit aute quis dolor cupidatat elit commodo aute consequat aliqua consectetur qui ex elit. Culpa elit est ut qui labore nisi deserunt excepteur consectetur et. Pariatur cupidatat minim labore esse occaecat deserunt aute ullamco sint laborum labore aliquip. Cillum adipisicing elit labore tempor consequat velit consequat pariatur labore aliquip eu officia nulla pariatur. Dolor sint ut ipsum aliqua nostrud consequat.\r\n",
+      "cost": 1.5,
       "package_info": "0.6kg/bag 24bags/ctn",
-      "sku": 7
+      "sku": 1,
+      "unit": "bag"
     },
     {
-      "id": 9233,
-      "name": "Sesame Rice Balls",
-      "image": "https://loremflickr.com/200/200",
-      "description": "Ad aliqua laborum dolor veniam eiusmod. Velit ad elit sunt sint exercitation veniam ad enim esse esse esse aute. Qui sit minim ipsum consectetur ad veniam pariatur in quis Lorem. Nulla nulla excepteur ut anim reprehenderit sit id irure amet laborum voluptate qui exercitation. Aliqua do sunt nisi ea consectetur cillum amet anim. Est anim pariatur proident cillum.\r\n",
+      "id": 7065,
+      "name": "Raw Soy Milk",
+      "image": "http://placehold.it/200x200",
+      "description": "Ex exercitation dolor do qui irure reprehenderit magna proident. Consectetur amet cillum amet exercitation labore ea non ipsum duis proident adipisicing anim quis culpa. Deserunt aliquip occaecat nisi Lorem deserunt exercitation eiusmod anim cupidatat ex dolore aliqua excepteur culpa. Labore excepteur minim in elit elit nisi reprehenderit ad culpa fugiat consectetur anim proident.\r\n",
       "cost": 3.7,
       "package_info": "600ml/bottle 20 bottles/ctn",
-      "sku": 5
+      "sku": 1,
+      "unit": "bottle"
+    },
+    {
+      "id": 9179,
+      "name": "Raw Soy Milk",
+      "image": "https://picsum.photos/200/200",
+      "description": "Ipsum id incididunt proident tempor. Dolor aliquip consequat amet pariatur et in aute sit veniam aute. Fugiat ex proident qui nostrud aute.\r\n",
+      "cost": 3.3,
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 4,
+      "unit": "box"
+    },
+    {
+      "id": 9007,
+      "name": "Mini Taro balls",
+      "image": "http://placehold.it/200x200",
+      "description": "Amet amet consectetur eiusmod reprehenderit. Mollit voluptate culpa anim est nisi id minim. Aliquip cillum ipsum occaecat reprehenderit laborum mollit Lorem amet proident ea aliqua. Laborum culpa ullamco elit et pariatur irure qui non. Excepteur duis Lorem tempor labore deserunt veniam non cupidatat.\r\n",
+      "cost": 3.7,
+      "package_info": "600ml/bottle 20 bottles/ctn",
+      "sku": 1,
+      "unit": "bag"
     }
   ]
 
@@ -530,7 +580,8 @@ export class OrderComponent implements OnInit {
           description: this.selected_item['description'],
           cost: this.selected_item['cost'],
           package_info: this.selected_item['package_info'],
-          qty: this.selected_item['added_qty']
+          qty: this.selected_item['added_qty'],
+          unit: this.selected_item['unit']
         })
       }
     }else{
