@@ -4,7 +4,7 @@
             Order item
         </h2>
         <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-            <a href="javascript:;" data-toggle="modal" data-target="#new-order-modal" class="button text-white bg-theme-1 shadow-md mr-2">New Order</a>
+            <a href="javascript:;" data-toggle="modal" data-target="#new-order-modal" class="button text-white bg-theme-1 shadow-md mr-2" (click)="generate_po_number()">New Order</a>
             <div class="pos-dropdown dropdown relative ml-auto sm:ml-0">
                 <button class="dropdown-toggle button px-2 box text-gray-700">
                     <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="chevron-down" appFeatherIcon></i> </span>
@@ -48,10 +48,13 @@
                             <img alt="Purchasing system image" class="rounded-full" src="{{ item.image }}">
                         </div>
                         <div class="ml-4 mr-auto">
-                            <a class="font-medium">{{ item.name }}</a>
-                            <div class="mr-5 sm:mr-5"><span class="text-gray-600">{{ item.package_info }}, </span><span class="text-gray-600 ml-2">Inventory: {{ item.in_stock }} {{item.main_unit}}{{item.in_stock==1 ? '':'s'}}</span></div>
+                            <a class="font-medium">{{item.vendor_description}} ({{item.description}})</a>
+                            <div class="mr-5 sm:mr-5">
+                              <span class="text-gray-600">{{ item.packing_info }}, </span>
+                              <span class="text-gray-600 ml-2">Max order qty: {{ item.max_order_qty }} {{item.uom}}{{item.max_order_qty==1 ? '':'s'}}</span>
+                            </div>
                         </div>
-                        <div class="font-medium text-gray-700">${{ item.cost }}</div>
+                        <div class="font-medium text-gray-700">${{item.cost}} / {{item.uom}}</div>
                     </div>
                 </a>
             </div>
@@ -63,7 +66,7 @@
                                 <img alt="Purchasing system image" src="{{item.image}}">
                             </div>
                         </div>
-                        <div class="block font-medium text-center truncate mt-3">{{item.name}}</div>
+                        <div class="block font-medium text-center truncate mt-3">{{item.vendor_description}} ({{item.description}})</div>
                     </div>
                 </a>
             </div>
@@ -71,46 +74,63 @@
         <!-- END: Item List -->
         <!-- BEGIN: Ticket -->
         <div class="col-span-12 lg:col-span-4">
+            <div class="intro-y pr-1">
+                <div class="box p-2">
+                    <div class="pos__tabs nav-tabs justify-center flex">
+                        <a *ngIf="ticket_created" data-toggle="tab" data-target="#ticket" href="javascript:;" class="flex-1 py-2 rounded-md text-center active">PO Ticket</a>
+                        <a data-toggle="tab" data-target="#details" href="javascript:;" class="flex-1 py-2 rounded-md text-center {{ticket_created ? '' : 'active'}}">My orders</a>
+                    </div>
+                </div>
+            </div>
             <div class="tab-content">
-                <div class="tab-content__pane active" id="ticket">
-                    <div class="pos__ticket box p-2">
+                <div class="tab-content__pane {{ticket_created ? 'active' : ''}}" id="ticket">
+                    <div class="pos__ticket box p-2 mt-5">
                         <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{ordered_item.length != 0 ? 'Ordered items:' : 'Please order items'}}</h6>
                         <a *ngFor="let item of ordered_item; index as idx;" (click)="select_ordered_item(item)" href="javascript:;" data-toggle="modal" data-target="#edit-item-modal" class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">
-                            <div class="pos__ticket__item-name truncate mr-1">{{item.name}}</div>
-                            <div class="text-gray-600">x {{item.ordered_qty}} {{item.main_unit}}{{item.ordered_qty==1 ? '' : 's'}}</div>
-                            <i data-feather="edit" class="w-4 h-4 text-gray-600 ml-2"></i>
-                            <div class="ml-auto">{{item.cost * item.ordered_qty | currency}}</div>
+                            <div class="pos__ticket__item-name truncate mr-1">{{item.vendor_description}} ({{item.description}})</div>
+                            <div class="text-gray-600">x {{item.ordered_qty}} {{item.uom}}{{item.ordered_qty==1 ? '' : 's'}}</div>
+                            <i data-feather="edit" class="w-4 h-4 text-gray-600 ml-2" appFeatherIcon></i>
+                            <div class="ml-auto">Sub total: {{item.cost * item.ordered_qty | currency}}</div>
                         </a>
-                    </div>
-                    <div class="box flex p-5 mt-5">
-                        <div class="w-full relative text-gray-700">
-                            <input type="text" class="input input--lg w-full bg-gray-200 pr-10 placeholder-theme-13" placeholder="Use coupon code...">
-                            <i class="w-4 h-4 hidden sm:absolute my-auto inset-y-0 mr-3 right-0" data-feather="search"></i>
-                        </div>
-                        <button class="button text-white bg-theme-1 ml-2">Apply</button>
                     </div>
                     <div class="box p-5 mt-5">
                         <div class="flex">
-                            <div class="mr-auto">Subtotal</div>
+                            <div class="mr-auto">Total</div>
                             <div>{{sum_total_price() | currency}}</div>
-                        </div>
-                        <div class="flex mt-4">
-                            <div class="mr-auto">Discount</div>
-                            <div class="text-theme-6">{{(ordered_item.length != 0 ? -ordered_item.length : 0) | currency}}</div>
-                        </div>
-                        <div class="flex mt-4">
-                            <div class="mr-auto">Tax</div>
-                            <div>15%</div>
                         </div>
                         <div class="flex mt-4 pt-4 border-t border-gray-200">
                             <div class="mr-auto font-medium text-base">Charge</div>
-                            <div class="font-medium text-base">{{(sum_total_price() * (1 + 0.15) + (ordered_item.length != 0 ? -ordered_item.length : 0)) | currency}}</div>
+                            <div class="font-medium text-base">{{sum_total_price() | currency}}</div>
                         </div>
                     </div>
                     <div class="flex mt-5">
                         <button class="button w-32 border border-gray-400 text-gray-600" (click)="clear_ordered_items()">Clear Items</button>
-                        <button class="button w-32 text-white bg-theme-1 shadow-md ml-auto">Order</button>
+                        <button class="button w-32 text-white bg-theme-1 shadow-md ml-auto" (click)="place_order()">Order</button>
                     </div>
+                </div>
+                <div class="tab-content__pane {{!ticket_created ? 'active' : ''}}" id="details">
+                  <div class="box p-2 mt-5">
+                      <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{orders.length != 0 ? 'Orders:' : 'You have no orders yet. Please start ordering.'}}</h6>
+                      <div *ngFor="let item of orders; index as idx;" class="intro-y" (click)="edit_order(item)">
+                          <div class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">
+                              <div class="w-20 overflow-hidden">
+                                  <div class="flex">
+                                      <div *ngFor="let _item of item.items; index as _idx" class="w-10 h-10 image-fit zoom-in {{_idx == 0 ? '' : '-ml-5'}}">
+                                          <img alt="Purchasing system image" class="tooltip rounded-full" src="{{_item.image}}">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="ml-4 mr-auto">
+                                  <div class="font-medium">{{item.po_id}}</div>
+                                  <div class="text-gray-600 text-xs">{{item.po_date}}
+                                      <span class="text-theme-1 ml-3">{{item.items.length != 1 ? item.items.length + ' items ordered.' : item.items.length + ' item ordered.'}}</span>
+                                      <span class="ml-3">Total: <span class="text-theme-9">{{item.charge | currency}}</span></span>
+                                  </div>
+                              </div>
+                              <div class="py-1 px-2 rounded-full text-xs bg-theme-{{item.status != 'pending' ? '9' : '12'}} text-white cursor-pointer font-medium">{{item.status}}</div>
+                          </div>
+                      </div>
+                  </div>
                 </div>
             </div>
         </div>
@@ -127,20 +147,16 @@
             <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
                 <div class="col-span-12">
                     <label>Name</label>
-                    <input type="text" class="input w-full border mt-2 flex-1" placeholder="Customer name">
+                    <input type="text" class="input w-full border mt-2 flex-1" placeholder="Customer name" value="David" disabled>
                 </div>
                 <div class="col-span-12">
-                    <label>Table</label>
-                    <input type="text" class="input w-full border mt-2 flex-1" placeholder="Customer table">
-                </div>
-                <div class="col-span-12">
-                    <label>Number of People</label>
-                    <input type="text" class="input w-full border mt-2 flex-1" placeholder="People">
+                    <label>PO number</label>
+                    <input type="text" class="input w-full border mt-2 flex-1" placeholder="Purchase order number" value="{{po_number}}" disabled>
                 </div>
             </div>
             <div class="px-5 py-3 text-right border-t border-gray-200">
                 <button type="button" data-dismiss="modal" class="button w-32 border text-gray-700 mr-1">Cancel</button>
-                <button type="button" class="button w-32 bg-theme-1 text-white">Create Ticket</button>
+                <button type="button" data-dismiss="modal" class="button w-32 bg-theme-1 text-white" (click)="create_ticket()">Create Ticket</button>
             </div>
         </div>
     </div>
@@ -150,7 +166,7 @@
         <div class="modal__content">
             <div class="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
                 <h2 class="font-medium text-base mr-auto">
-                    {{selected_item ? selected_item['name'] : ''}}
+                    {{selected_item ? (selected_item['vendor_description'] + ' (' + selected_item['description'] + ')' ) : ''}}
                 </h2>
             </div>
             <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
@@ -175,14 +191,14 @@
         <div class="modal__content">
             <div class="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
                 <h2 class="font-medium text-base mr-auto">
-                    {{selected_ordered_item ? selected_ordered_item['name'] : ''}}
+                    {{selected_ordered_item ? (selected_ordered_item['vendor_description'] + ' (' + selected_ordered_item['description'] + ')' ) : ''}}
                 </h2>
             </div>
             <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
                 <div class="col-span-12">
                     <label>Quantity</label>
                     <div class="flex mt-2 flex-1">
-                        <input type="text" class="input w-full border text-center" placeholder="Item quantity" value="{{selected_ordered_item ? selected_ordered_item['qty'] : ''}}" disabled>
+                        <input type="text" class="input w-full border text-center" placeholder="Item quantity" value="{{selected_ordered_item ? selected_ordered_item['ordered_qty'] : ''}}" disabled>
                     </div>
                 </div>
             </div>
