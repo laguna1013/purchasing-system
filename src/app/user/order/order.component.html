@@ -105,7 +105,7 @@
           </div>
           <div class="flex mt-5">
             <button class="button w-32 border border-gray-400 text-gray-600" (click)="clear_ordered_items()">Clear Items</button>
-            <button class="button w-32 text-white bg-theme-1 shadow-md ml-auto" (click)="place_order()">Order</button>
+            <a class="button w-32 text-white bg-theme-1 shadow-md ml-auto" href="javascript:;" data-toggle="modal" data-target="#place-order-modal">Order</a>
           </div>
         </div>
         <div class="tab-content__pane {{!ticket_created ? 'active' : ''}}" id="details">
@@ -171,10 +171,10 @@
     </div>
     <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
       <div class="col-span-12">
-        <label>Quantity</label>
+        <label>Quantity({{selected_item ? selected_item['uom'] : ''}})</label>
         <div class="flex mt-2 flex-1">
           <button type="button" class="button w-12 border bg-gray-200 text-gray-600 mr-1" (click)="decrease_selected_item()">-</button>
-          <input type="text" class="input w-full border text-center" placeholder="Item quantity" value="{{selected_item ? selected_item['added_qty'] : ''}}" disabled>
+          <input type="number" class="input w-full border text-center" placeholder="Item quantity" value="{{selected_item ? selected_item['added_qty'] : ''}}" (change)="added_qty_change($event)">
           <button type="button" class="button w-12 border bg-gray-200 text-gray-600 ml-1" (click)="increase_selected_item()">+</button>
         </div>
       </div>
@@ -196,7 +196,7 @@
     </div>
     <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
       <div class="col-span-12">
-        <label>Quantity</label>
+        <label>Quantity({{selected_ordered_item ? selected_ordered_item['uom'] : ''}})</label>
         <div class="flex mt-2 flex-1">
           <input type="text" class="input w-full border text-center" placeholder="Item quantity" value="{{selected_ordered_item ? selected_ordered_item['ordered_qty'] : ''}}" disabled>
         </div>
@@ -209,4 +209,39 @@
   </div>
 </div>
 <!-- END: Edit Item Modal -->
+<!-- BEGIN: Place Order Modal -->
+<div class="modal" id="place-order-modal">
+  <div class="modal__content modal__content--lg">
+    <div class="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
+      <h2 class="font-medium text-base mr-auto">
+        Your order: {{po_number}}
+      </h2>
+    </div>
+    <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
+      <div class="col-span-12" style="max-height: 500px; overflow: auto;">
+        <div class="intro-x" *ngFor="let item of ordered_item; index as idx;">
+          <div class="box px-5 py-3 mb-3 flex items-center">
+            <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
+              <img alt="Purchasing system image" src="{{item.image}}">
+            </div>
+            <div class="ml-4 mr-auto">
+              <div class="font-medium">{{item.description}}({{item.description}})</div>
+              <div class="text-gray-600 text-xs">{{item.ordered_qty}} {{item.ordered_qty == 1 ? item.uom : item.uom + 's'}} ({{(item.primary_unit * item.ordered_qty * 10) / 10}}{{item.base_uom}})</div>
+            </div>
+            <div class="text-theme-6">{{item.cost * item.ordered_qty | currency}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end mx-5 mb-2">
+      <span class="text-theme-1 mr-5">CBM: {{sum_total_cbm() * 10 / 10}}</span>
+      <span class="text-theme-6">Total charge: {{sum_total_price() | currency}}</span>
+    </div>
+    <div class="px-5 py-3 text-right border-t border-gray-200">
+      <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1">Cancel</button>
+      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white" (click)="place_order()">Place order</button>
+    </div>
+  </div>
+</div>
+<!-- END: Place Order Modal -->
 </div>
