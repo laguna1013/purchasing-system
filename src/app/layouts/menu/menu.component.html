@@ -8,15 +8,21 @@
     </div>
     <ul class="border-t border-theme-24 py-5 hidden">
         <li>
-            <a href="" class="menu">
+            <a href="/order" class="menu">
                 <div class="menu__icon"> <i data-feather="box" appFeatherIcon></i> </div>
                 <div class="menu__title"> Order </div>
             </a>
         </li>
         <li>
-            <a href="" class="menu">
+            <a href="/history" class="menu">
                 <div class="menu__icon"> <i data-feather="activity" appFeatherIcon></i> </div>
                 <div class="menu__title"> History </div>
+            </a>
+        </li>
+        <li>
+            <a href="/item" class="menu">
+                <div class="menu__icon"> <i data-feather="database" appFeatherIcon></i> </div>
+                <div class="menu__title"> Items </div>
             </a>
         </li>
     </ul>
@@ -27,15 +33,21 @@
 <nav class="top-nav">
     <ul>
         <li>
-            <a href="" class="top-menu top-menu--active">
+            <a routerLink="/order" class="top-menu {{globalService.menu == 'order' ? 'top-menu--active' : ''}}">
                 <div class="top-menu__icon"> <i data-feather="box" appFeatherIcon></i> </div>
                 <div class="top-menu__title"> Order </div>
             </a>
         </li>
         <li>
-            <a href="" class="top-menu">
+            <a routerLink="/history" class="top-menu {{globalService.menu == 'history' ? 'top-menu--active' : ''}}">
                 <div class="top-menu__icon"> <i data-feather="activity" appFeatherIcon></i> </div>
                 <div class="top-menu__title"> History </div>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/item" class="top-menu {{globalService.menu == 'item' ? 'top-menu--active' : ''}}">
+                <div class="top-menu__icon"> <i data-feather="database" appFeatherIcon></i> </div>
+                <div class="top-menu__title"> Items </div>
             </a>
         </li>
     </ul>

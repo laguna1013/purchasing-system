@@ -8,6 +8,7 @@ import { MenuComponent } from './layouts/menu/menu.component';
 import { FeatherIconDirective } from './directives/feather-icon.directive';
 import { OrderComponent } from './user/order/order.component';
 import { HistoryComponent } from './user/history/history.component';
+import { ItemComponent } from './admin/item/item.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { HistoryComponent } from './user/history/history.component';
     MenuComponent,
     FeatherIconDirective,
     OrderComponent,
-    HistoryComponent
+    HistoryComponent,
+    ItemComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
+
+import { GlobalService } from '../../services/global.service'
+
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
@@ -7,7 +10,7 @@ import * as moment from 'moment';
 })
 export class OrderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private globalService: GlobalService) { }
 
   items: Array<Object> = [
     {
@@ -775,6 +778,7 @@ export class OrderComponent implements OnInit {
   order_selected: boolean = false;;
 
   ngOnInit(): void {
+    this.globalService.menu = 'order';
   }
 
   item_display_style_change = style => {
