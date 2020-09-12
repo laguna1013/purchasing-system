@@ -1,10 +1,12 @@
 <div class="content">
-  <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+  <div class="intro-y flex flex-col sm:flex-row items-center mt-5">
     <h2 class="text-lg font-medium mr-auto">
       Order item
     </h2>
     <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-      <a href="javascript:;" data-toggle="modal" data-target="#new-order-modal" class="button text-white bg-theme-1 shadow-md mr-2" (click)="generate_po_number()">New Order</a>
+      <a href="javascript:;" data-toggle="modal" data-target="#new-order-modal" class="button text-white bg-theme-1 shadow-md mr-2" (click)="generate_po_number()">
+        New Order
+      </a>
       <div class="pos-dropdown dropdown relative ml-auto sm:ml-0">
         <button class="dropdown-toggle button px-2 box text-gray-700">
         <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="chevron-down" appFeatherIcon></i> </span>
@@ -19,47 +21,47 @@
       </div>
     </div>
   </div>
-  <div class="pos intro-y grid grid-cols-12 gap-5 mt-5">
+  <div class="pos intro-y grid grid-cols-12 gap-5 mt-2">
     <!-- BEGIN: Item List -->
     <div class="intro-y col-span-12 lg:col-span-8">
-      <div class="lg:flex intro-y">
+      <div class="flex intro-y">
         <div class="relative text-gray-700">
           <input type="text" class="input input--lg w-full lg:w-64 box pr-10 placeholder-theme-13" placeholder="Search item...">
           <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search" appFeatherIcon></i>
         </div>
-        <select class="input input--lg box w-full lg:w-auto mt-3 lg:mt-0 ml-auto">
+        <select class="input input--lg box lg:mt-0 ml-auto">
           <option>Sort By</option>
           <option>A to Z</option>
           <option>Z to A</option>
           <option>Lowest Price</option>
           <option>Highest Price</option>
         </select>
-        <div class="box p-2 ml-2">
+        <div class="box p-2 ml-2 sm:hide">
           <div class="w-20 flex justify-around items-center h-full item-layout-style">
             <a class="{{item_display_style == 'list' ? 'active' : ''}}" (click)="item_display_style_change('list')"><i class="h-5" data-feather="list" appFeatherIcon></i></a>
             <a class="{{item_display_style == 'grid' ? 'active' : ''}}" (click)="item_display_style_change('grid')"><i class="h-5" data-feather="grid" appFeatherIcon></i></a>
           </div>
         </div>
       </div>
-      <div *ngIf="item_display_style == 'list'" class="p-0 mt-5" style="max-height: 720px; overflow: auto;">
-        <a *ngFor="let item of items; index as idx" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-3">
+      <div *ngIf="item_display_style == 'list'" class="p-0 mt-2" style="max-height: 65vh; overflow: auto;">
+        <a *ngFor="let item of globalService.items; index as idx" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-3">
           <div class="relative flex items-center box p-2 mt-2" (click)="select_item(item)">
             <div class="w-12 h-12 flex-none image-fit">
               <img alt="Purchasing system image" class="rounded-full" src="{{ item.image }}">
             </div>
             <div class="ml-4 mr-auto">
-        <a class="font-medium">{{item.vendor_description}} ({{item.description}})</a>
-        <div class="mr-5 sm:mr-5">
-        <span class="text-gray-600">{{ item.packing_info }}, </span>
-        <span class="text-gray-600 ml-2">Max order qty: {{ item.max_order_qty }} {{item.uom}}{{item.max_order_qty==1 ? '':'s'}}</span>
-        </div>
-        </div>
-        <div class="font-medium text-gray-700">${{item.cost}} / {{item.uom}}</div>
-        </div>
+              <a class="font-medium">{{item.vendor_description}} ({{item.description}})</a>
+              <div class="mr-5 sm:mr-5">
+                <span class="text-gray-600">{{ item.packing_info }}, </span>
+                <span class="text-gray-600 ml-2">Max order qty: {{ item.max_order_qty }} {{item.uom}}{{item.max_order_qty==1 ? '':'s'}}</span>
+              </div>
+            </div>
+            <div class="font-medium text-gray-700">${{item.cost}} / {{item.uom}}</div>
+          </div>
         </a>
       </div>
-      <div *ngIf="item_display_style == 'grid'" class="grid grid-cols-12 gap-5 mt-5 pt-5 border-t border-theme-5" style="max-height: 720px; overflow: auto;">
-        <a *ngFor="let item of items; index as idx" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-2">
+      <div *ngIf="item_display_style == 'grid'" class="grid grid-cols-12 gap-5 mt-2 pt-5 border-t border-theme-5" style="max-height: 65vh; overflow: auto;">
+        <a *ngFor="let item of globalService.items; index as idx" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-2">
           <div class="box rounded-md p-3 relative zoom-in" (click)="select_item(item)">
             <div class="flex-none pos-image relative block">
               <div class="pos-image__preview image-fit">
@@ -84,7 +86,7 @@
       </div>
       <div class="tab-content">
         <div class="tab-content__pane {{ticket_created ? 'active' : ''}}" id="ticket">
-          <div class="pos__ticket box p-2 mt-5">
+          <div class="pos__ticket box p-2 mt-2">
             <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{ordered_item.length != 0 ? 'Ordered items:' : 'Please order items'}}</h6>
             <a *ngFor="let item of ordered_item; index as idx;" (click)="select_ordered_item(item)" href="javascript:;" data-toggle="modal" data-target="#edit-item-modal" class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">
             <div class="pos__ticket__item-name truncate mr-1">{{item.vendor_description}} ({{item.description}})</div>
@@ -109,7 +111,7 @@
           </div>
         </div>
         <div class="tab-content__pane {{!ticket_created ? 'active' : ''}}" id="details">
-          <div class="box p-2 mt-5">
+          <div class="box p-2 mt-2">
             <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{orders.length != 0 ? 'Orders:' : 'You have no orders yet. Please start ordering.'}}</h6>
             <div *ngFor="let item of orders; index as idx;" class="intro-y" (click)="edit_order(item)">
             <div class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">

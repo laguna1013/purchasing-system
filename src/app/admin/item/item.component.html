@@ -1,3 +1,78 @@
 <div class="content">
-  
+  <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+    <h2 class="text-lg font-medium mr-auto">
+      Items
+    </h2>
+    <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+      <div class="dropdown relative ml-auto sm:ml-0">
+        <button class="dropdown-toggle button px-2 box text-gray-700 flex">
+          <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="plus" appFeatherIcon></i> </span><span>Add New Item</span>
+        </button>
+        <div class="dropdown-box mt-10 absolute w-40 top-0 right-0 z-20">
+          <div class="dropdown-box__content box p-2">
+            <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md"> <i data-feather="file-plus" class="w-4 h-4 mr-2"></i> Upload excel </a>
+            <a href="" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md"> <i data-feather="edit" class="w-4 h-4 mr-2"></i> Add manually </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pos intro-y grid grid-cols-12">
+    <div class="intro-y col-span-12">
+      <div class="intro-y datatable-wrapper box mt-2 item-list">
+        <table class="table table-report table-report--bordered display w-full">
+          <thead>
+            <tr>
+              <th class="text-center">Sort by weights</th>
+              <th class="text-center">Inventory ID</th>
+              <th class="">Image</th>
+              <th class="text-center">Vendor description</th>
+              <th class="text-center">Description</th>
+              <th class="text-center">Packing info</th>
+              <th class="text-center">Cost</th>
+              <th class="text-center">QTY</th>
+              <th class="text-center">Customer UOM</th>
+              <th class="text-center">G.W.(lb)</th>
+              <th class="text-center">Total G.W.(lb)</th>
+              <th class="text-center">Subcharge (20%)</th>
+              <th class="text-center">Max order qty</th>
+              <th class="text-center">Added date</th>
+              <th class="text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of globalService.items; index as idx;">
+              <td class="border-b">
+                <div class="font-medium text-center">{{item.weight}}</div></td>
+              <td class="border-b text-center">
+                <div class="font-medium">{{item.id}}</div></td>
+              <td class="text-left border-b">
+                <div class="flex sm:justify-start">
+                  <div class="w-10 h-10 image-fit">
+                    <img src="{{item.image}}" alt="Purchasing system image">
+                  </div>
+                </div></td>
+              <td class="border-b"><div class="text-center font-medium">{{item.vendor_description}}</div></td>
+              <td class="border-b"><div class="text-center font-medium">{{item.description}}</div></td>
+              <td class="text-center border-b">{{item.packing_info}}</td>
+              <td class="text-center border-b">{{item.cost | currency}}</td>
+              <td class="text-center border-b">{{item.qty}}</td>
+              <td class="text-center border-b">{{item.big_uom}}</td>
+              <td class="text-center border-b">{{item.gw}}</td>
+              <td class="text-center border-b">{{item.gw * item.qty | number}}</td>
+              <td class="text-center border-b">{{item.cost * 0.2 | currency}}</td>
+              <td class="text-center border-b">{{item.max_order_qty}}</td>
+              <td class="text-center border-b">{{item.added_date}}</td>
+              <td class="border-b">
+                <div class="flex">
+                  <input class="input input--switch border mr-1" type="checkbox" [(checked)]="item.status">
+                  <div class="flex items-center sm:justify-center text-theme-{{item.status ? '9' : '6'}}"> {{item.status ? 'Activated' : 'Inactivated'}} </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

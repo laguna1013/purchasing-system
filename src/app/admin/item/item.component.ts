@@ -9,7 +9,7 @@ import { GlobalService } from '../../services/global.service'
 })
 export class ItemComponent implements OnInit {
 
-  constructor(private globalService: GlobalService) { }
+  constructor(public globalService: GlobalService) { }
 
   ngOnInit(): void {
     this.globalService.menu = 'item';
