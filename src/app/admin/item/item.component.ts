@@ -15,4 +15,7 @@ export class ItemComponent implements OnInit {
     this.globalService.menu = 'item';
   }
 
+  status_change = item => {
+    item.status = !item.status;
+  }
 }
