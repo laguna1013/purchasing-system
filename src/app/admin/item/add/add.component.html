@@ -1,1 +1,92 @@
-<p>add works!</p>
+<div class="content">
+  <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-12">
+          <div class="intro-y box lg:mt-5">
+              <div class="flex items-center p-5 border-b border-gray-200">
+                  <h2 class="font-medium text-base mr-auto">
+                      Item information
+                  </h2>
+              </div>
+              <div class="p-5">
+                  <div class="grid grid-cols-12 gap-5">
+                      <div class="col-span-12 xl:col-span-4">
+                          <h4>Click or drop image</h4>
+                          <div class="border border-gray-200 rounded-md p-5 flex item-image justify-center">
+                              <ngx-dropzone (change)="onSelect($event)">
+                                  <ngx-dropzone-label>Item image. Drop it here!</ngx-dropzone-label>
+                              </ngx-dropzone>
+                              <div class="item-preview">
+                                <img src="{{item['image'] ? item['image'] : '/assets/images/placeholders/800x800.jpg'}}" alt="Purchasing system image">
+                              </div>
+                              <div class="remove-image" (click)="remove_item_image()">
+                                <i data-feather="x" class="w-4 h-4 mr-2" appFeatherIcon style="color: white; margin: 0px;"></i>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-span-12 xl:col-span-8">
+                          <div class="grid grid-cols-12 gap-5">
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Inventory ID</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Inventory ID">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Gross weight</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Gross weight">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Description</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Vendor description">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Description 1</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Description">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Packing info</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="0.6kg/bag 10bags/ctn">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Cusomer UOM</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="ctn">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Cost</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Price of item">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>CBM</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Item cbm">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Qty in stock</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="qty">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Max order Qty</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Max order Qty">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <div class="grid grid-cols-12 gap-5">
+                                    <div class="col-span-6 xl:col-span-6 flex">
+                                      <input class="input input--switch border mr-2" type="checkbox">
+                                      <span>Item activated</span>
+                                    </div>
+                                    <div class="col-span-6 xl:col-span-6 flex">
+                                      <input class="input input--switch border mr-2" type="checkbox">
+                                      <span>Display qty</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 xl:col-span-6 flex justify-end">
+                                <button type="button" class="button w-20 bg-theme-7 text-white mt-3 mr-3">Back</button>
+                                <button type="button" class="button w-20 bg-theme-6 text-white mt-3 mr-3">Delete</button>
+                                <button type="button" class="button w-20 bg-theme-1 text-white mt-3">Save</button>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
