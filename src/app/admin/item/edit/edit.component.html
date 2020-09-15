@@ -26,57 +26,39 @@
                       <div class="col-span-12 xl:col-span-8">
                           <div class="grid grid-cols-12 gap-5">
                             <div class="col-span-12 xl:col-span-6">
-                                <label>Weight</label>
-                                <input type="text" class="input w-full border mt-2" placeholder="Item weight(Number)" value="{{item['weight']}}">
-                            </div>
-                            <div class="col-span-12 xl:col-span-6">
                                 <label>Inventory ID</label>
                                 <input type="text" class="input w-full border mt-2" placeholder="Inventory ID" value="{{item['id']}}">
                             </div>
                             <div class="col-span-12 xl:col-span-6">
-                                <label>Vendor Description</label>
-                                <input type="text" class="input w-full border mt-2" placeholder="Vendor description" value="{{item['vendor_description']}}">
+                                <label>Gross weight</label>
+                                <input type="text" class="input w-full border mt-2" value="{{item['gw']}}">
                             </div>
                             <div class="col-span-12 xl:col-span-6">
                                 <label>Description</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Vendor description" value="{{item['vendor_description']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Description 1</label>
                                 <input type="text" class="input w-full border mt-2" placeholder="Description" value="{{item['description']}}">
                             </div>
                             <div class="col-span-12 xl:col-span-6">
                                 <label>Packing info</label>
-                                <div class="grid grid-cols-12 gap-5">
-                                  <div class="col-span-6 xl:col-span-3">
-                                    <small class="">Primary unit</small>
-                                    <input type="text" class="input w-full border mt-2">
-                                  </div>
-                                  <div class="col-span-6 xl:col-span-3">
-                                    <small>Base UOM/UOM</small>
-                                    <input type="text" class="input w-full border mt-2">
-                                  </div>
-                                  <div class="col-span-6 xl:col-span-3">
-                                    <small>Secondary unit</small>
-                                    <input type="text" class="input w-full border mt-2">
-                                  </div>
-                                  <div class="col-span-6 xl:col-span-3">
-                                    <small>UOM/Big UOM</small>
-                                    <input type="text" class="input w-full border mt-2">
-                                  </div>
-                                </div>
+                                <input type="text" class="input w-full border mt-2" value="{{item['packing_info']}}">
                             </div>
                             <div class="col-span-12 xl:col-span-6">
                                 <label>Cusomer UOM</label>
-                                <div class="grid grid-cols-12 gap-5">
-                                  <div class="col-span-12 xl:col-span-12">
-                                    <small>Unit of measurement on purchase</small>
-                                    <input type="text" class="input w-full border mt-2" value="{{item['uom']}}">
-                                  </div>
-                                </div>
+                                <input type="text" class="input w-full border mt-2" value="{{item['uom']}}">
                             </div>
                             <div class="col-span-12 xl:col-span-6">
                                 <label>Cost</label>
                                 <input type="text" class="input w-full border mt-2" value="{{item['cost']}}">
                             </div>
                             <div class="col-span-12 xl:col-span-6">
-                                <label>Qty</label>
+                                <label>CBM</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Item weight(Number)" value="{{item['cbm']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Qty in stock</label>
                                 <input type="text" class="input w-full border mt-2" value="{{item['qty']}}">
                             </div>
                             <div class="col-span-12 xl:col-span-6">
@@ -84,11 +66,22 @@
                                 <input type="text" class="input w-full border mt-2" value="{{item['max_order_qty']}}">
                             </div>
                             <div class="col-span-12 xl:col-span-6">
-                                <label>Gross weight</label>
-                                <input type="text" class="input w-full border mt-2" value="{{item['gw']}}">
+                                <div class="grid grid-cols-12 gap-5">
+                                    <div class="col-span-6 xl:col-span-6 flex">
+                                      <input class="input input--switch border mr-2" type="checkbox" [(checked)]="item['qty_visible']">
+                                      <span>Item activated</span>
+                                    </div>
+                                    <div class="col-span-6 xl:col-span-6 flex">
+                                      <input class="input input--switch border mr-2" type="checkbox" [(checked)]="item['status']">
+                                      <span>Display qty</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 xl:col-span-6 flex justify-end">
+                                <button type="button" class="button w-20 bg-theme-6 text-white mt-3 mr-3">Delete</button>
+                                <button type="button" class="button w-20 bg-theme-1 text-white mt-3">Save</button>
                             </div>
                           </div>
-                          <button type="button" class="button w-20 bg-theme-1 text-white mt-3">Save</button>
                       </div>
                   </div>
               </div>
