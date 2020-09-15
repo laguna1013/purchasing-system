@@ -1,0 +1,98 @@
+<div class="content">
+  <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-12">
+          <div class="intro-y box lg:mt-5">
+              <div class="flex items-center p-5 border-b border-gray-200">
+                  <h2 class="font-medium text-base mr-auto">
+                      Item information
+                  </h2>
+              </div>
+              <div class="p-5">
+                  <div class="grid grid-cols-12 gap-5">
+                      <div class="col-span-12 xl:col-span-4">
+                          <div class="border border-gray-200 rounded-md p-5">
+                              <ngx-dropzone (change)="onSelect($event)">
+                                  <ngx-dropzone-label>Item image. Drop it here!</ngx-dropzone-label>
+                                  <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                                      <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                                  </ngx-dropzone-image-preview>
+                              </ngx-dropzone>
+                              <div class="w-40 mx-auto cursor-pointer relative mt-5">
+                                  <button type="button" class="button w-full bg-theme-1 text-white">Item image</button>
+                                  <input type="file" class="w-full h-full top-0 left-0 absolute opacity-0">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-span-12 xl:col-span-8">
+                          <div class="grid grid-cols-12 gap-5">
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Weight</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Item weight(Number)" value="{{item['weight']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Inventory ID</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Inventory ID" value="{{item['id']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Vendor Description</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Vendor description" value="{{item['vendor_description']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Description</label>
+                                <input type="text" class="input w-full border mt-2" placeholder="Description" value="{{item['description']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Packing info</label>
+                                <div class="grid grid-cols-12 gap-5">
+                                  <div class="col-span-6 xl:col-span-3">
+                                    <small class="">Primary unit</small>
+                                    <input type="text" class="input w-full border mt-2">
+                                  </div>
+                                  <div class="col-span-6 xl:col-span-3">
+                                    <small>Base UOM/UOM</small>
+                                    <input type="text" class="input w-full border mt-2">
+                                  </div>
+                                  <div class="col-span-6 xl:col-span-3">
+                                    <small>Secondary unit</small>
+                                    <input type="text" class="input w-full border mt-2">
+                                  </div>
+                                  <div class="col-span-6 xl:col-span-3">
+                                    <small>UOM/Big UOM</small>
+                                    <input type="text" class="input w-full border mt-2">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Cusomer UOM</label>
+                                <div class="grid grid-cols-12 gap-5">
+                                  <div class="col-span-12 xl:col-span-12">
+                                    <small>Unit of measurement on purchase</small>
+                                    <input type="text" class="input w-full border mt-2" value="{{item['uom']}}">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Cost</label>
+                                <input type="text" class="input w-full border mt-2" value="{{item['cost']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Qty</label>
+                                <input type="text" class="input w-full border mt-2" value="{{item['qty']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Max order Qty</label>
+                                <input type="text" class="input w-full border mt-2" value="{{item['max_order_qty']}}">
+                            </div>
+                            <div class="col-span-12 xl:col-span-6">
+                                <label>Gross weight</label>
+                                <input type="text" class="input w-full border mt-2" value="{{item['gw']}}">
+                            </div>
+                          </div>
+                          <button type="button" class="button w-20 bg-theme-1 text-white mt-3">Save</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

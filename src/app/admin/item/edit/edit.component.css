@@ -1,0 +1,7 @@
+ngx-dropzone{
+  height: 392px;
+}
+ngx-dropzone-image-preview{
+  height: 90% !important;
+  width: 90% !important;
+}

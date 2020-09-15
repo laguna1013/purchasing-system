@@ -9,7 +9,10 @@ import { FeatherIconDirective } from './directives/feather-icon.directive';
 import { OrderComponent } from './user/order/order.component';
 import { HistoryComponent } from './user/history/history.component';
 import { ItemComponent } from './admin/item/item.component';
+import { AddComponent } from './admin/item/add/add.component';
+import { EditComponent } from './admin/item/edit/edit.component';
 
+import { NgxDropzoneModule } from 'ngx-dropzone';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,12 +21,15 @@ import { ItemComponent } from './admin/item/item.component';
     FeatherIconDirective,
     OrderComponent,
     HistoryComponent,
-    ItemComponent
+    ItemComponent,
+    AddComponent,
+    EditComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    appRoutingModule
+    appRoutingModule,
+    NgxDropzoneModule
   ],
   providers: [],
   bootstrap: [AppComponent]
