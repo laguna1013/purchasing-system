@@ -10,7 +10,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 export class EditComponent implements OnInit {
   item_id: String = ''
   item: Object;
-  files: File[] = [];
+  file: File;
   constructor(public globalService: GlobalService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -19,12 +19,14 @@ export class EditComponent implements OnInit {
   }
 
   onSelect(event) {
-    console.log(event);
-    this.files.push(...event.addedFiles);
+    const reader = new FileReader();
+    this.file = event.addedFiles[0];
+    reader.readAsDataURL(this.file);
+    reader.onload = () => {
+      this.item['image'] = reader.result;
+    };
   }
-
-  onRemove(event) {
-    console.log(event);
-    this.files.splice(this.files.indexOf(event), 1);
+  remove_item_image = () => {
+    this.item['image'] = '';
   }
 }

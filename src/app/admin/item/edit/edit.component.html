@@ -10,16 +10,16 @@
               <div class="p-5">
                   <div class="grid grid-cols-12 gap-5">
                       <div class="col-span-12 xl:col-span-4">
-                          <div class="border border-gray-200 rounded-md p-5">
+                          <h4>Click or drop image</h4>
+                          <div class="border border-gray-200 rounded-md p-5 flex item-image justify-center">
                               <ngx-dropzone (change)="onSelect($event)">
                                   <ngx-dropzone-label>Item image. Drop it here!</ngx-dropzone-label>
-                                  <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-                                      <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                                  </ngx-dropzone-image-preview>
                               </ngx-dropzone>
-                              <div class="w-40 mx-auto cursor-pointer relative mt-5">
-                                  <button type="button" class="button w-full bg-theme-1 text-white">Item image</button>
-                                  <input type="file" class="w-full h-full top-0 left-0 absolute opacity-0">
+                              <div class="item-preview">
+                                <img src="{{item['image'] ? item['image'] : '/assets/images/placeholders/800x800.jpg'}}" alt="Purchasing system image">
+                              </div>
+                              <div class="remove-image" (click)="remove_item_image()">
+                                <i data-feather="x" class="w-4 h-4 mr-2" appFeatherIcon style="color: white; margin: 0px;"></i>
                               </div>
                           </div>
                       </div>
