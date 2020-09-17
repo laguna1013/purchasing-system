@@ -13,6 +13,7 @@ import { AddComponent } from './admin/item/add/add.component';
 import { EditComponent } from './admin/item/edit/edit.component';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { LoginComponent } from './auth/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     HistoryComponent,
     ItemComponent,
     AddComponent,
-    EditComponent
+    EditComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
