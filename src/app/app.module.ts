@@ -12,6 +12,8 @@ import { ItemComponent } from './admin/item/item.component';
 import { AddComponent } from './admin/item/add/add.component';
 import { EditComponent } from './admin/item/edit/edit.component';
 
+import { HttpClientModule } from '@angular/common/http';
+
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LoginComponent } from './auth/login/login.component';
 @NgModule({
@@ -31,7 +33,8 @@ import { LoginComponent } from './auth/login/login.component';
     BrowserModule,
     BrowserAnimationsModule,
     appRoutingModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

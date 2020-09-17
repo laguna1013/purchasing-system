@@ -24,17 +24,44 @@
                     </h2>
                     <div class="intro-x mt-2 text-gray-500 xl:hidden text-center">Our system enables you to order products and manage your orders</div>
                     <div class="intro-x mt-8">
-                        <input type="text" class="intro-x login__input input input--lg border border-gray-300 block" placeholder="Email or user ID">
-                        <input type="password" class="intro-x login__input input input--lg border border-gray-300 block mt-4" placeholder="Password">
+                        <input type="text" class="intro-x login__input input input--lg border border-gray-300 block" placeholder="Email or user ID" value="{{username}}" (change)="username_change($event)">
+                        <input type="password" class="intro-x login__input input input--lg border border-gray-300 block mt-4" placeholder="Password" value="{{password}}" (change)="password_change($event)">
                     </div>
                     <div class="intro-x flex text-gray-700 text-xs sm:text-sm mt-4">
                         <div class="flex items-center mr-auto">
-                            <input type="checkbox" class="input border mr-2" id="remember-me">
+                            <input type="checkbox" class="input border mr-2" id="remember-me" [checked]="remember" (change)="remember = !remember">
                             <label class="cursor-pointer select-none" for="remember-me">Remember me</label>
                         </div>
                     </div>
-                    <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
-                        <button class="button button--lg w-full xl:w-32 text-white bg-theme-1 xl:mr-3">Login</button>
+                    <div *ngIf="error_message != ''" class="error-messages mt-4 rounded-md px-5 py-4 mb-2 border border-theme-6 text-theme-6">
+                      {{error_message}}
+                    </div>
+                    <div *ngIf="success_message != ''" class="success-messages mt-4 rounded-md px-5 py-4 mb-2 border border-theme-9 text-theme-9">
+                      {{success_message}}
+                    </div>
+                    <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left flex">
+                        <button class="button button--lg w-full xl:w-32 text-white bg-theme-1 xl:mr-3" (click)="login()">Login</button>
+                        <div *ngIf="loading" class="flex ml-2" style="align-items: center;">
+                          <svg width="20" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
+                            <defs>
+                                <linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a">
+                                    <stop stop-color="rgb(45, 55, 72)" stop-opacity="0" offset="0%"></stop>
+                                    <stop stop-color="rgb(45, 55, 72)" stop-opacity=".631" offset="63.146%"></stop>
+                                    <stop stop-color="rgb(45, 55, 72)" offset="100%"></stop>
+                                </linearGradient>
+                            </defs>
+                            <g fill="none" fill-rule="evenodd">
+                                <g transform="translate(1 1)">
+                                    <path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="3">
+                                        <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite"></animateTransform>
+                                    </path>
+                                    <circle fill="rgb(45, 55, 72)" cx="36" cy="18" r="1">
+                                        <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite"></animateTransform>
+                                    </circle>
+                                </g>
+                            </g>
+                        </svg>
+                        </div>
                     </div>
                     <div class="intro-x mt-10 xl:mt-24 text-gray-700 text-center xl:text-left">
                         By signin up, you agree to our
