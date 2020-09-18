@@ -20,6 +20,16 @@ export class AuthService {
         password: password
     }));
   }
+  isLoggedIn(){
+    if(this.currentUser()){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  public get currentUserRole(){
+    return this.user['role']
+  }
   logout() {
     // remove user from local storage to log user out
     this.cookieService.deleteCookie('currentUser');

@@ -22,7 +22,15 @@ export class LoginComponent implements OnInit {
   remember: Boolean = true;
 
   loading: Boolean = false;
-  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private cookieService: CookieService,) { }
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private cookieService: CookieService,) {
+    if (authService.isLoggedIn()) {
+      if(authService.currentUserRole == 'admin'){
+        router.navigate(['item']);
+      }else{
+        router.navigate(['order']);
+      }
+    }
+  }
 
   ngOnInit(): void {
     let remember_credentials = JSON.parse(this.cookieService.getCookie('PS_remember_credentials'));

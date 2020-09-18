@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
 import { GlobalService } from '../../services/global.service';
+import { MENU } from './menu';
+
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -9,9 +11,16 @@ import { GlobalService } from '../../services/global.service';
 })
 export class MenuComponent implements OnInit {
 
-  constructor(public globalService: GlobalService) { }
+  menuItems: Object;
+
+  constructor(public globalService: GlobalService, public authService: AuthService) { }
 
   ngOnInit(): void {
+    if(this.authService.currentUserRole == 'admin'){
+      this.menuItems = MENU.filter(item => item['role'] == 'admin')
+    }else{
+      this.menuItems = MENU.filter(item => item['role'] != 'admin')
+    }
   }
 
 }

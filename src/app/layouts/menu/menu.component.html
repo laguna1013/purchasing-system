@@ -7,22 +7,10 @@
         <a href="javascript:;" id="mobile-menu-toggler"> <i data-feather="bar-chart-2" class="w-8 h-8 text-white transform -rotate-90" appFeatherIcon></i> </a>
     </div>
     <ul class="border-t border-theme-24 py-5 hidden">
-        <li>
-            <a href="/order" class="menu">
-                <div class="menu__icon"> <i data-feather="box" appFeatherIcon></i> </div>
-                <div class="menu__title"> Order </div>
-            </a>
-        </li>
-        <li>
-            <a href="/history" class="menu">
-                <div class="menu__icon"> <i data-feather="activity" appFeatherIcon></i> </div>
-                <div class="menu__title"> History </div>
-            </a>
-        </li>
-        <li>
-            <a href="/item" class="menu">
-                <div class="menu__icon"> <i data-feather="database" appFeatherIcon></i> </div>
-                <div class="menu__title"> Items </div>
+        <li *ngFor="let item of menuItems">
+            <a routerLink="/{{item.link}}" class="menu">
+                <div class="menu__icon"> <i [attr.data-feather]="item.icon" appFeatherIcon *ngIf="item.icon"></i> </div>
+                <div class="menu__title"> {{item.label}} </div>
             </a>
         </li>
     </ul>
@@ -32,22 +20,10 @@
 <!-- BEGIN: Top Menu -->
 <nav class="top-nav">
     <ul>
-        <li>
-            <a routerLink="/order" class="top-menu {{globalService.menu == 'order' ? 'top-menu--active' : ''}}">
-                <div class="top-menu__icon"> <i data-feather="box" appFeatherIcon></i> </div>
-                <div class="top-menu__title"> Order </div>
-            </a>
-        </li>
-        <li>
-            <a routerLink="/history" class="top-menu {{globalService.menu == 'history' ? 'top-menu--active' : ''}}">
-                <div class="top-menu__icon"> <i data-feather="activity" appFeatherIcon></i> </div>
-                <div class="top-menu__title"> History </div>
-            </a>
-        </li>
-        <li>
-            <a routerLink="/item" class="top-menu {{globalService.menu == 'item' ? 'top-menu--active' : ''}}">
-                <div class="top-menu__icon"> <i data-feather="database" appFeatherIcon></i> </div>
-                <div class="top-menu__title"> Items </div>
+        <li *ngFor="let item of menuItems">
+            <a routerLink="/{{item.link}}" class="top-menu {{globalService.menu == item.link ? 'top-menu--active' : ''}}">
+                <div class="top-menu__icon"> <i [attr.data-feather]="item.icon" appFeatherIcon *ngIf="item.icon"></i> </div>
+                <div class="top-menu__title"> {{item.label}} </div>
             </a>
         </li>
     </ul>

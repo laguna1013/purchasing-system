@@ -16,6 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LoginComponent } from './auth/login/login.component';
+import { UnauthorizedComponent } from './auth/unauthorized/unauthorized.component';
+import { PageNotFoundComponent } from './auth/page-not-found/page-not-found.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +29,9 @@ import { LoginComponent } from './auth/login/login.component';
     ItemComponent,
     AddComponent,
     EditComponent,
-    LoginComponent
+    LoginComponent,
+    UnauthorizedComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
