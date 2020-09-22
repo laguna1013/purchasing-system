@@ -43,3 +43,4 @@ ngx-dropzone-image-preview{
 .remove-image i{
   color: white;
 }
+input.ng-touched.ng-invalid {border:solid red 1px;}

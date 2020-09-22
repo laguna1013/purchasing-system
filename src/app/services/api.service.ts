@@ -25,4 +25,10 @@ export class ApiService {
         return res;
       }));
   }
+  addItem(data){
+    return this.http.post(`${api_url}/${ controller }/add_item`, data)
+      .pipe(map(res => {
+          return res;
+      }))
+  }
 }
