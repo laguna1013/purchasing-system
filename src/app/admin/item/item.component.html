@@ -24,7 +24,7 @@
         <table class="table table-report table-report--bordered display w-full">
           <thead>
             <tr>
-              <th class="text-center">Sort by weights</th>
+              <th class="text-center">Branch</th>
               <th class="text-center">Inventory ID</th>
               <th class="">Image</th>
               <th class="text-center">Vendor description</th>
@@ -43,29 +43,29 @@
           </thead>
           <tbody>
             <tr class="edit-item cursor-pointer" *ngFor="let item of globalService.items; index as idx;">
-              <td class="border-b"><div class="font-medium text-center">{{item.weight}}</div></td>
-              <td class="border-b text-center" (click)='edit_item(item.id)'><div class="font-medium">{{item.id}}</div></td>
-              <td class="text-left border-b" (click)='edit_item(item.id)'>
+              <td class="border-b"><div class="font-medium text-center">{{item.branch}}</div></td>
+              <td class="border-b text-center" (click)='edit_item(item.inventory_id)'><div class="font-medium">{{item.inventory_id}}</div></td>
+              <td class="text-left border-b" (click)='edit_item(item.inventory_id)'>
                 <div class="flex sm:justify-start">
                   <div class="w-10 h-10 image-fit">
                     <img src="{{item.image}}" alt="Purchasing system image">
                   </div>
                 </div></td>
-              <td class="border-b" (click)='edit_item(item.id)'><div class="text-center font-medium">{{item.vendor_description}}</div></td>
-              <td class="border-b" (click)='edit_item(item.id)'><div class="text-center font-medium">{{item.description}}</div></td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.packing_info}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.cost | currency}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.qty}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.big_uom}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.gw}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.gw * item.qty | number}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.cost * 0.2 | currency}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.max_order_qty}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.id)'>{{item.added_date}}</td>
+              <td class="border-b" (click)='edit_item(item.inventory_id)'><div class="text-center font-medium">{{item.vendor_description}}</div></td>
+              <td class="border-b" (click)='edit_item(item.inventory_id)'><div class="text-center font-medium">{{item.description}}</div></td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.packing_info}}</td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.price | currency}}</td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.qty}}</td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.uom}}</td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.gross_weight}}</td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.gross_weight * item.qty | number}}</td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.price * 0.2 | currency}}</td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.moq}}</td>
+              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.created_at}}</td>
               <td class="border-b">
                 <div class="flex">
-                  <input class="input input--switch border mr-2" type="checkbox" [(checked)]="item.status" (change)="status_change(item)">
-                  <div class="flex items-center sm:justify-center text-theme-{{item.status ? '9' : '6'}}"> {{item.status ? 'Activated' : 'Inactivated'}} </div>
+                  <input class="input input--switch border mr-2" type="checkbox" [checked]="item.status=='true'" (change)="status_change(item)">
+                  <div class="flex items-center sm:justify-center text-theme-{{item.status=='true' ? '9' : '6'}}"> {{item.status=='true' ? 'Activated' : 'Inactivated'}} </div>
                 </div>
               </td>
             </tr>

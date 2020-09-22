@@ -7,6 +7,9 @@ import { ParseService } from '../../../services/parse.service';
 import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import * as moment from 'moment';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
@@ -17,9 +20,11 @@ export class AddComponent implements OnInit {
   item = new Item();
   file: File;
   loading: Boolean = false;
+  addMoreModal: any;
   constructor(
     public globalService: GlobalService,
     private route: ActivatedRoute,
+    private router: Router,
     private parseService: ParseService,
     private apiService: ApiService,
     private authService: AuthService,
@@ -27,6 +32,7 @@ export class AddComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     this.item.created_user_id = this.authService.currentUser()['id']
+    this.item.inventory_id = 'D' + moment().format('YYYYMMDDhms')
   }
   onSelect(event) {
     const reader = new FileReader();
@@ -39,16 +45,36 @@ export class AddComponent implements OnInit {
   remove_item_image = () => {
     this.item.image = [];
   }
+  discard = () => {
+    this.item.reset();
+    this.item.created_user_id = this.authService.currentUser()['id']
+    this.item.inventory_id = 'D' + moment().format('YYYYMMDDhms')
+  }
   onSubmit = () => {
     this.loading = true;
     this.apiService.addItem(this.parseService.encode(this.item))
       .pipe(first())
       .subscribe(
         data => {
-          console.log(data['data'])
           if(data['status'] == 'success'){
             if(data['data'] == 1){
               this.toast.success('Item added successfully!', 'Success');
+              Swal.fire({
+                title: 'Item added successfully',
+                text: 'Do you want to add more items?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+              }).then((result) => {
+                if(result.value) {
+                  this.item.reset();
+                  this.item.created_user_id = this.authService.currentUser()['id']
+                  this.item.inventory_id = 'D' + moment().format('YYYYMMDDhms')
+                }else{
+                  this.router.navigate(['/item']);
+                }
+              })
             }else if(data['data'] == 0){
               this.toast.error('Duplicating inventory ID.', 'Error');
             }else if(data['data'] == -1){
