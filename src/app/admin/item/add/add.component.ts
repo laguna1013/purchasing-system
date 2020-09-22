@@ -6,6 +6,7 @@ import { Item } from '../item';
 import { ParseService } from '../../../services/parse.service';
 import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
@@ -15,8 +16,15 @@ export class AddComponent implements OnInit {
   item_id: String = ''
   item = new Item();
   file: File;
-  constructor(public globalService: GlobalService, private route: ActivatedRoute, private parseService: ParseService, private apiService: ApiService, private authService: AuthService) { }
-
+  loading: Boolean = false;
+  constructor(
+    public globalService: GlobalService,
+    private route: ActivatedRoute,
+    private parseService: ParseService,
+    private apiService: ApiService,
+    private authService: AuthService,
+    private toast: ToastrService
+  ) { }
   ngOnInit(): void {
     this.item.created_user_id = this.authService.currentUser()['id']
   }
@@ -32,15 +40,28 @@ export class AddComponent implements OnInit {
     this.item.image = [];
   }
   onSubmit = () => {
-    //console.log(this.parseService.encode(this.item))
+    this.loading = true;
     this.apiService.addItem(this.parseService.encode(this.item))
       .pipe(first())
       .subscribe(
         data => {
-          console.log(data)
+          console.log(data['data'])
+          if(data['status'] == 'success'){
+            if(data['data'] == 1){
+              this.toast.success('Item added successfully!', 'Success');
+            }else if(data['data'] == 0){
+              this.toast.error('Duplicating inventory ID.', 'Error');
+            }else if(data['data'] == -1){
+              this.toast.error('Database error. Please try again.', 'Error');
+            }else{
+              this.toast.warning('Image not uploaded. Please try with different image.', 'Warning');
+            }
+            this.loading = false;
+          }
         },
         error => {
-          console.log(error)
+          this.toast.error('Server error. Please try again later.', 'Error');
+          this.loading = false;
         }
       )
   }

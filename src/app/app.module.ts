@@ -19,6 +19,8 @@ import { LoginComponent } from './auth/login/login.component';
 import { UnauthorizedComponent } from './auth/unauthorized/unauthorized.component';
 import { PageNotFoundComponent } from './auth/page-not-found/page-not-found.component';
 import { FormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
+import { LoaderComponent } from './fragments/loader/loader.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +34,8 @@ import { FormsModule } from '@angular/forms';
     EditComponent,
     LoginComponent,
     UnauthorizedComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ import { FormsModule } from '@angular/forms';
     appRoutingModule,
     NgxDropzoneModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
