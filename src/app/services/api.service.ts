@@ -55,4 +55,10 @@ export class ApiService {
           return res;
       }))
   }
+  removeItem(data){
+    return this.http.post(`${api_url}/${ controller }/remove_item`, data)
+      .pipe(map(res => {
+          return res;
+      }))
+  }
 }

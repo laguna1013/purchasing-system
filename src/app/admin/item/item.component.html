@@ -4,6 +4,9 @@
     <h2 class="text-lg font-medium mr-auto">
       Items
     </h2>
+    <div *ngIf="loading" class="mr-3">
+      <app-loader></app-loader>
+    </div>
     <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
       <div class="dropdown relative ml-auto sm:ml-0">
         <button class="dropdown-toggle button px-2 box text-gray-700 flex">
@@ -39,6 +42,7 @@
               <th class="text-center">Max order qty</th>
               <th class="text-center">Added date</th>
               <th class="text-center">Status</th>
+              <th class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -67,6 +71,9 @@
                   <input class="input input--switch border mr-2" type="checkbox" [checked]="item.status=='true'" (change)="status_change(item)">
                   <div class="flex items-center sm:justify-center text-theme-{{item.status=='true' ? '9' : '6'}}"> {{item.status=='true' ? 'Activated' : 'Inactivated'}} </div>
                 </div>
+              </td>
+              <td class="text-center border-b">
+                <button (click)="delete_item(item)" class="button button--sm flex items-center justify-center bg-theme-6 text-white"><i data-feather="trash" class="w-4 h-4 mr-2" appFeatherIcon></i>Delete</button>
               </td>
             </tr>
           </tbody>

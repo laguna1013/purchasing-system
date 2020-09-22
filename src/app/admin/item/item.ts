@@ -1,18 +1,18 @@
 export class Item {
-  inventory_id: string = 'D20200102'
+  inventory_id: string = ''
   created_user_id: string
-  branch: string = 'Meetfresh'
-  gross_weight: string = '10'
+  branch: string = ''
+  gross_weight: string = ''
   category: string = 'dry'
-  vendor_description: string = '鮮芋仙紅茶'
-  description: string = 'Black Tea'
+  vendor_description: string = ''
+  description: string = ''
   image: any = []
-  packing_info: string = '130g/bag 50bags/ctn'
-  uom: string = 'ctn'
-  price: string = '80'
-  cbm: string = '0.4'
-  qty: string = '200'
-  moq: string = '9'
+  packing_info: string = ''
+  uom: string = ''
+  price: string = ''
+  cbm: string = ''
+  qty: string = ''
+  moq: string = ''
   status: any = true
   qty_display: any = true
   user_access: string = 'all'
@@ -22,7 +22,7 @@ export class Item {
     this.created_user_id = ''
     this.branch = ''
     this.gross_weight = ''
-    this.category = ''
+    this.category = 'dry'
     this.vendor_description = ''
     this.description = ''
     this.image = ''
@@ -34,6 +34,6 @@ export class Item {
     this.moq = ''
     this.status = ''
     this.qty_display = ''
-    this.user_access = ''
+    this.user_access = 'all'
   }
 }
