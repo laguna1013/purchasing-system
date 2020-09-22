@@ -18,6 +18,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { LoginComponent } from './auth/login/login.component';
 import { UnauthorizedComponent } from './auth/unauthorized/unauthorized.component';
 import { PageNotFoundComponent } from './auth/page-not-found/page-not-found.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,8 @@ import { PageNotFoundComponent } from './auth/page-not-found/page-not-found.comp
     BrowserAnimationsModule,
     appRoutingModule,
     NgxDropzoneModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

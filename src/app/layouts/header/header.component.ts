@@ -13,12 +13,13 @@ export class HeaderComponent implements OnInit {
 
   day: String;
   time: String;
-
+  user: Object;
   ngOnInit(): void {
     setInterval(() => {
       this.day = moment().format('MMM DD ddd, YYYY');
       this.time = moment().format('hh:mm:ss');
     }, 1000)
+    this.user = this.authService.currentUser();
   }
   logout = () => {
     this.authService.logout();

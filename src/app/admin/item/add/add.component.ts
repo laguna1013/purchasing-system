@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../../services/global.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+
+import { Item } from '../item';
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
@@ -8,9 +10,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 })
 export class AddComponent implements OnInit {
   item_id: String = ''
-  item: Object = {
-    
-  };
+  item = new Item();
   file: File;
   constructor(public globalService: GlobalService, private route: ActivatedRoute) { }
 
@@ -21,10 +21,13 @@ export class AddComponent implements OnInit {
     this.file = event.addedFiles[0];
     reader.readAsDataURL(this.file);
     reader.onload = () => {
-      this.item['image'] = reader.result;
+      this.item.image = reader.result;
     };
   }
   remove_item_image = () => {
-    this.item['image'] = '';
+    this.item.image = [];
+  }
+  onSubmit = () => {
+    console.log(this.item)
   }
 }
