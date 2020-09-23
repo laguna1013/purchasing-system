@@ -13,9 +13,10 @@
           <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="plus" appFeatherIcon></i> </span><span>Add New Item</span>
         </button>
         <div class="dropdown-box mt-10 absolute w-40 top-0 right-0 z-20">
-          <div class="dropdown-box__content box p-2">
-            <a routerLink="/item" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md"> <i data-feather="file-plus" class="w-4 h-4 mr-2" appFeatherIcon></i> Upload excel </a>
+          <div class="dropdown-box__content box p-2" style="position: relative;">
+            <a class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md"> <i data-feather="file-plus" class="w-4 h-4 mr-2" appFeatherIcon></i> Upload excel </a>
             <a routerLink="/item/add" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md"> <i data-feather="edit" class="w-4 h-4 mr-2" appFeatherIcon></i> Add manually </a>
+            <input (change)="fileUpload($event)" type="file" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md" style="position: absolute; top: 0.5rem; left: 0.5rem; width: 144px; height: 37px; opacity: 0; pointer: cursor;"/>
           </div>
         </div>
       </div>

@@ -11,7 +11,6 @@ import { HistoryComponent } from './user/history/history.component';
 import { ItemComponent } from './admin/item/item.component';
 import { AddComponent } from './admin/item/add/add.component';
 import { EditComponent } from './admin/item/edit/edit.component';
-
 import { HttpClientModule } from '@angular/common/http';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
@@ -21,6 +20,9 @@ import { PageNotFoundComponent } from './auth/page-not-found/page-not-found.comp
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { LoaderComponent } from './fragments/loader/loader.component';
+
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +46,8 @@ import { LoaderComponent } from './fragments/loader/loader.component';
     NgxDropzoneModule,
     HttpClientModule,
     FormsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    SweetAlert2Module.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

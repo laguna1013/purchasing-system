@@ -6,15 +6,15 @@ export class Item {
   category: string = 'dry'
   vendor_description: string = ''
   description: string = ''
-  image: any = []
+  image: any = ''
   packing_info: string = ''
   uom: string = ''
   price: string = ''
   cbm: string = ''
   qty: string = ''
   moq: string = ''
-  status: any = true
-  qty_display: any = true
+  status: any = 'true'
+  qty_display: any = 'true'
   user_access: string = 'all'
 
   public reset(){
@@ -32,8 +32,8 @@ export class Item {
     this.cbm = ''
     this.qty = ''
     this.moq = ''
-    this.status = ''
-    this.qty_display = ''
+    this.status = 'true'
+    this.qty_display = 'true'
     this.user_access = 'all'
   }
 }
