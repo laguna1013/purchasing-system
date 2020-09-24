@@ -45,10 +45,10 @@ export class ItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.globalService.menu = 'item';
-    this.get_item();
+    this.getItem();
   }
 
-  get_item = () => {
+  getItem = () => {
     this.loading = true;
     this.api.getItem().pipe(first()).subscribe(
       data => {
@@ -90,7 +90,7 @@ export class ItemComponent implements OnInit {
     });
   }
 
-  delete_item = item => {
+  deleteItem = item => {
     Swal.fire({
       title: 'Are you sure?',
       text: 'Do you want to remove this item? ' + item.inventory_id,
@@ -104,7 +104,7 @@ export class ItemComponent implements OnInit {
         this.api.removeItem(this.parseService.encode({
           inventory_id: item.inventory_id
         })).pipe(first()).subscribe(data => {
-          this.get_item()
+          this.getItem();
           this.loading = false;
         }, error => {
           this.loading = false;
@@ -116,7 +116,7 @@ export class ItemComponent implements OnInit {
     })
   }
 
-  edit_item = id => {
+  editItem = id => {
     this.router.navigate(['/item/edit', id])
   }
 
@@ -134,14 +134,14 @@ export class ItemComponent implements OnInit {
         initial[name] = XLSX.utils.sheet_to_json(sheet);
         return initial;
       }, {});
-      this.process_data_from_xlxs(jsonData)
+      this.processDataFromXlxs(jsonData)
       this.loading = false;
     }
     reader.readAsBinaryString(file);
   }
 
-  process_data_from_xlxs = (data) => {
-    let ret = [];
+  processDataFromXlxs = (data) => {
+    const ret = [];
     for(let property in data){
       let category = '';
       let items = [];
@@ -216,7 +216,6 @@ export class ItemComponent implements OnInit {
       }
     }
     this.globalService.items = ret[0].items
-    console.log(ret)
     Swal.fire({
       title: 'Are you sure?',
       text: 'Do you want to save the items to database?',
@@ -226,14 +225,14 @@ export class ItemComponent implements OnInit {
       cancelButtonText: 'No'
     }).then((result) => {
       if(result.value) {
-        this.upload_to_db(ret[0].items)
+        this.uploadToDb(ret[0].items)
       }else{
 
       }
     })
   }
 
-  upload_to_db = (data) => {
-    
+  uploadToDb = (data) => {
+
   }
 }

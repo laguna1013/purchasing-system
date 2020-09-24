@@ -16,7 +16,7 @@
           <div class="dropdown-box__content box p-2" style="position: relative;">
             <a class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md"> <i data-feather="file-plus" class="w-4 h-4 mr-2" appFeatherIcon></i> Upload excel </a>
             <a routerLink="/item/add" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md"> <i data-feather="edit" class="w-4 h-4 mr-2" appFeatherIcon></i> Add manually </a>
-            <input (change)="fileUpload($event)" type="file" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md" style="position: absolute; top: 0.5rem; left: 0.5rem; width: 144px; height: 37px; opacity: 0; pointer: cursor;"/>
+            <input (change)="fileUpload($event)" type="file" class="flex items-center block p-2 transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md" style="position: absolute; top: 0.5rem; left: 0.5rem; width: 144px; height: 37px; opacity: 0; cursor: pointer;"/>
           </div>
         </div>
       </div>
@@ -49,24 +49,24 @@
           <tbody>
             <tr class="edit-item cursor-pointer" *ngFor="let item of globalService.items; index as idx;">
               <td class="border-b"><div class="font-medium text-center">{{item.branch}}</div></td>
-              <td class="border-b text-center" (click)='edit_item(item.inventory_id)'><div class="font-medium">{{item.inventory_id}}</div></td>
-              <td class="text-left border-b" (click)='edit_item(item.inventory_id)'>
+              <td class="border-b text-center" (click)='editItem(item.inventory_id)'><div class="font-medium">{{item.inventory_id}}</div></td>
+              <td class="text-left border-b" (click)='editItem(item.inventory_id)'>
                 <div class="flex sm:justify-start">
                   <div class="w-10 h-10 image-fit">
                     <img src="{{item.image}}" alt="Purchasing system image">
                   </div>
                 </div></td>
-              <td class="border-b" (click)='edit_item(item.inventory_id)'><div class="text-center font-medium">{{item.vendor_description}}</div></td>
-              <td class="border-b" (click)='edit_item(item.inventory_id)'><div class="text-center font-medium">{{item.description}}</div></td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.packing_info}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.price | currency}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.qty}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.uom}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.gross_weight}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.gross_weight * item.qty | number}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.price * 0.2 | currency}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.moq}}</td>
-              <td class="text-center border-b" (click)='edit_item(item.inventory_id)'>{{item.created_at}}</td>
+              <td class="border-b" (click)='editItem(item.inventory_id)'><div class="text-center font-medium">{{item.vendor_description}}</div></td>
+              <td class="border-b" (click)='editItem(item.inventory_id)'><div class="text-center font-medium">{{item.description}}</div></td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.packing_info}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price | currency}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.qty}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.uom}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.gross_weight}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.gross_weight * item.qty | number}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price * 0.2 | currency}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.moq}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.created_at}}</td>
               <td class="border-b">
                 <div class="flex">
                   <input class="input input--switch border mr-2" type="checkbox" [checked]="item.status=='true'" (change)="status_change(item)">
@@ -74,7 +74,7 @@
                 </div>
               </td>
               <td class="text-center border-b">
-                <button (click)="delete_item(item)" class="button button--sm flex items-center justify-center bg-theme-6 text-white"><i data-feather="trash" class="w-4 h-4 mr-2" appFeatherIcon></i>Delete</button>
+                <button (click)="deleteItem(item)" class="button button--sm flex items-center justify-center bg-theme-6 text-white"><i data-feather="trash" class="w-4 h-4 mr-2" appFeatherIcon></i>Delete</button>
               </td>
             </tr>
           </tbody>
