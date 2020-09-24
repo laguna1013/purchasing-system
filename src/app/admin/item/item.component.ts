@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalService } from '../../services/global.service'
-import { ApiService } from '../../services/api.service'
-import { ParseService } from '../../services/parse.service'
-import { AuthService } from '../../services/auth.service'
+import { GlobalService } from '../../services/global.service';
+import { ApiService } from '../../services/api.service';
+import { ParseService } from '../../services/parse.service';
+import { AuthService } from '../../services/auth.service';
 import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Item } from './item';
@@ -32,7 +32,7 @@ const RAW_FIELDS = [
 })
 export class ItemComponent implements OnInit {
 
-  loading: Boolean = false;
+  loading = false;
   constructor(
     public globalService: GlobalService,
     private route: ActivatedRoute,
@@ -139,6 +139,7 @@ export class ItemComponent implements OnInit {
     }
     reader.readAsBinaryString(file);
   }
+
   process_data_from_xlxs = (data) => {
     let ret = [];
     for(let property in data){

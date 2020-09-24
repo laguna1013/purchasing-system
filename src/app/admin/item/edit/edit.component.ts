@@ -31,7 +31,7 @@ export class EditComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.item_id = this.route.snapshot.paramMap.get("id")
+    this.item_id = this.route.snapshot.paramMap.get('id')
     this.item = this.globalService.items.filter(item => item.inventory_id == this.item_id)[0]
 
     if(!this.item){
