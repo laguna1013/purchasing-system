@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ApiService } from '../../services/api.service';
+import { ParseService } from '../../services/parse.service';
+import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { first } from 'rxjs/operators';
+import { Item } from '../../admin/item/item';
 import * as moment from 'moment';
 
 import { GlobalService } from '../../services/global.service'
@@ -10,8 +17,17 @@ import { GlobalService } from '../../services/global.service'
 })
 export class OrderComponent implements OnInit {
 
-  constructor(private globalService: GlobalService) { }
+  constructor(
+    private globalService: GlobalService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private api: ApiService,
+    private parseService: ParseService,
+    private toast: ToastrService,
+    private authService: AuthService
+  ) { }
 
+  loading = false;
   orders: Array<Object> = [];
 
   item_display_style: String = 'list';
@@ -23,12 +39,30 @@ export class OrderComponent implements OnInit {
   selected_ordered_item: Object;
 
   po_number: String = '';
-  order_selected: boolean = false;;
+  order_selected: boolean = false;
 
   ngOnInit(): void {
     this.globalService.menu = 'order';
+    this.getItem();
   }
-
+  getItem = () => {
+    this.loading = true;
+    this.api.getItem().pipe(first()).subscribe(
+      data => {
+        if (data['status'] == 'success') {
+          let items = data['data'];
+          this.globalService.items = [...items]
+        } else {
+          this.toast.error('There is an issue with server. Please try again.', 'Error');
+        }
+        this.loading = false;
+      },
+      error => {
+        console.log(error)
+        this.loading = false;
+      }
+    );
+  }
   item_display_style_change = style => {
     this.item_display_style = style;
   }

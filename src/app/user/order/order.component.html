@@ -46,16 +46,16 @@
       </div>
       <div *ngIf="item_display_style == 'list'" class="p-0 mt-2" style="max-height: 65vh; overflow: auto;">
         <div *ngFor="let item of globalService.items; index as idx">
-          <a *ngIf="item.status == true" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-3">
+          <a *ngIf="item.status == 'true'" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-3">
             <div class="relative flex items-center box p-2 mt-2" (click)="select_item(item)">
               <div class="w-12 h-12 flex-none image-fit">
-                <img alt="Purchasing system image" class="rounded-full" src="{{ item.image }}">
+                <img alt="Purchasing system image" class="rounded-full" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
               </div>
               <div class="ml-4 mr-auto">
                 <a class="font-medium">{{item.vendor_description}} ({{item.description}})</a>
                 <div class="mr-5 sm:mr-5">
                   <span class="text-gray-600">{{ item.packing_info }}, </span>
-                  <span class="text-gray-600 ml-2">Max order qty: {{ item.max_order_qty }} {{item.uom}}{{item.max_order_qty==1 ? '':'s'}}</span>
+                  <span class="text-gray-600 ml-2">Max order qty: {{ item.moq }} {{item.uom}}{{item.moq==1 ? '':'s'}}</span>
                 </div>
               </div>
               <div class="font-medium text-gray-700">${{item.cost}} / {{item.uom}}</div>
@@ -64,16 +64,18 @@
         </div>
       </div>
       <div *ngIf="item_display_style == 'grid'" class="grid grid-cols-12 gap-5 mt-2 pt-5 border-t border-theme-5" style="max-height: 65vh; overflow: auto;">
-        <a *ngFor="let item of globalService.items; index as idx" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-2">
-          <div class="box rounded-md p-3 relative zoom-in" (click)="select_item(item)">
-            <div class="flex-none pos-image relative block">
-              <div class="pos-image__preview image-fit">
-                <img alt="Purchasing system image" src="{{item.image}}">
+        <div *ngFor="let item of globalService.items; index as idx" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-2">
+          <a *ngIf="item.status == 'true'" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" >
+            <div class="box rounded-md p-3 relative zoom-in" (click)="select_item(item)">
+              <div class="flex-none pos-image relative block">
+                <div class="pos-image__preview image-fit">
+                  <img alt="Purchasing system image" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
+                </div>
               </div>
+              <div class="block font-medium text-center truncate mt-3">{{item.vendor_description}} ({{item.description}})</div>
             </div>
-            <div class="block font-medium text-center truncate mt-3">{{item.vendor_description}} ({{item.description}})</div>
-          </div>
-        </a>
+          </a>
+        </div>
       </div>
     </div>
     <!-- END: Item List -->
@@ -121,7 +123,7 @@
               <div class="w-20 overflow-hidden">
                 <div class="flex">
                   <div *ngFor="let _item of item.items; index as _idx" class="w-10 h-10 image-fit zoom-in {{_idx == 0 ? '' : '-ml-5'}}">
-                    <img alt="Purchasing system image" class="tooltip rounded-full" src="{{_item.image}}">
+                    <img alt="Purchasing system image" class="tooltip rounded-full" src="{{ _item.image ? _item.image : 'assets/images/place_holder.png' }}">
                   </div>
                 </div>
               </div>
@@ -227,7 +229,7 @@
         <div class="intro-y" *ngFor="let item of ordered_item; index as idx;">
           <div class="box px-5 py-3 mb-3 flex items-center">
             <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-              <img alt="Purchasing system image" src="{{item.image}}">
+              <img alt="Purchasing system image" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
             </div>
             <div class="ml-4 mr-auto">
               <div class="font-medium">{{item.description}}({{item.description}})</div>
