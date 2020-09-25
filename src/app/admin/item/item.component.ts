@@ -41,7 +41,7 @@ export class ItemComponent implements OnInit {
     private parseService: ParseService,
     private toast: ToastrService,
     private authService: AuthService
-  ){ }
+  ) { }
 
   ngOnInit(): void {
     this.globalService.menu = 'item';
@@ -52,10 +52,10 @@ export class ItemComponent implements OnInit {
     this.loading = true;
     this.api.getItem().pipe(first()).subscribe(
       data => {
-        if(data['status'] == 'success'){
+        if (data['status'] == 'success') {
           let items = data['data'];
           this.globalService.items = [...items]
-        }else{
+        } else {
           this.toast.error('There is an issue with server. Please try again.', 'Error');
         }
         this.loading = false;
@@ -68,9 +68,9 @@ export class ItemComponent implements OnInit {
   }
 
   status_change = item => {
-    if(item.status == 'true'){
+    if (item.status == 'true') {
       item.status = 'false'
-    }else{
+    } else {
       item.status = 'true'
     }
     this.loading = true;
@@ -78,9 +78,9 @@ export class ItemComponent implements OnInit {
       status: item.status,
       inventory_id: item.inventory_id
     })).pipe(first()).subscribe(data => {
-      if(data['data'] == 1){
+      if (data['data'] == 1) {
         this.toast.success('Item status changed successfully!', 'Success');
-      }else{
+      } else {
         this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
       }
       this.loading = false;
@@ -99,7 +99,7 @@ export class ItemComponent implements OnInit {
       confirmButtonText: 'Yes',
       cancelButtonText: 'No'
     }).then((result) => {
-      if(result.value) {
+      if (result.value) {
         this.loading = true;
         this.api.removeItem(this.parseService.encode({
           inventory_id: item.inventory_id
@@ -110,7 +110,7 @@ export class ItemComponent implements OnInit {
           this.loading = false;
           this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
         });
-      }else{
+      } else {
 
       }
     })
@@ -142,14 +142,14 @@ export class ItemComponent implements OnInit {
 
   processDataFromXlxs = (data) => {
     const ret = [];
-    for(let property in data){
+    for (let property in data) {
       let category = '';
       let items = [];
       switch (property) {
-        case 'Dry Food' :
+        case 'Dry Food':
           category = 'dry';
           break;
-        case 'Frozen Food' :
+        case 'Frozen Food':
           category = 'frozen';
           break;
         default:
@@ -160,43 +160,43 @@ export class ItemComponent implements OnInit {
         let _item = new Item();
         Object.entries(raw_item).map(([key, value]) => {
           switch (key) {
-            case 'BRANCH' :
+            case 'BRANCH':
               _item.branch = value.toString();
               break;
-            case 'Cost' :
+            case 'Cost':
               _item.price = value.toString();
               break;
-            case 'Customer Unit of Measure' :
+            case 'Customer Unit of Measure':
               _item.uom = value.toString();
               break;
-            case 'Description' :
+            case 'Description':
               _item.description = value.toString();
               break;
-            case 'G.W.\r\n(lb)' :
+            case 'G.W.\r\n(lb)':
               _item.gross_weight = value.toString();
               break;
-            case 'Inventory ID' :
+            case 'Inventory ID':
               _item.inventory_id = value.toString();
               break;
-            case 'Packing Info' :
+            case 'Packing Info':
               _item.packing_info = value.toString();
               break;
-            case 'Q\'ty' :
+            case 'Q\'ty':
               _item.qty = value.toString();
               break;
-            case 'Subcharge (20%)' :
+            case 'Subcharge (20%)':
               break;
-            case 'Subtotal' :
+            case 'Subtotal':
               break;
-            case 'Total \nG.W. (lb)' :
+            case 'Total \nG.W. (lb)':
               break;
-            case 'Vendor Description' :
+            case 'Vendor Description':
               _item.vendor_description = value.toString();
               break;
-            case 'max order q\'ty' :
+            case 'max order q\'ty':
               _item.moq = value.toString();
               break;
-            case 'sorting order by weights' :
+            case 'sorting order by weights':
               break;
             default:
               break;
@@ -204,35 +204,54 @@ export class ItemComponent implements OnInit {
         })
         _item.category = category;
         _item.created_user_id = this.authService.currentUser()['id'];
-        if(_item.inventory_id != ""){
+        if (_item.inventory_id != "") {
           items.push(_item)
         }
       })]
-      if(category != 'order'){
+      if (category != 'order') {
         ret.push({
           category: category,
           items: items
         })
       }
     }
-    this.globalService.items = ret[0].items
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you want to save the items to database?',
+      text: `Do you want to save ${ret[0].items.length} items to database?`,
       icon: 'info',
       showCancelButton: true,
       confirmButtonText: 'Yes',
       cancelButtonText: 'No'
     }).then((result) => {
-      if(result.value) {
+      if (result.value) {
         this.uploadToDb(ret[0].items)
-      }else{
+      } else {
 
       }
     })
   }
 
-  uploadToDb = (data) => {
-
+  uploadToDb = (items) => {
+    this.loading = true;
+    this.api.addBatchItem(this.parseService.encode({ items: JSON.stringify(items) })).pipe(first()).subscribe(
+      data => {
+        if (data['data'] == true) {
+          this.toast.success('Items added successfully!', 'Success');
+          if (data['invalid_ids'].length == 0) {
+            this.toast.info(`${items.length} items were added to database.`, 'Success');
+          } else {
+            this.toast.info(`${items.length - data['invalid_ids'].length} items were added to database. ${data['invalid_ids'].length} items were not added due to id conflict.`, 'Success');
+          }
+          this.getItem();
+        } else {
+          this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
+        }
+        this.loading = false;
+      },
+      error => {
+        this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
+        this.loading = false;
+      }
+    );
   }
 }

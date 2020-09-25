@@ -13,52 +13,58 @@ const controller = 'ps';
   providedIn: 'root'
 })
 export class ApiService {
-  constructor( private http: HttpClient, private cookieService: CookieService ) { }
+  constructor(private http: HttpClient, private cookieService: CookieService) { }
   // Admin APIs
   login(data) {
     return this.http.post(`${api_url}/auth/ps_login`, data)
       .pipe(map(res => {
         //login successful if the status is success
         if (res['status'] == 'success') {
-            this.cookieService.setCookie('currentUser', JSON.stringify(res['res']), 1);
+          this.cookieService.setCookie('currentUser', JSON.stringify(res['res']), 1);
         }
         return res;
       }));
   }
-  getItem(){
-    return this.http.post(`${api_url}/${ controller }/get_item`, '')
+  getItem() {
+    return this.http.post(`${api_url}/${controller}/get_item`, '')
       .pipe(map(res => {
-          return res;
+        return res;
       }))
   }
-  getItemById(data){
-    return this.http.post(`${api_url}/${ controller }/get_item_by_id`, data)
+  getItemById(data) {
+    return this.http.post(`${api_url}/${controller}/get_item_by_id`, data)
       .pipe(map(res => {
-          return res;
+        return res;
       }))
   }
-  addItem(data){
-    return this.http.post(`${api_url}/${ controller }/add_item`, data)
+  addItem(data) {
+    return this.http.post(`${api_url}/${controller}/add_item`, data)
       .pipe(map(res => {
-          return res;
+        return res;
       }))
   }
-  updateItem(data){
-    return this.http.post(`${api_url}/${ controller }/update_item`, data)
+  updateItem(data) {
+    return this.http.post(`${api_url}/${controller}/update_item`, data)
       .pipe(map(res => {
-          return res;
+        return res;
       }))
   }
-  updateItemStatus(data){
-    return this.http.post(`${api_url}/${ controller }/update_item_status`, data)
+  updateItemStatus(data) {
+    return this.http.post(`${api_url}/${controller}/update_item_status`, data)
       .pipe(map(res => {
-          return res;
+        return res;
       }))
   }
-  removeItem(data){
-    return this.http.post(`${api_url}/${ controller }/remove_item`, data)
+  removeItem(data) {
+    return this.http.post(`${api_url}/${controller}/remove_item`, data)
       .pipe(map(res => {
-          return res;
+        return res;
+      }))
+  }
+  addBatchItem(data) {
+    return this.http.post(`${api_url}/${controller}/add_batch_item`, data)
+      .pipe(map(res => {
+        return res;
       }))
   }
 }

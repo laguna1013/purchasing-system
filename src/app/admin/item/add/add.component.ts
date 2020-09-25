@@ -56,8 +56,8 @@ export class AddComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          if(data['status'] == 'success'){
-            if(data['data'] == 1){
+          if (data['status'] == 'success') {
+            if (data['data'] == 1) {
               this.toast.success('Item added successfully!', 'Success');
               Swal.fire({
                 title: 'Item added successfully',
@@ -67,19 +67,19 @@ export class AddComponent implements OnInit {
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No'
               }).then((result) => {
-                if(result.value) {
+                if (result.value) {
                   this.item.reset();
                   this.item.created_user_id = this.authService.currentUser()['id']
                   this.item.inventory_id = 'D' + moment().format('YYYYMMDDhms')
-                }else{
+                } else {
                   this.router.navigate(['/item']);
                 }
               })
-            }else if(data['data'] == 0){
+            } else if (data['data'] == 0) {
               this.toast.error('Duplicating inventory ID.', 'Error');
-            }else if(data['data'] == -1){
+            } else if (data['data'] == -1) {
               this.toast.error('Database error. Please try again.', 'Error');
-            }else{
+            } else {
               this.toast.warning('Image not uploaded. Please try with different image.', 'Warning');
             }
             this.loading = false;

@@ -17,7 +17,7 @@ export class Item {
   qty_display: any = 'true'
   user_access: string = 'all'
 
-  public reset(){
+  public reset() {
     this.inventory_id = ''
     this.created_user_id = ''
     this.branch = ''
