@@ -29,22 +29,23 @@
         <table class="table table-report table-report--bordered display w-full">
           <thead>
             <tr>
-              <th class="text-center">Branch</th>
-              <th class="text-center">Inventory ID</th>
-              <th class="">Image</th>
-              <th class="text-center">Vendor description</th>
-              <th class="text-center">Description</th>
-              <th class="text-center">Packing info</th>
-              <th class="text-center">Cost</th>
-              <th class="text-center">QTY</th>
-              <th class="text-center">Customer UOM</th>
-              <th class="text-center">G.W.(lb)</th>
-              <th class="text-center">Total G.W.(lb)</th>
-              <th class="text-center">Subcharge (20%)</th>
-              <th class="text-center">Max order qty</th>
-              <th class="text-center">Added date</th>
-              <th class="text-center">Status</th>
-              <th class="text-center">Action</th>
+              <th width="3%" class="text-center">Branch</th>
+              <th width="3%" class="text-center">Category</th>
+              <th width="5%" class="text-center">Inventory ID</th>
+              <th width="5%" class="">Image</th>
+              <th width="10%" class="text-center">Vendor description</th>
+              <th width="10%" class="text-center">Description</th>
+              <th width="10%" class="text-center">Packing info</th>
+              <th width="3%" class="text-center">Cost</th>
+              <th width="3%" class="text-center">QTY</th>
+              <th width="3%" class="text-center">Customer UOM</th>
+              <th width="3%" class="text-center">G.W.(lb)</th>
+              <th width="5%" class="text-center">Total G.W.(lb)</th>
+              <th width="5%" class="text-center">Subcharge (20%)</th>
+              <th width="5%" class="text-center">Max order qty</th>
+              <th width="10%" class="text-center">Added date</th>
+              <th width="10%" class="text-center">Status</th>
+              <th width="10%" class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -52,13 +53,16 @@
               <td class="border-b">
                 <div class="font-medium text-center">{{item.branch}}</div>
               </td>
+              <td class="border-b">
+                <div class="font-medium text-center">{{item.category}}</div>
+              </td>
               <td class="border-b text-center" (click)='editItem(item.inventory_id)'>
                 <div class="font-medium">{{item.inventory_id}}</div>
               </td>
               <td class="text-left border-b" (click)='editItem(item.inventory_id)'>
                 <div class="flex sm:justify-start">
                   <div class="w-10 h-10 image-fit">
-                    <img src="{{item.image}}" alt="Purchasing system image">
+                    <img src="{{item.image != '' ? item.image : 'assets/images/place_holder.png'}}" alt="Purchasing system image">
                   </div>
                 </div>
               </td>

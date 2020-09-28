@@ -29,7 +29,7 @@ export class OrderComponent implements OnInit {
 
   loading = false;
   orders: Array<Object> = [];
-
+  category: string = 'all';
   ticket_created: boolean = false;
 
   ordered_item: Array<Object> = [];
@@ -37,12 +37,20 @@ export class OrderComponent implements OnInit {
   selected_item: Object;
   selected_ordered_item: Object;
 
+  qty: number = 1;
+
   po_number: String = '';
   order_selected: boolean = false;
+
+  price_tbded: boolean = false;
+  cbm_tbded: boolean = false;
+
+  user: Object;
 
   ngOnInit(): void {
     this.globalService.menu = 'order';
     this.getItem();
+    this.user = this.authService.currentUser();
   }
 
   getItem = () => {
@@ -65,158 +73,120 @@ export class OrderComponent implements OnInit {
   }
 
   generate_po_number = () => {
-    this.po_number = 'david' + moment().format('hhmmssMMDDYYYY');
+    this.po_number = this.user['name'] + moment().format('hhmmssMMDDYYYY');
   }
   create_ticket = () => {
     this.ticket_created = true;
   }
-
-  select_item = item => {
+  select_item = (item) => {
     this.selected_item = item;
-    if(this.selected_item['max_order_qty'] == 0){
-      this.selected_item['added_qty'] = 0;
-    }else{
-      this.selected_item['added_qty'] = 1;
+  }
+  increase_item = () => {
+    this.qty++;
+  }
+  decrease_item = () => {
+    if(this.qty > 1){
+      this.qty--;
     }
   }
-
-  select_ordered_item = item => {
-    this.selected_item = null;
-    this.selected_ordered_item = item;
-    this.globalService.items.forEach(item => {
-      if(item['id'] == this.selected_ordered_item['id']){
-        this.selected_item = item;
-      }
-    })
+  manual_input_item = (event) => {
+    this.qty = event.target.value;
   }
-
-  increase_selected_item = () => {
-    if(this.selected_item['added_qty'] < this.selected_item['max_order_qty']){
-      this.selected_item['added_qty']++;
-    }else{
-      // Show error alert
-    }
-  }
-  decrease_selected_item = () => {
-    if(0 < this.selected_item['added_qty']){
-      this.selected_item['added_qty']--;
-    }
-  }
-  added_qty_change = (e) => {
-    this.selected_item['added_qty'] = parseInt(e.target.value);
-  }
-
-  order_item = () => {
-    this.selected_ordered_item = null;
-    if(this.selected_item['added_qty'] != 0){
-      if(this.ordered_item.length != 0){
+  add_item = () => {
+    if(this.ticket_created){
+      let flag = false;
+      this.ordered_item.forEach(item => {
+        if(item['item_id'] == this.selected_item['id']){
+          flag = true;
+        }
+      })
+      if(flag){
         this.ordered_item.forEach(item => {
-          if(item['id'] == this.selected_item['id']){
-            this.selected_ordered_item = item;
+          if(item['item_id'] == this.selected_item['id']){
+            item['qty'] += this.qty;
           }
         })
-      }
-      if(this.selected_ordered_item){
-        if(this.selected_item['max_order_qty'] < this.selected_ordered_item['ordered_qty'] + this.selected_item['added_qty']){ // Check if ordered too much than stock
-          this.selected_ordered_item['ordered_qty'] += this.selected_item['max_order_qty'];
-          this.selected_item['max_order_qty'] = 0;
-          this.selected_item['added_qty'] = this.selected_item['max_order_qty'];
-        }
-        this.selected_ordered_item['ordered_qty'] += this.selected_item['added_qty'];
-        this.selected_item['max_order_qty'] -= this.selected_item['added_qty'];
       }else{
-        if(this.selected_item['max_order_qty'] < this.selected_item['added_qty']){ // Check if ordered too much than stock
-          this.selected_item['added_qty'] = this.selected_item['max_order_qty'];
-          this.selected_item['max_order_qty'] = 0;
-        }else{
-          this.selected_item['max_order_qty'] -= this.selected_item['added_qty'];
-        }
         this.ordered_item.push({
-          id: this.selected_item['id'],
-          image: this.selected_item['image'],
-          description: this.selected_item['description'],
-          vendor_description: this.selected_item['vendor_description'],
-          cost: this.selected_item['cost'],
-          packing_info: this.selected_item['packing_info'],
-          ordered_qty: this.selected_item['added_qty'],
-          base_uom: this.selected_item['base_uom'],
-          uom: this.selected_item['uom'],
-          primary_unit: this.selected_item['primary_unit'],
-          secondary_unit: this.selected_item['secondary_unit'],
-          big_unit: this.selected_item['big_unit'],
-          cbm: this.selected_item['cbm'],
+          item_id: this.selected_item['id'],
+          qty: this.qty
         })
       }
     }else{
-      // Show error alert
+      this.toast.error('You need to create a new order before adding items.', 'Error');
     }
-    this.selected_item['added_qty'] = 0;
+    this.reset();
   }
-
-  remove_ordered_item = () => {
-    this.selected_item['max_order_qty'] += this.selected_ordered_item['ordered_qty'];
-    this.ordered_item = [...this.ordered_item.filter(item => item['id'] != this.selected_ordered_item['id'])];
-    this.selected_ordered_item = null;
+  edit_item = (id) => {
+    this.reset();
+    this.selected_item = this.globalService.items.filter(item => item['id'] == id)[0];
+    this.qty = this.ordered_item.filter(item => item['item_id'] == id)[0]['qty'];
   }
-
-  clear_ordered_items = () => {
-    this.order_selected = false;
-    this.selected_item = null;
-    this.selected_ordered_item = null;
-    this.ordered_item = [];
-  }
-
-  place_order = () => {
-    if(this.ordered_item.length != 0){
-      if(this.order_selected){
-        if(this.ordered_item.length != 0){
-          this.orders.map(item => {
-            if(item['po_id'] == this.po_number){
-              item['po_date'] = moment().format('hh:mm MMM DD, ddd');
-              item['charge'] = this.sum_total_price();
-              item['items'] = [...this.ordered_item];
-            }
-          })
-        }
-      }else{
-        this.orders.push({
-          po_id: this.po_number,
-          customer_name: 'David',
-          po_date: moment().format('hh:mm MMM DD, ddd'),
-          status: 'pending',
-          charge: this.sum_total_price(),
-          items: [...this.ordered_item]
-        });
+  edit_item_confirm = () => {
+    this.ordered_item.map(item => {
+      if(item['item_id'] == this.selected_item['id']){
+        item['qty'] = this.qty;
       }
-      this.ticket_created = false;
-      this.clear_ordered_items();
-    }else{
-
-    }
+    })
+    this.reset();
   }
-  edit_order = item => {
-    this.order_selected = true;
-    this.ordered_item = [...item.items];
-    this.po_number = item.po_id;
-    this.ticket_created = true;
+  remove_item = () => {
+    this.ordered_item = [...this.ordered_item.filter(item => item['item_id'] != this.selected_item['id'])];
+    this.reset();
   }
-
+  confirm_order = () => {
+    this.place_order(this.ordered_item);
+    this.ordered_item = [];
+    this.ticket_created = false;
+    this.reset();
+  }
   sum_total_price = () => {
     let sum = 0;
+    this.price_tbded = false;
     if(this.ordered_item.length != 0){
       this.ordered_item.forEach(item => {
-        sum += item['cost'] * item['ordered_qty'];
+        this.globalService.items.forEach(_item => {
+          if(item['item_id'] == _item['id']){
+            if((_item['price'] != '') && (_item['price'] != 'Market Price')){
+              sum += this.parse_float(_item['price']) * item['qty'];
+            }else{
+              this.price_tbded = true;
+            }
+          }
+        })
       })
     }
     return sum;
   }
   sum_total_cbm = () => {
     let sum = 0;
+    this.cbm_tbded = false;
     if(this.ordered_item.length != 0){
       this.ordered_item.forEach(item => {
-        sum += item['cbm'] * item['ordered_qty'];
+        this.globalService.items.forEach(_item => {
+          if(item['item_id'] == _item['id']){
+            if(_item['cbm'] != ''){
+              sum += this.parse_float(_item['cbm']) * item['qty'];
+            }else{
+              this.cbm_tbded = true;
+            }
+          }
+        })
       })
     }
     return sum;
+  }
+  parse_float = (val) => {
+    return Math.floor(parseFloat(val) * 100) / 100;
+  }
+  parse_int = (val) => {
+    return parseInt(val);
+  }
+  reset = () => {
+    this.selected_item = null;
+    this.qty = 1;
+  }
+  place_order = (items) => {
+    console.log(items)
   }
 }

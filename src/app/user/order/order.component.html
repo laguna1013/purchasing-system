@@ -36,33 +36,30 @@
           <option value="frozen">Frozen</option>
         </select>
       </div>
-      <div class="p-0 mt-2" style="max-height: 65vh; overflow: auto;">
-        <div *ngFor="let item of globalService.items; index as idx">
-          <a *ngIf="item.status == 'true'" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="intro-y block col-span-12 sm:col-span-4 xxl:col-span-3">
-            <div class="relative flex items-center box p-2 mt-2" (click)="select_item(item)">
-              <div class="w-12 h-12 flex-none image-fit">
-                <img alt="Purchasing system image" class="rounded-full" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
-              </div>
-              <div class="ml-4 mr-auto">
-                <a class="font-medium">{{item.vendor_description}} ({{item.description}})</a>
-                <div class="mr-5 sm:mr-5">
-                  <span class="text-gray-600">{{ item.packing_info }}, </span>
-                  <span class="text-gray-600 ml-2">Max order qty: {{ item.moq }} {{item.uom}}{{item.moq==1 ? '':'s'}}</span>
+      <div class="grid grid-cols-12 gap-5 mt-5 pt-5 border-t border-theme-5" style="max-height: 65vh; overflow: auto;">
+        <div *ngFor="let item of globalService.items; index as idx" class="intro-y block col-span-6 sm:col-span-3 xxl:col-span-2">
+          <a *ngIf="item.status == 'true'" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="">
+            <div class="box rounded-md p-3 relative" (click)="select_item(item)">
+              <div class="flex-none pos-image relative block">
+                <div class="pos-image__preview image-fit">
+                  <img alt="Purchasing system image" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
                 </div>
               </div>
-              <div class="font-medium text-gray-700">${{item.price}} / {{item.uom}}</div>
+              <div class="flex mt-1 justify-between">
+                <small>{{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</small>
+                <small>{{(item.qty_display == 'true' && (item.qty != '')) ? item.qty + ' ' + item.uom : ''}}</small>
+              </div>
+              <small class="block truncate">{{item.vendor_description}} ({{item.description}})</small>
             </div>
           </a>
         </div>
       </div>
     </div>
-    <!-- END: Item List -->
-    <!-- BEGIN: Ticket -->
     <div class="col-span-12 lg:col-span-4">
       <div class="intro-y pr-1">
         <div class="box p-2">
           <div class="pos__tabs nav-tabs justify-center flex">
-            <a *ngIf="ticket_created" data-toggle="tab" data-target="#ticket" href="javascript:;" class="flex-1 py-2 rounded-md text-center active">PO Ticket</a>
+            <a *ngIf="ticket_created" data-toggle="tab" data-target="#ticket" href="javascript:;" class="flex-1 py-2 rounded-md text-center active">Current order</a>
             <a data-toggle="tab" data-target="#details" href="javascript:;" class="flex-1 py-2 rounded-md text-center {{ticket_created ? '' : 'active'}}">My orders</a>
           </div>
         </div>
@@ -71,25 +68,37 @@
         <div class="tab-content__pane {{ticket_created ? 'active' : ''}}" id="ticket">
           <div class="pos__ticket box p-2 mt-2">
             <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{ordered_item.length != 0 ? 'Ordered items:' : 'Please order items'}}</h6>
-            <a *ngFor="let item of ordered_item; index as idx;" (click)="select_ordered_item(item)" href="javascript:;" data-toggle="modal" data-target="#edit-item-modal" class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">
-            <div class="pos__ticket__item-name truncate mr-1">{{item.vendor_description}} ({{item.description}})</div>
-            <div class="text-gray-600">x {{item.ordered_qty}} {{item.uom}}{{item.ordered_qty==1 ? '' : 's'}}</div>
-            <i data-feather="edit" class="w-4 h-4 text-gray-600 ml-2" appFeatherIcon></i>
-            <div class="ml-auto">Sub total: {{item.price * item.ordered_qty | currency}}</div>
-            </a>
+            <div *ngFor="let item of ordered_item; index as idx;" >
+              <div *ngFor="let _item of globalService.items">
+                <div *ngIf="item.item_id == _item.id">
+                  <a (click)="edit_item(item.item_id)" href="javascript:;" data-toggle="modal" data-target="#edit-item-modal" class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">
+                    <div class="pos__ticket__item-name truncate mr-1">{{_item.vendor_description}} ({{_item.description}})</div>
+                    <div class="text-gray-600">x {{item.qty}} {{_item.uom}}{{item.qty==1 ? '' : 's'}}</div>
+                    <i data-feather="edit" class="w-4 h-4 text-gray-600 ml-2" appFeatherIcon></i>
+                    <div class="ml-auto flex align-center">
+                      <span>Sub total: {{_item.price != '' && _item.price != 'Market Price' ? '$' + parse_float(parse_float(_item.price) * item.qty) : 'TBD'}}</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="box p-5 mt-5">
             <div class="flex">
-              <div class="mr-auto">Total</div>
-              <div>{{sum_total_price() | currency}}</div>
+              <div class="mr-auto">Total price</div>
+              <div>{{sum_total_price() | currency}} {{price_tbded ? '+' : ''}}</div>
             </div>
             <div class="flex mt-4 pt-4 border-t border-gray-200">
               <div class="mr-auto font-medium text-base">Charge</div>
-              <div class="font-medium text-base">{{sum_total_price() | currency}}</div>
+              <div class="font-medium text-base">{{sum_total_price() | currency}} {{price_tbded ? '+' : ''}}</div>
+            </div>
+            <div class="flex mt-4">
+              <div class="mr-auto font-medium text-base">CBM</div>
+              <div class="font-medium text-base">{{sum_total_cbm()}} {{cbm_tbded ? '+' : ''}}</div>
             </div>
           </div>
           <div class="flex mt-5">
-            <button class="button w-32 border border-gray-400 text-gray-600" (click)="clear_ordered_items()">Clear Items</button>
+            <button class="button w-32 border border-gray-400 text-gray-600">Clear Items</button>
             <a class="button w-32 text-white bg-theme-1 shadow-md ml-auto" href="javascript:;" data-toggle="modal" data-target="#place-order-modal">Order</a>
           </div>
         </div>
@@ -119,7 +128,6 @@
       </div>
     </div>
   </div>
-  <!-- END: Ticket -->
 </div>
 <!-- BEGIN: New Order Modal -->
 <div class="modal" id="new-order-modal">
@@ -132,7 +140,7 @@
     <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
       <div class="col-span-12">
         <label>Name</label>
-        <input type="text" class="input w-full border mt-2 flex-1" placeholder="Customer name" value="David" disabled>
+        <input type="text" class="input w-full border mt-2 flex-1" placeholder="Customer name" value="{{user['name']}}" disabled>
       </div>
       <div class="col-span-12">
         <label>PO number</label>
@@ -141,7 +149,7 @@
     </div>
     <div class="px-5 py-3 text-right border-t border-gray-200">
       <button type="button" data-dismiss="modal" class="button w-32 border text-gray-700 mr-1">Cancel</button>
-      <button type="button" data-dismiss="modal" class="button w-32 bg-theme-1 text-white" (click)="create_ticket()">Create Ticket</button>
+      <button type="button" data-dismiss="modal" class="button w-32 bg-theme-1 text-white" (click)="create_ticket()">Create Order</button>
     </div>
   </div>
 </div>
@@ -151,22 +159,39 @@
   <div class="modal__content">
     <div class="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
       <h2 class="font-medium text-base mr-auto">
-        {{selected_item ? (selected_item['vendor_description'] + ' (' + selected_item['description'] + ')' ) : ''}}
+        Order item
       </h2>
     </div>
     <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
       <div class="col-span-12">
-        <label>Quantity({{selected_item ? selected_item['uom'] : ''}})</label>
+        <h4 class="font-bold">Item details</h4>
+        <div style="border: 1px solid #eee; border-radius: 5px;" class="py-2 mt-2 mb-2">
+          <div class="px-5">{{selected_item ? selected_item['vendor_description'] + '(' + selected_item['description'] + ')' : 'TBD'}}</div>
+          <div class="flex mt-1 px-5 justify-between">
+            <div>Category: <span class="text-gray-600">{{selected_item ? selected_item['category'] : 'TBD'}}</span></div>
+            <div>Unit of measurment: <span class="text-gray-600">{{selected_item ? selected_item['uom'] : 'TBD'}}</span></div>
+          </div>
+          <div class="flex mt-1 px-5 justify-between">
+            <div>Price: <span class="text-gray-600">{{selected_item ? selected_item['price'] : 'TBD'}}</span></div>
+            <div>Max order qty: <span class="text-gray-600">{{selected_item && selected_item['moq'] != '' ? selected_item['moq'] : 'TBD'}}</span></div>
+          </div>
+          <div class="flex mt-1 px-5 justify-between">
+            <div>Packing info: <span class="text-gray-600">{{selected_item && selected_item['packing_info'] != '' ? selected_item['packing_info'] : 'TBD'}}</span></div>
+            <div>CBM: <span class="text-gray-600">{{selected_item && selected_item['cbm'] != '' ? selected_item['cbm'] : 'TBD'}}</span></div>
+          </div>
+        </div>
+        <div class="w-full border-t border-gray-200 border-dashed my-3"></div>
+        <label class="font-bold">Quantity({{selected_item ? selected_item['uom'] : ''}})</label>
         <div class="flex mt-2 flex-1">
-          <button type="button" class="button w-12 border bg-gray-200 text-gray-600 mr-1" (click)="decrease_selected_item()">-</button>
-          <input type="number" class="input w-full border text-center" placeholder="Item quantity" value="{{selected_item ? selected_item['added_qty'] : ''}}" (change)="added_qty_change($event)">
-          <button type="button" class="button w-12 border bg-gray-200 text-gray-600 ml-1" (click)="increase_selected_item()">+</button>
+          <button type="button" class="button w-12 border bg-gray-200 text-gray-600 mr-1" (click)="decrease_item()">-</button>
+          <input type="number" class="input w-full border text-center" placeholder="Item quantity" value="{{qty}}" (change)="manual_input_item($event)">
+          <button type="button" class="button w-12 border bg-gray-200 text-gray-600 ml-1" (click)="increase_item()">+</button>
         </div>
       </div>
     </div>
     <div class="px-5 py-3 text-right border-t border-gray-200">
-      <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1">Cancel</button>
-      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white" (click)="order_item()">Add Item</button>
+      <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1" (click)="reset()">Cancel</button>
+      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white" (click)="add_item()">Add</button>
     </div>
   </div>
 </div>
@@ -176,20 +201,40 @@
   <div class="modal__content">
     <div class="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
       <h2 class="font-medium text-base mr-auto">
-        {{selected_ordered_item ? (selected_ordered_item['vendor_description'] + ' (' + selected_ordered_item['description'] + ')' ) : ''}}
+        Edit item
       </h2>
     </div>
     <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
       <div class="col-span-12">
-        <label>Quantity({{selected_ordered_item ? selected_ordered_item['uom'] : ''}})</label>
+        <h4 class="font-bold">Item details</h4>
+        <div style="border: 1px solid #eee; border-radius: 5px;" class="py-2 mt-2 mb-2">
+          <div class="px-5">{{selected_item ? selected_item['vendor_description'] + '(' + selected_item['description'] + ')' : 'TBD'}}</div>
+          <div class="flex mt-1 px-5 justify-between">
+            <div>Category: <span class="text-gray-600">{{selected_item ? selected_item['category'] : 'TBD'}}</span></div>
+            <div>Unit of measurment: <span class="text-gray-600">{{selected_item ? selected_item['uom'] : 'TBD'}}</span></div>
+          </div>
+          <div class="flex mt-1 px-5 justify-between">
+            <div>Price: <span class="text-gray-600">{{selected_item ? selected_item['price'] : 'TBD'}}</span></div>
+            <div>Max order qty: <span class="text-gray-600">{{selected_item && selected_item['moq'] != '' ? selected_item['moq'] : 'TBD'}}</span></div>
+          </div>
+          <div class="flex mt-1 px-5 justify-between">
+            <div>Packing info: <span class="text-gray-600">{{selected_item && selected_item['packing_info'] != '' ? selected_item['packing_info'] : 'TBD'}}</span></div>
+            <div>CBM: <span class="text-gray-600">{{selected_item && selected_item['cbm'] != '' ? selected_item['cbm'] : 'TBD'}}</span></div>
+          </div>
+        </div>
+        <div class="w-full border-t border-gray-200 border-dashed my-3"></div>
+        <label class="font-bold">Quantity({{selected_item ? selected_item['uom'] : ''}})</label>
         <div class="flex mt-2 flex-1">
-          <input type="text" class="input w-full border text-center" placeholder="Item quantity" value="{{selected_ordered_item ? selected_ordered_item['ordered_qty'] : ''}}" disabled>
+          <button type="button" class="button w-12 border bg-gray-200 text-gray-600 mr-1" (click)="decrease_item()">-</button>
+          <input type="number" class="input w-full border text-center" placeholder="Item quantity" value="{{qty}}" (change)="manual_input_item($event)">
+          <button type="button" class="button w-12 border bg-gray-200 text-gray-600 ml-1" (click)="increase_item()">+</button>
         </div>
       </div>
     </div>
     <div class="px-5 py-3 text-right border-t border-gray-200">
-      <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1">Cancel</button>
-      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-6 text-white" (click)="remove_ordered_item()">Remove</button>
+      <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1" (click)="reset()">Cancel</button>
+      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-6 text-white mr-1" (click)="remove_item()">Remove</button>
+      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-3 text-white" (click)="edit_item_confirm()">Confirm</button>
     </div>
   </div>
 </div>
@@ -204,27 +249,32 @@
     </div>
     <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
       <div class="col-span-12" style="max-height: 500px; overflow: auto;">
-        <div class="intro-y" *ngFor="let item of ordered_item; index as idx;">
-          <div class="box px-5 py-3 mb-3 flex items-center">
-            <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-              <img alt="Purchasing system image" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
+        <div *ngFor="let item of ordered_item; index as idx;">
+          <div *ngFor="let _item of globalService.items;">
+            <div *ngIf="_item['id'] == item['item_id']">
+              <div class="px-5 py-3 mb-3 flex items-center" style="border: 1px solid #eee; border-radius: 5px;">
+                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
+                  <img alt="Purchasing system image" src="{{ _item['image'] ? _item['image'] : 'assets/images/place_holder.png' }}">
+                </div>
+                <div class="ml-4 mr-auto" style="max-width: 50%;">
+                  <div class="font-medium block truncate">{{_item['vendor_description']}}({{_item['description']}})</div>
+                  <div class="text-gray-600 text-xs">{{item.qty}} {{item.qty == 1 ? _item.uom : _item.uom + 's'}}</div>
+                </div>
+                <div class="text-theme-6">Price</div>
+              </div>
             </div>
-            <div class="ml-4 mr-auto">
-              <div class="font-medium">{{item.description}}({{item.description}})</div>
-              <div class="text-gray-600 text-xs">{{item.ordered_qty}} {{item.ordered_qty == 1 ? item.uom : item.uom + 's'}} ({{(item.primary_unit * item.ordered_qty * 10) / 10}}{{item.base_uom}})</div>
-            </div>
-            <div class="text-theme-6">{{item.price * item.ordered_qty | currency}}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="flex justify-end mx-5 mb-2">
-      <span class="text-theme-1 mr-5">CBM: {{sum_total_cbm() * 10 / 10}}</span>
-      <span class="text-theme-6">Total charge: {{sum_total_price() | currency}}</span>
+      <span class="text-theme-1">Total items: {{ordered_item ? ordered_item.length : '0'}}</span>
+      <span class="text-theme-1 mr-5">CBM: {{sum_total_cbm()}} {{cbm_tbded ? '+' : ''}}</span>
+      <span class="text-theme-6 mr-5">Total charge: {{sum_total_price() | currency}} {{price_tbded ? '+' : ''}}</span>
     </div>
     <div class="px-5 py-3 text-right border-t border-gray-200">
       <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1">Cancel</button>
-      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white" (click)="place_order()">Place order</button>
+      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white" (click)="confirm_order()">Confrim</button>
     </div>
   </div>
 </div>
