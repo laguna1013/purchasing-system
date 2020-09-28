@@ -18,7 +18,7 @@ import { GlobalService } from '../../services/global.service'
 export class OrderComponent implements OnInit {
 
   constructor(
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
@@ -30,7 +30,6 @@ export class OrderComponent implements OnInit {
   loading = false;
   orders: Array<Object> = [];
 
-  item_display_style: String = 'list';
   ticket_created: boolean = false;
 
   ordered_item: Array<Object> = [];
@@ -45,6 +44,7 @@ export class OrderComponent implements OnInit {
     this.globalService.menu = 'order';
     this.getItem();
   }
+
   getItem = () => {
     this.loading = true;
     this.api.getItem().pipe(first()).subscribe(
@@ -62,9 +62,6 @@ export class OrderComponent implements OnInit {
         this.loading = false;
       }
     );
-  }
-  item_display_style_change = style => {
-    this.item_display_style = style;
   }
 
   generate_po_number = () => {
