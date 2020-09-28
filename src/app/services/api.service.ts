@@ -79,8 +79,20 @@ export class ApiService {
         return res;
       }))
   }
+  getAllOrders(){
+    return this.http.post(`${api_url}/${controller}/get_all_orders`, '')
+      .pipe(map(res => {
+        return res;
+      }))
+  }
   getOrderDetails(data){
     return this.http.post(`${api_url}/${controller}/get_order_details`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  getPsUsers(){
+    return this.http.post(`${api_url}/${controller}/get_ps_users`, '')
       .pipe(map(res => {
         return res;
       }))

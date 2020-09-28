@@ -22,6 +22,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { LoaderComponent } from './fragments/loader/loader.component';
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ManageOrderComponent } from './admin/manage-order/manage-order.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     LoginComponent,
     UnauthorizedComponent,
     PageNotFoundComponent,
-    LoaderComponent
+    LoaderComponent,
+    ManageOrderComponent
   ],
   imports: [
     BrowserModule,

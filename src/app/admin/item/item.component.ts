@@ -10,21 +10,6 @@ import { Item } from './item';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 
-const RAW_FIELDS = [
-  `BRANCH`,
-  `Cost`,
-  `Customer Unit of Measure`,
-  `Description`,
-  `"G.W. ↵(lb)"`,
-  `Inventory ID`,
-  `Packing Info`,
-  `Subcharge (20%)`,
-  `Subtotal`,
-  `"Total ↵G.W. (lb)"`,
-  `Vendor Description`,
-  `max order q'ty`,
-  `sorting order by weights`,
-];
 @Component({
   selector: 'app-item',
   templateUrl: './item.component.html',

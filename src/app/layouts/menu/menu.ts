@@ -18,7 +18,7 @@ export const MENU: Object[] = [
     role: 'user'
   },
   {
-    link: 'admin-orders',
+    link: 'manage-order',
     label: 'Orders',
     icon: 'database',
     role: 'admin'

@@ -58,7 +58,9 @@ export class OrderComponent implements OnInit {
     this.getItem();
     this.getOrders(this.user['id']);
   }
-
+  category_change = (event) => {
+    this.category = event.target.value;
+  }
   getItem = () => {
     this.loading = true;
     this.api.getItem().pipe(first()).subscribe(
@@ -157,6 +159,15 @@ export class OrderComponent implements OnInit {
   }
   remove_item = () => {
     this.ordered_item = [...this.ordered_item.filter(item => item['item_id'] != this.selected_item['id'])];
+    this.reset();
+  }
+  clear_items = () => {
+    this.ordered_item = [];
+    this.reset();
+  }
+  cancel_order = () => {
+    this.ticket_created = false;
+    this.ordered_item = [];
     this.reset();
   }
   confirm_order = () => {

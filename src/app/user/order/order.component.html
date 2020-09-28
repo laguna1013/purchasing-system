@@ -30,15 +30,15 @@
           <input type="text" class="input input--lg w-full lg:w-64 box pr-10 placeholder-theme-13" placeholder="Search item...">
           <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search" appFeatherIcon></i>
         </div>
-        <select class="input input--lg box lg:mt-0 ml-auto">
-          <option>Choose category</option>
+        <select class="input input--lg box lg:mt-0 ml-auto" (change)="category_change($event)">
+          <option value="all">Choose category</option>
           <option value="dry">Dry</option>
           <option value="frozen">Frozen</option>
         </select>
       </div>
       <div class="grid grid-cols-12 gap-5 mt-5 pt-5 border-t border-theme-5" style="max-height: 65vh; overflow: auto;">
         <div *ngFor="let item of globalService.items; index as idx" class="intro-y block col-span-6 sm:col-span-3 xxl:col-span-2">
-          <a *ngIf="item.status == 'true'" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="">
+          <a *ngIf="(item.status == 'true') && ((item.category == category) || (category == 'all'))" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="">
             <div class="box rounded-md p-3 relative" (click)="select_item(item)">
               <div class="flex-none pos-image relative block">
                 <div class="pos-image__preview image-fit">
@@ -97,14 +97,15 @@
               <div class="font-medium text-base">{{sum_total_cbm(ordered_item)}} {{cbm_tbded ? '+' : ''}}</div>
             </div>
           </div>
-          <div class="flex mt-5">
-            <button class="button w-32 border border-gray-400 text-gray-600">Clear Items</button>
-            <a class="button w-32 text-white bg-theme-1 shadow-md ml-auto" href="javascript:;" data-toggle="modal" data-target="#place-order-modal">Order</a>
+          <div class="flex mt-5 justify-between">
+            <button class="button w-32 border border-gray-400 text-gray-600" (click)="cancel_order()">Cancel Order</button>
+            <button class="button w-32 text-white bg-theme-6 shadow-md" (click)="clear_items()">Clear Items</button>
+            <a class="button w-32 text-white bg-theme-1 shadow-md" href="javascript:;" data-toggle="modal" data-target="#place-order-modal">Order</a>
           </div>
         </div>
         <div class="tab-content__pane {{!ticket_created ? 'active' : ''}}" id="details">
           <div class="box p-2 mt-2">
-            <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{globalService.orders.length != 0 ? 'Orders:' : 'You have no orders yet. Please start ordering.'}}</h6>
+            <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{globalService.orders.length != 0 ? 'Recent orders:' : 'You have no orders yet. Please start ordering.'}}</h6>
             <a *ngFor="let item of globalService.orders; index as idx;" href="javascript:;" (click)="select_order(item['order_id'])" data-toggle="modal" data-target="#order-items-modal">
               <div class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">
                 <div class="ml-4 mr-auto">
