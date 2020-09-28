@@ -86,15 +86,15 @@
           <div class="box p-5 mt-5">
             <div class="flex">
               <div class="mr-auto">Total price</div>
-              <div>{{sum_total_price() | currency}} {{price_tbded ? '+' : ''}}</div>
+              <div>{{sum_total_price(ordered_item) | currency}} {{price_tbded ? '+' : ''}}</div>
             </div>
             <div class="flex mt-4 pt-4 border-t border-gray-200">
               <div class="mr-auto font-medium text-base">Charge</div>
-              <div class="font-medium text-base">{{sum_total_price() | currency}} {{price_tbded ? '+' : ''}}</div>
+              <div class="font-medium text-base">{{sum_total_price(ordered_item) | currency}} {{price_tbded ? '+' : ''}}</div>
             </div>
             <div class="flex mt-4">
               <div class="mr-auto font-medium text-base">CBM</div>
-              <div class="font-medium text-base">{{sum_total_cbm()}} {{cbm_tbded ? '+' : ''}}</div>
+              <div class="font-medium text-base">{{sum_total_cbm(ordered_item)}} {{cbm_tbded ? '+' : ''}}</div>
             </div>
           </div>
           <div class="flex mt-5">
@@ -104,26 +104,17 @@
         </div>
         <div class="tab-content__pane {{!ticket_created ? 'active' : ''}}" id="details">
           <div class="box p-2 mt-2">
-            <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{orders.length != 0 ? 'Orders:' : 'You have no orders yet. Please start ordering.'}}</h6>
-            <div *ngFor="let item of orders; index as idx;" class="intro-y" (click)="edit_order(item)">
-            <div class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">
-              <div class="w-20 overflow-hidden">
-                <div class="flex">
-                  <div *ngFor="let _item of item.items; index as _idx" class="w-10 h-10 image-fit zoom-in {{_idx == 0 ? '' : '-ml-5'}}">
-                    <img alt="Purchasing system image" class="tooltip rounded-full" src="{{ _item.image ? _item.image : 'assets/images/place_holder.png' }}">
-                  </div>
+            <h6 class="text-base font-medium leading-none ml-2 mt-2 mb-2">{{globalService.orders.length != 0 ? 'Orders:' : 'You have no orders yet. Please start ordering.'}}</h6>
+            <a *ngFor="let item of globalService.orders; index as idx;" href="javascript:;" (click)="select_order(item['order_id'])" data-toggle="modal" data-target="#order-items-modal">
+              <div class="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white hover:bg-gray-200 rounded-md">
+                <div class="ml-4 mr-auto">
+                  <div class="font-medium">Order ID: {{item.order_id}}</div>
+                  <div class="text-gray-600 text-xs">Ordered time: {{item.order_time}}</div>
                 </div>
+                <div class="py-1 px-2 rounded-full text-xs bg-theme-{{item.status != 'pending' ? '9' : '12'}} text-white cursor-pointer font-medium">{{item.status}}</div>
               </div>
-              <div class="ml-4 mr-auto">
-                <div class="font-medium">{{item.po_id}}</div>
-                <div class="text-gray-600 text-xs">{{item.po_date}}
-                  <span class="text-theme-1 ml-3">{{item.items.length != 1 ? item.items.length + ' items ordered.' : item.items.length + ' item ordered.'}}</span>
-                  <span class="ml-3">Total: <span class="text-theme-9">{{item.charge | currency}}</span></span>
-                </div>
-              </div>
-              <div class="py-1 px-2 rounded-full text-xs bg-theme-{{item.status != 'pending' ? '9' : '12'}} text-white cursor-pointer font-medium">{{item.status}}</div>
-            </div>
-          </div>
+              <div class="w-full border-t border-gray-200 border-dashed"></div>
+            </a>
         </div>
       </div>
     </div>
@@ -260,7 +251,7 @@
                   <div class="font-medium block truncate">{{_item['vendor_description']}}({{_item['description']}})</div>
                   <div class="text-gray-600 text-xs">{{item.qty}} {{item.qty == 1 ? _item.uom : _item.uom + 's'}}</div>
                 </div>
-                <div class="text-theme-6">Price</div>
+                <div class="text-theme-6">{{_item.price != '' && _item.price != 'Market Price' ? '$' + parse_float(parse_float(_item.price) * item.qty) : 'TBD'}}</div>
               </div>
             </div>
           </div>
@@ -268,13 +259,53 @@
       </div>
     </div>
     <div class="flex justify-end mx-5 mb-2">
-      <span class="text-theme-1">Total items: {{ordered_item ? ordered_item.length : '0'}}</span>
-      <span class="text-theme-1 mr-5">CBM: {{sum_total_cbm()}} {{cbm_tbded ? '+' : ''}}</span>
-      <span class="text-theme-6 mr-5">Total charge: {{sum_total_price() | currency}} {{price_tbded ? '+' : ''}}</span>
+      <span class="text-theme-1 mr-5">Total items: {{ordered_item ? ordered_item.length : '0'}}</span>
+      <span class="text-theme-1 mr-5">CBM: {{sum_total_cbm(ordered_item)}} {{cbm_tbded ? '+' : ''}}</span>
+      <span class="text-theme-6">Total charge: {{sum_total_price(ordered_item) | currency}} {{price_tbded ? '+' : ''}}</span>
     </div>
     <div class="px-5 py-3 text-right border-t border-gray-200">
       <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1">Cancel</button>
       <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white" (click)="confirm_order()">Confrim</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="order-items-modal">
+  <div class="modal__content modal__content--lg">
+    <div class="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
+      <h2 class="font-medium text-base mr-auto">
+        Order ID: {{selected_order ? selected_order['order_id'] : ''}}
+      </h2>
+      <small>{{selected_order ? selected_order['order_time'] : ''}}</small>
+    </div>
+    <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
+      <div class="col-span-12" style="max-height: 500px; overflow: auto;">
+        <div *ngFor="let item of ordered_item_details; index as idx;">
+          <div *ngFor="let _item of globalService.items;">
+            <div *ngIf="_item['id'] == item['item_id']">
+              <div class="px-5 py-3 mb-3 flex items-center" style="border: 1px solid #eee; border-radius: 5px;">
+                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
+                  <img alt="Purchasing system image" src="{{ _item['image'] ? _item['image'] : 'assets/images/place_holder.png' }}">
+                </div>
+                <div class="ml-4 mr-auto" style="max-width: 50%;">
+                  <div class="font-medium block truncate">{{_item['vendor_description']}}({{_item['description']}})</div>
+                  <div class="text-gray-600 text-xs">{{item.qty}} {{item.qty == 1 ? _item.uom : _item.uom + 's'}}</div>
+                </div>
+                <div class="text-theme-6">Price: {{_item.price != '' && _item.price != 'Market Price' ? '$' + parse_float(parse_float(_item.price) * item.qty) : 'TBD'}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end mx-5 mb-2">
+      <span class="text-theme-1 mr-5">Status: <span class="py-1 px-2 rounded-full text-xs bg-theme-{{selected_order ? (selected_order['status'] != 'pending' ? '9' : '12') : ''}} text-white cursor-pointer font-medium">{{selected_order ? selected_order['status'] : ''}}</span></span>
+      <span class="text-theme-1 mr-5">Total items: {{ordered_item_details ? ordered_item_details.length : '0'}}</span>
+      <span class="text-theme-1 mr-5">CBM: {{sum_total_cbm(ordered_item_details)}} {{cbm_tbded ? '+' : ''}}</span>
+      <span class="text-theme-6">Total charge: {{sum_total_price(ordered_item_details) | currency}} {{price_tbded ? '+' : ''}}</span>
+    </div>
+    <div class="px-5 py-3 text-right border-t border-gray-200">
+      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white">Ok</button>
     </div>
   </div>
 </div>

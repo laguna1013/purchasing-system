@@ -67,4 +67,22 @@ export class ApiService {
         return res;
       }))
   }
+  addOrder(data){
+    return this.http.post(`${api_url}/${controller}/add_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  getOrders(data){
+    return this.http.post(`${api_url}/${controller}/get_orders`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  getOrderDetails(data){
+    return this.http.post(`${api_url}/${controller}/get_order_details`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
 }

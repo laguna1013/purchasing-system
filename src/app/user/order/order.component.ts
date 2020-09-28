@@ -28,7 +28,7 @@ export class OrderComponent implements OnInit {
   ) { }
 
   loading = false;
-  orders: Array<Object> = [];
+
   category: string = 'all';
   ticket_created: boolean = false;
 
@@ -37,7 +37,12 @@ export class OrderComponent implements OnInit {
   selected_item: Object;
   selected_ordered_item: Object;
 
+  selected_order: Object;
+
   qty: number = 1;
+
+  ordered_item_details: Array<Object> = [];
+
 
   po_number: String = '';
   order_selected: boolean = false;
@@ -49,8 +54,9 @@ export class OrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.globalService.menu = 'order';
-    this.getItem();
     this.user = this.authService.currentUser();
+    this.getItem();
+    this.getOrders(this.user['id']);
   }
 
   getItem = () => {
@@ -71,7 +77,26 @@ export class OrderComponent implements OnInit {
       }
     );
   }
-
+  getOrders = (user_id) => {
+    this.loading = true;
+    this.api.getOrders(this.parseService.encode({
+      customer_id: user_id
+    })).pipe(first()).subscribe(
+      data => {
+        if (data['status'] == 'success') {
+          let orders = data['data'];
+          this.globalService.orders = [...orders];
+        } else {
+          this.toast.error('There is an issue with server. Please try again.', 'Error');
+        }
+        this.loading = false;
+      },
+      error => {
+        console.log(error)
+        this.loading = false;
+      }
+    );
+  }
   generate_po_number = () => {
     this.po_number = this.user['name'] + moment().format('hhmmssMMDDYYYY');
   }
@@ -135,16 +160,20 @@ export class OrderComponent implements OnInit {
     this.reset();
   }
   confirm_order = () => {
-    this.place_order(this.ordered_item);
-    this.ordered_item = [];
-    this.ticket_created = false;
-    this.reset();
+    if(this.ordered_item.length == 0){
+      this.toast.error('No items added. Please add items.', 'Error');
+    }else{
+      this.place_order(this.ordered_item);
+      this.ordered_item = [];
+      this.ticket_created = false;
+      this.reset();
+    }
   }
-  sum_total_price = () => {
+  sum_total_price = (ordered_item) => {
     let sum = 0;
     this.price_tbded = false;
-    if(this.ordered_item.length != 0){
-      this.ordered_item.forEach(item => {
+    if(ordered_item.length != 0){
+      ordered_item.forEach(item => {
         this.globalService.items.forEach(_item => {
           if(item['item_id'] == _item['id']){
             if((_item['price'] != '') && (_item['price'] != 'Market Price')){
@@ -158,11 +187,11 @@ export class OrderComponent implements OnInit {
     }
     return sum;
   }
-  sum_total_cbm = () => {
+  sum_total_cbm = (ordered_item) => {
     let sum = 0;
     this.cbm_tbded = false;
-    if(this.ordered_item.length != 0){
-      this.ordered_item.forEach(item => {
+    if(ordered_item.length != 0){
+      ordered_item.forEach(item => {
         this.globalService.items.forEach(_item => {
           if(item['item_id'] == _item['id']){
             if(_item['cbm'] != ''){
@@ -187,6 +216,42 @@ export class OrderComponent implements OnInit {
     this.qty = 1;
   }
   place_order = (items) => {
-    console.log(items)
+    this.loading = true;
+    this.api.addOrder(this.parseService.encode({
+      customer_id: this.user['id'],
+      order_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+      order_id: this.po_number,
+      items: JSON.stringify(items)
+    })).pipe(first()).subscribe(data => {
+      if(data['data'] == true){
+        this.toast.success('Your order has been placed successfully.', 'Success');
+        this.getOrders(this.user['id']);
+      }
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+      this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
+    });
+  }
+  select_order = (order_id) => {
+    this.selected_order = this.globalService.orders.filter(item => item['order_id'] == order_id)[0];
+    this.ordered_item_details = [];
+    this.loading = true;
+    this.api.getOrderDetails(this.parseService.encode({
+      order_id: order_id
+    })).pipe(first()).subscribe(
+      data => {
+        if (data['status'] == 'success') {
+          this.ordered_item_details = [...data['data']];
+        } else {
+          this.toast.error('There is an issue with server. Please try again.', 'Error');
+        }
+        this.loading = false;
+      },
+      error => {
+        console.log(error)
+        this.loading = false;
+      }
+    );
   }
 }

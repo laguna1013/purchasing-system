@@ -6,5 +6,6 @@ import { Item } from '../admin/item/item';
 export class GlobalService {
   menu: String = ''
   items: Item[] = [];
+  orders: Object[] = [];
   constructor() { }
 }
