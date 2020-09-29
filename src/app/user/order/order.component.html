@@ -27,7 +27,7 @@
     <div class="intro-y col-span-12 lg:col-span-8">
       <div class="flex intro-y">
         <div class="relative text-gray-700">
-          <input type="text" class="input input--lg w-full lg:w-64 box pr-10 placeholder-theme-13" placeholder="Search item...">
+          <input type="text" class="input input--lg w-full lg:w-64 box pr-10 placeholder-theme-13" placeholder="Search item..." (keyup)="search_item($event)">
           <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search" appFeatherIcon></i>
         </div>
         <select class="input input--lg box lg:mt-0 ml-auto" (change)="category_change($event)">
@@ -37,22 +37,26 @@
         </select>
       </div>
       <div class="grid grid-cols-12 gap-5 mt-5 pt-5 border-t border-theme-5" style="max-height: 65vh; overflow: auto;">
-        <div *ngFor="let item of globalService.items; index as idx" class="intro-y block col-span-6 sm:col-span-3 xxl:col-span-2">
-          <a *ngIf="(item.status == 'true') && ((item.category == category) || (category == 'all'))" href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="">
-            <div class="box rounded-md p-3 relative" (click)="select_item(item)">
-              <div class="flex-none pos-image relative block">
-                <div class="pos-image__preview image-fit">
-                  <img alt="Purchasing system image" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
+        <ng-template ngFor let-item [ngForOf]="globalService.items" let-i="index">
+          <ng-template [ngIf]="filter_item(item) && (item.status == 'true') && ((item.category == category) || (category == 'all'))">
+            <div class="intro-y block col-span-6 sm:col-span-3 xxl:col-span-2">
+              <a href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="">
+                <div class="box rounded-md p-3 relative" (click)="select_item(item)">
+                  <div class="flex-none pos-image relative block">
+                    <div class="pos-image__preview image-fit">
+                      <img alt="Purchasing system image" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
+                    </div>
+                  </div>
+                  <div class="flex mt-1 justify-between">
+                    <small>{{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</small>
+                    <small>{{(item.qty_display == 'true' && (item.qty != '')) ? item.qty + ' ' + item.uom : ''}}</small>
+                  </div>
+                  <small class="block truncate">{{item.vendor_description}} ({{item.description}})</small>
                 </div>
-              </div>
-              <div class="flex mt-1 justify-between">
-                <small>{{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</small>
-                <small>{{(item.qty_display == 'true' && (item.qty != '')) ? item.qty + ' ' + item.uom : ''}}</small>
-              </div>
-              <small class="block truncate">{{item.vendor_description}} ({{item.description}})</small>
+              </a>
             </div>
-          </a>
-        </div>
+          </ng-template>
+        </ng-template>
       </div>
     </div>
     <div class="col-span-12 lg:col-span-4">

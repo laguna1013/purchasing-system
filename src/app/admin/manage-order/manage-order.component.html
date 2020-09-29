@@ -27,7 +27,7 @@
               <td>CUSTOMER ID</td>
               <td>ORDER TIME</td>
               <td>STATUS</td>
-              <td>ACTION</td>
+              <td class="text-center">ACTION</td>
             </tr>
           </thead>
           <tbody>
@@ -39,9 +39,9 @@
               <td>
                 <span class="py-1 px-2 rounded-full text-xs bg-theme-{{item['status'] != 'pending' ? '9' : '12'}} text-white cursor-pointer font-medium">{{item['status']}}</span>
               </td>
-              <td>
-                <button class="button w-24 mr-1 mb-2 bg-theme-9 text-white">Approve</button>
-                <button class="button w-24 mr-1 mb-2 bg-theme-6 text-white">Delete</button>
+              <td class="flex justify-end">
+                <button *ngIf="item['status'] == 'pending'" class="button w-24 mr-1 mb-2 bg-theme-9 text-white" (click)="approve_order(item['order_id'])">Approve</button>
+                <button class="button w-24 mr-1 mb-2 bg-theme-6 text-white" (click)="delete_order(item['order_id'])">Delete</button>
               </td>
             </tr>
           </tbody>

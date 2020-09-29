@@ -97,4 +97,16 @@ export class ApiService {
         return res;
       }))
   }
+  approveOrder(data){
+    return this.http.post(`${api_url}/${controller}/approve_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  deleteOrder(data){
+    return this.http.post(`${api_url}/${controller}/delete_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
 }

@@ -52,6 +52,8 @@ export class OrderComponent implements OnInit {
 
   user: Object;
 
+  search_key = '';
+
   ngOnInit(): void {
     this.globalService.menu = 'order';
     this.user = this.authService.currentUser();
@@ -82,7 +84,8 @@ export class OrderComponent implements OnInit {
   getOrders = (user_id) => {
     this.loading = true;
     this.api.getOrders(this.parseService.encode({
-      customer_id: user_id
+      customer_id: user_id,
+      limit: 8
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
@@ -264,5 +267,18 @@ export class OrderComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+  search_item = (event) => {
+    this.search_key = event.target.value;
+  }
+  filter_item = (item) => {
+    if(this.search_key == ''){
+      return true;
+    }else{
+      if((item['description'].toLowerCase().indexOf(this.search_key.toLowerCase()) != -1) || (item['vendor_description'].toLowerCase().indexOf(this.search_key.toLowerCase()) != -1)){
+        return true;
+      }
+      return false;
+    }
   }
 }

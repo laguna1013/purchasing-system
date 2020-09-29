@@ -160,4 +160,38 @@ export class ManageOrderComponent implements OnInit {
     }
     return sum;
   }
+  approve_order = (order_id) => {
+    this.loading = true;
+    this.api.approveOrder(this.parseService.encode({
+      order_id: order_id
+    })).pipe(first()).subscribe(data => {
+      if(data['data'] == true){
+        this.toast.success('Status updated successfully', 'Success');
+        this.get_orders();
+      }else{
+        this.toast.error('There had been a database error. Please try again later.', 'Error');
+      }
+      this.loading = false;
+    }, error => {
+      this.toast.error('There had been a database error. Please try again later.', 'Error');
+      this.loading = false;
+    })
+  }
+  delete_order = (order_id) => {
+    this.loading = true;
+    this.api.deleteOrder(this.parseService.encode({
+      order_id: order_id
+    })).pipe(first()).subscribe(data => {
+      if(data['data'] == true){
+        this.toast.success('Order deleted successfully', 'Success');
+        this.get_orders();
+      }else{
+        this.toast.error('There had been a database error. Please try again later.', 'Error');
+      }
+      this.loading = false;
+    }, error => {
+      this.toast.error('There had been a database error. Please try again later.', 'Error');
+      this.loading = false;
+    })
+  }
 }
