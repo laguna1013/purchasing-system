@@ -1,7 +1,6 @@
 export class Item {
   inventory_id: string = ''
   created_user_id: string
-  branch: string = ''
   gross_weight: string = ''
   category: string = 'dry'
   vendor_description: string = ''
@@ -20,7 +19,6 @@ export class Item {
   public reset() {
     this.inventory_id = ''
     this.created_user_id = ''
-    this.branch = ''
     this.gross_weight = ''
     this.category = 'dry'
     this.vendor_description = ''

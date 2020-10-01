@@ -145,9 +145,6 @@ export class ItemComponent implements OnInit {
         let _item = new Item();
         Object.entries(raw_item).map(([key, value]) => {
           switch (key) {
-            case 'BRANCH':
-              _item.branch = value.toString();
-              break;
             case 'Cost':
               _item.price = value.toString();
               break;

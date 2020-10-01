@@ -35,8 +35,32 @@
           <option value="dry">Dry</option>
           <option value="frozen">Frozen</option>
         </select>
+        <div class="box p-2 ml-2 sm:hide">
+          <div class="w-20 flex justify-around items-center h-full item-layout-style">
+            <a class="{{item_display_style == 'list' ? 'active' : ''}}" (click)="item_display_style_change('list')"><i class="h-5" data-feather="list" appFeatherIcon></i></a>
+            <a class="{{item_display_style == 'grid' ? 'active' : ''}}" (click)="item_display_style_change('grid')"><i class="h-5" data-feather="grid" appFeatherIcon></i></a>
+          </div>
+        </div>
       </div>
-      <div class="grid grid-cols-12 gap-5 mt-5 pt-5 border-t border-theme-5" style="max-height: 65vh; overflow: auto;">
+      <div *ngIf="item_display_style == 'list'" class="p-0 mt-2" style="max-height: 65vh; overflow: auto;">
+        <ng-template ngFor let-item [ngForOf]="globalService.items" let-i="index">
+          <ng-template [ngIf]="filter_item(item) && (item.status == 'true') && ((item.category == category) || (category == 'all'))">
+            <a href="javascript:;" data-toggle="modal" data-target="#add-item-modal" class="">
+              <div class="relative flex items-center box p-2 mt-2" (click)="select_item(item)">
+                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
+                  <img alt="Purchasing system image" src="{{ item.image ? item.image : 'assets/images/place_holder.png' }}">
+                </div>
+                <div class="ml-4 mr-auto">
+                  <div class="font-medium">Description: {{item.vendor_description}} ({{item.description}})</div>
+                  <div class="text-gray-600 text-xs">Qty: {{(item.qty_display == 'true' && (item.qty != '')) ? item.qty + ' ' + item.uom : 'TBD'}}</div>
+                </div>
+                <div class="text-theme-6">Price: {{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</div>
+              </div>
+            </a>
+          </ng-template>
+        </ng-template>
+      </div>
+      <div *ngIf="item_display_style == 'grid'" class="grid grid-cols-12 gap-5 mt-5 pt-5 border-t border-theme-5" style="max-height: 65vh; overflow: auto;">
         <ng-template ngFor let-item [ngForOf]="globalService.items" let-i="index">
           <ng-template [ngIf]="filter_item(item) && (item.status == 'true') && ((item.category == category) || (category == 'all'))">
             <div class="intro-y block col-span-6 sm:col-span-3 xxl:col-span-2">

@@ -17,7 +17,7 @@
                   <ngx-dropzone-label>Item image. Drop it here!</ngx-dropzone-label>
                 </ngx-dropzone>
                 <div class="item-preview">
-                  <img src="{{item.image.length != 0 ? item.image : '/assets/images/placeholders/800x800.jpg'}}" alt="Purchasing system image">
+                  <img src="{{item.image.length != 0 ? item.image : 'assets/images/placeholders/800x800.jpg'}}" alt="Purchasing system image">
                 </div>
                 <div class="remove-image" (click)="remove_item_image()">
                   <i data-feather="x" class="w-4 h-4 mr-2" appFeatherIcon style="color: white; margin: 0px;"></i>
@@ -30,10 +30,6 @@
                   <div class="col-span-12 xl:col-span-6">
                     <label>Inventory ID</label>
                     <input type="text" class="input w-full border" placeholder="Inventory ID" [(ngModel)]="item.inventory_id" name="inventory_id" #inventory_id="ngModel" required>
-                  </div>
-                  <div class="col-span-12 xl:col-span-6">
-                    <label>Branch</label>
-                    <input type="text" class="input w-full border" placeholder="Branch (Shop ID)" [(ngModel)]="item.branch" name="branch" #branch="ngModel" required>
                   </div>
                   <div class="col-span-12 xl:col-span-6">
                     <label>Gross weight</label>

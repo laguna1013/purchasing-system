@@ -28,7 +28,7 @@ export class OrderComponent implements OnInit {
   ) { }
 
   loading = false;
-
+  item_display_style = 'list';
   category: string = 'all';
   ticket_created: boolean = false;
 
@@ -62,6 +62,9 @@ export class OrderComponent implements OnInit {
   }
   category_change = (event) => {
     this.category = event.target.value;
+  }
+  item_display_style_change = (style) => {
+    this.item_display_style = style;
   }
   getItem = () => {
     this.loading = true;

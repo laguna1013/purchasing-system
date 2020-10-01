@@ -29,7 +29,6 @@
         <table class="table table-report table-report--bordered display w-full">
           <thead>
             <tr>
-              <th width="3%" class="text-center">Branch</th>
               <th width="3%" class="text-center">Category</th>
               <th width="5%" class="text-center">Inventory ID</th>
               <th width="5%" class="">Image</th>
@@ -50,9 +49,6 @@
           </thead>
           <tbody>
             <tr class="edit-item cursor-pointer" *ngFor="let item of globalService.items; index as idx;">
-              <td class="border-b">
-                <div class="font-medium text-center">{{item.branch}}</div>
-              </td>
               <td class="border-b">
                 <div class="font-medium text-center">{{item.category}}</div>
               </td>
