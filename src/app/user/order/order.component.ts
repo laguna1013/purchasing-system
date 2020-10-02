@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
 import { Item } from '../../admin/item/item';
 import * as moment from 'moment';
+import * as XLSX from 'xlsx';
 
 import { GlobalService } from '../../services/global.service'
 
@@ -283,5 +284,17 @@ export class OrderComponent implements OnInit {
       }
       return false;
     }
+  }
+  export_excel = () => {
+    /* table id is passed over here */
+    let element = document.getElementById('export-table');
+    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, `${this.po_number}.xlsx`);
   }
 }
