@@ -109,4 +109,10 @@ export class ApiService {
         return res;
       }))
   }
+  sendMail(data){
+    return this.http.post(`${api_url}/${controller}/send_mail`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
 }

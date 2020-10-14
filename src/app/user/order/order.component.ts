@@ -250,6 +250,21 @@ export class OrderComponent implements OnInit {
       this.loading = false;
       this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
     });
+    //this.extract_to_excel();
+    this.api.sendMail(this.parseService.encode({
+      to: this.user['email'],
+      subject: "Your order has been placed successfully",
+      message: "Order details will be attached."
+    })).pipe(first()).subscribe(data => {
+      if(data['data'] == true){
+        this.toast.success('Your order has been placed successfully.', 'Success');
+        this.getOrders(this.user['id']);
+      }
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+      this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
+    });
   }
   select_order = (order_id) => {
     this.selected_order = this.globalService.orders.filter(item => item['order_id'] == order_id)[0];
@@ -289,12 +304,21 @@ export class OrderComponent implements OnInit {
     /* table id is passed over here */
     let element = document.getElementById('export-table');
     const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
-
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
     /* save to file */
+    XLSX.writeFile(wb, `${this.po_number}.xlsx`);
+  }
+  extract_to_excel = () => {
+    /* table id is passed over here */
+    let element = document.getElementById('export-table');
+    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    /* save to file */
+    //console.log(wb)
     XLSX.writeFile(wb, `${this.po_number}.xlsx`);
   }
 }
