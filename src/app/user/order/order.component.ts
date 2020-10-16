@@ -244,21 +244,48 @@ export class OrderComponent implements OnInit {
       if(data['data'] == true){
         this.toast.success('Your order has been placed successfully.', 'Success');
         this.getOrders(this.user['id']);
+        this.send_email(items);
       }
       this.loading = false;
     }, error => {
       this.loading = false;
       this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
     });
-    //this.extract_to_excel();
+  }
+  send_email = (items) => {
+    let order_details = [];
+    items.forEach(item => {
+      this.globalService.items.forEach(gitem => {
+        if(gitem['id'] == item['item_id']){
+          order_details.push({
+            "branch_id": this.user['name'],
+            "g_weight": gitem['gross_weight'],
+            "i_id": gitem['inventory_id'],
+            "v_desc": gitem['vendor_description'],
+            "desc": gitem['description'],
+            "p_info": gitem['packing_info'],
+            "cost": gitem['price'],
+            "qty": item['qty'],
+            "uom": gitem['uom'],
+            "subtotal": gitem['price'] != '' && gitem['price'] != 'Market Price' ? this.parse_float(parseFloat(gitem['price']) * item['qty']).toFixed(2) : 'TBD',
+            "gw": gitem['gross_weight'],
+            "t_gw": gitem['gross_weight'] ? this.parse_float(parseFloat(gitem['gross_weight']) * item['qty']).toFixed(2) : '',
+            "subcharge": gitem['price'] != '' && gitem['price'] != 'Market Price' ? this.parse_float(parseFloat(gitem['price']) * item['qty'] * 0.2).toFixed(2) : 'TBD',
+            "moq": gitem['moq'],
+            "cbm": gitem['cbm']
+          });
+        }
+      })
+    })
     this.api.sendMail(this.parseService.encode({
       to: this.user['email'],
       subject: "Your order has been placed successfully",
-      message: "Order details will be attached."
+      message: "Order details will be attached.",
+      order_details: JSON.stringify(order_details),
+      po_id: this.po_number
     })).pipe(first()).subscribe(data => {
       if(data['data'] == true){
-        this.toast.success('Your order has been placed successfully.', 'Success');
-        this.getOrders(this.user['id']);
+        this.toast.success('Purchasing order mail sent successfully to your email.', 'Success');
       }
       this.loading = false;
     }, error => {
@@ -308,17 +335,6 @@ export class OrderComponent implements OnInit {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     /* save to file */
-    XLSX.writeFile(wb, `${this.po_number}.xlsx`);
-  }
-  extract_to_excel = () => {
-    /* table id is passed over here */
-    let element = document.getElementById('export-table');
-    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
-    /* generate workbook and add the worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    /* save to file */
-    //console.log(wb)
     XLSX.writeFile(wb, `${this.po_number}.xlsx`);
   }
 }
