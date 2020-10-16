@@ -279,6 +279,7 @@ export class OrderComponent implements OnInit {
     })
     this.api.sendMail(this.parseService.encode({
       to: this.user['email'],
+      user_name: this.user['name'],
       subject: "Your order has been placed successfully",
       message: "Order details will be attached.",
       order_details: JSON.stringify(order_details),
