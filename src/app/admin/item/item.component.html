@@ -69,22 +69,22 @@
                 <div class="text-center font-medium">{{item.description}}</div>
               </td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.packing_info}}</td>
-              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.qty}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.uom}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.gross_weight}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.gross_weight * item.qty | number}}</td>
-              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price * 0.2 | currency}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price != 'Market Price' ? ('$' + parse_float(item.price * 0.2)) : item.price}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.moq}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.created_at}}</td>
               <td class="border-b">
-                <div class="flex">
+                <div class="flex m-auto justify-center">
                   <input class="input input--switch border mr-2" type="checkbox" [checked]="item.status=='true'" (change)="status_change(item)">
                   <div class="flex items-center sm:justify-center text-theme-{{item.status=='true' ? '9' : '6'}}"> {{item.status=='true' ? 'Activated' : 'Inactivated'}} </div>
                 </div>
               </td>
               <td class="text-center border-b">
-                <button (click)="deleteItem(item)" class="button button--sm flex items-center justify-center bg-theme-6 text-white"><i data-feather="trash" class="w-4 h-4 mr-2" appFeatherIcon></i>Delete</button>
+                <button (click)="deleteItem(item)" class="button button--sm m-auto flex items-center justify-center bg-theme-6 text-white"><i data-feather="trash" class="w-4 h-4 mr-2" appFeatherIcon></i>Delete</button>
               </td>
             </tr>
           </tbody>

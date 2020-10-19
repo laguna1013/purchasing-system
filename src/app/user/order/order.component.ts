@@ -69,7 +69,11 @@ export class OrderComponent implements OnInit {
   }
   getItem = () => {
     this.loading = true;
-    this.api.getItem().pipe(first()).subscribe(
+    this.api.getItem(
+      this.parseService.encode({
+        company: this.authService.currentUser()['company']
+      })
+    ).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
           let items = data['data'];
@@ -280,6 +284,7 @@ export class OrderComponent implements OnInit {
     this.api.sendMail(this.parseService.encode({
       to: this.user['email'],
       user_name: this.user['name'],
+      company: this.user['company'],
       subject: "Your order has been placed successfully",
       message: "Order details will be attached.",
       order_details: JSON.stringify(order_details),

@@ -25,8 +25,8 @@ export class ApiService {
         return res;
       }));
   }
-  getItem() {
-    return this.http.post(`${api_url}/${controller}/get_item`, '')
+  getItem(data) {
+    return this.http.post(`${api_url}/${controller}/get_item`, data)
       .pipe(map(res => {
         return res;
       }))
@@ -79,8 +79,8 @@ export class ApiService {
         return res;
       }))
   }
-  getAllOrders(){
-    return this.http.post(`${api_url}/${controller}/get_all_orders`, '')
+  getAllOrders(data){
+    return this.http.post(`${api_url}/${controller}/get_all_orders`, data)
       .pipe(map(res => {
         return res;
       }))

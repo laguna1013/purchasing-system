@@ -55,6 +55,7 @@
                     <div class="p-4 border-b border-theme-40">
                         <div class="font-medium">{{user['name']}}<span class="text-xs px-1 rounded-full bg-theme-9 text-theme-6 ml-2">{{user['role']}}</span></div>
                         <div class="text-xs text-theme-41">{{user['email']}}</div>
+                        <div class="text-xs text-theme-41 font-bold">{{user['company']}}</div>
                     </div>
                     <div class="p-2 border-t border-theme-40">
                         <a (click)="logout()" class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 rounded-md cursor-pointer"> <i data-feather="toggle-right" class="w-4 h-4 mr-2" appFeatherIcon></i> Logout </a>

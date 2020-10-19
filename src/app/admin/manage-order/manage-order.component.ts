@@ -42,7 +42,9 @@ export class ManageOrderComponent implements OnInit {
 
   get_orders = () => {
     this.loading = true;
-    this.api.getAllOrders().pipe(first()).subscribe(
+    this.api.getAllOrders(this.parseService.encode({
+      company: this.authService.currentUser()['company']
+    })).pipe(first()).subscribe(
       data => {
         if(data['status'] == 'success'){
           this.orders = [...data['data']];
@@ -59,7 +61,9 @@ export class ManageOrderComponent implements OnInit {
   }
   get_item = () => {
     this.loading = true;
-    this.api.getItem().pipe(first()).subscribe(
+    this.api.getItem(this.parseService.encode({
+      company: this.authService.currentUser()['company']
+    })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
           let items = data['data'];

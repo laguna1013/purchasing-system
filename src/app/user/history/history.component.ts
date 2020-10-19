@@ -61,7 +61,9 @@ export class HistoryComponent implements OnInit {
   }
   get_item = () => {
     this.loading = true;
-    this.api.getItem().pipe(first()).subscribe(
+    this.api.getItem(this.parseService.encode({
+      company: this.authService.currentUser()['company']
+    })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
           let items = data['data'];

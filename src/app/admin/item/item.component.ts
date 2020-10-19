@@ -32,10 +32,16 @@ export class ItemComponent implements OnInit {
     this.globalService.menu = 'item';
     this.getItem();
   }
-
+  parse_float = (val) => {
+    return Math.floor(parseFloat(val) * 100) / 100;
+  }
   getItem = () => {
     this.loading = true;
-    this.api.getItem().pipe(first()).subscribe(
+    this.api.getItem(
+      this.parseService.encode({
+        company: this.authService.currentUser()['company']
+      })
+    ).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
           let items = data['data'];
