@@ -52,7 +52,10 @@
                 </div>
                 <div class="ml-4 mr-auto">
                   <div class="font-medium">Description: {{item.vendor_description}} ({{item.description}})</div>
-                  <div class="text-gray-600 text-xs">Qty: {{(item.qty_display == 'true' && (item.qty != '')) ? item.qty + ' ' + item.uom : 'TBD'}}</div>
+                  <div class="text-gray-600 text-xs">
+                    <span><em>Qty</em>: {{(item.qty_display == 'true' && (item.qty != '')) ? item.qty + ' ' + item.uom : 'TBD'}}</span>
+                    <span class="ml-5"><em>Packing info</em>: {{item.packing_info}}</span>
+                  </div>
                 </div>
                 <div class="text-theme-6">Price: {{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</div>
               </div>

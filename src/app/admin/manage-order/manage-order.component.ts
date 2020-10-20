@@ -8,6 +8,7 @@ import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import * as moment from 'moment';
 @Component({
   selector: 'app-manage-order',
   templateUrl: './manage-order.component.html',
@@ -30,6 +31,7 @@ export class ManageOrderComponent implements OnInit {
   users = [];
   order_detail = [];
   selected_order: Object;
+  selected_item: Object;
   price_tbded = false;
   cbm_tbded = false;
 
@@ -125,6 +127,12 @@ export class ManageOrderComponent implements OnInit {
       return ret['name'];
     }
   }
+  get_user_email = (id) => {
+    if(this.users.length != 0){
+      let ret = this.users.filter(item => item['id'] == id)[0];
+      return ret['email'];
+    }
+  }
   parse_float = (val) => {
     return Math.floor(parseFloat(val) * 100) / 100;
   }
@@ -164,6 +172,12 @@ export class ManageOrderComponent implements OnInit {
     }
     return sum;
   }
+  select_item = (item_id) => {
+    console.log(item_id)
+  }
+  format_date_time = (date) => {
+    return moment(date, 'YYYY-MM-DD HH:mm:ss').format('hh:mm A MMM DD ddd, YYYY')
+  }
   approve_order = (order_id) => {
     this.loading = true;
     this.api.approveOrder(this.parseService.encode({
@@ -182,20 +196,31 @@ export class ManageOrderComponent implements OnInit {
     })
   }
   delete_order = (order_id) => {
-    this.loading = true;
-    this.api.deleteOrder(this.parseService.encode({
-      order_id: order_id
-    })).pipe(first()).subscribe(data => {
-      if(data['data'] == true){
-        this.toast.success('Order deleted successfully', 'Success');
-        this.get_orders();
-      }else{
-        this.toast.error('There had been a database error. Please try again later.', 'Error');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to remove this order? ' + order_id,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        this.api.deleteOrder(this.parseService.encode({
+          order_id: order_id
+        })).pipe(first()).subscribe(data => {
+          if(data['data'] == true){
+            this.toast.success('Order deleted successfully', 'Success');
+            this.get_orders();
+          }else{
+            this.toast.error('There had been a database error. Please try again later.', 'Error');
+          }
+          this.loading = false;
+        }, error => {
+          this.toast.error('There had been a database error. Please try again later.', 'Error');
+          this.loading = false;
+        })
       }
-      this.loading = false;
-    }, error => {
-      this.toast.error('There had been a database error. Please try again later.', 'Error');
-      this.loading = false;
     })
   }
 }
