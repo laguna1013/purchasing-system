@@ -35,6 +35,7 @@ export class ManageOrderComponent implements OnInit {
   price_tbded = false;
   cbm_tbded = false;
   qty = 0;
+  filter = 'all';
 
   ngOnInit(): void {
     this.globalService.menu = 'manage-order';
@@ -43,6 +44,16 @@ export class ManageOrderComponent implements OnInit {
     this.get_users();
   }
 
+  change_filter = (filter) => {
+    this.filter = filter;
+  }
+  get_filtered_order_length = () => {
+    if(this.filter == 'all'){
+      return this.orders.length;
+    }else{
+      return this.orders.filter(item => item['status'] == this.filter).length;
+    }
+  }
   get_orders = () => {
     this.loading = true;
     this.api.getAllOrders(this.parseService.encode({
@@ -101,7 +112,6 @@ export class ManageOrderComponent implements OnInit {
   }
   get_order_details = (order_id) => {
     this.selected_order = this.orders.filter(item => item['order_id'] == order_id)[0]
-    this.order_detail = [];
     this.price_tbded = false;
     this.cbm_tbded = false;
     this.loading = true;
@@ -175,23 +185,6 @@ export class ManageOrderComponent implements OnInit {
   }
   format_date_time = (date) => {
     return moment(date, 'YYYY-MM-DD HH:mm:ss').format('hh:mm A MMM DD ddd, YYYY')
-  }
-  approve_order = (order_id) => {
-    this.loading = true;
-    this.api.approveOrder(this.parseService.encode({
-      order_id: order_id
-    })).pipe(first()).subscribe(data => {
-      if(data['data'] == true){
-        this.toast.success('Status updated successfully', 'Success');
-        this.get_orders();
-      }else{
-        this.toast.error('There had been a database error. Please try again later.', 'Error');
-      }
-      this.loading = false;
-    }, error => {
-      this.toast.error('There had been a database error. Please try again later.', 'Error');
-      this.loading = false;
-    })
   }
   delete_order = (order_id) => {
     Swal.fire({
@@ -318,6 +311,134 @@ export class ManageOrderComponent implements OnInit {
     })
   }
   add_more_items = () => {
-
+    Swal.fire({
+      title: 'Add more items',
+      html: `
+        <div class="mt-3 p-5 overflow-auto h-64">
+          ${(() => {
+            let tag = ``;
+            let remaining_items = [];
+            // Exclude exsiting items in current order
+            this.globalService.items.forEach(g_item => {
+              let found = false;
+              this.order_detail.forEach(item => {
+                if(item['item_id'] == g_item['id']) found = true;
+              })
+              if(!found) remaining_items.push(g_item);
+            })
+            remaining_items.forEach(item => {
+              tag += `
+                <div class="flex items-center justify-start mt-2">
+                  <input name="items" type="checkbox" class="input border mr-4" id="vertical-checkbox-chris-evans-${item['description']}" data-item-id="${item['id']}">
+                  <label class="cursor-pointer select-none" for="vertical-checkbox-chris-evans-${item['description']}">${item['vendor_description']}(${item['description']})</label>
+                </div>`;
+            })
+            return tag;
+          })()}
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: `Add`,
+      preConfirm: () => {
+        let items = [];
+        document.querySelectorAll('input[name=items]:checked').forEach(item => {
+          items.push({
+            item_id: item.getAttribute('data-item-id'),
+            qty: 1
+          })
+        })
+        this.loading = true;
+        this.api.addAdditionalItemsToOrder(this.parseService.encode({
+          order_id: this.selected_order['order_id'],
+          items: JSON.stringify(items)
+        })).pipe(first()).subscribe(data => {
+          if(data['data'] == true){
+            this.toast.success(`${items.length} items have been added to order ${this.selected_order['order_id']} successfully`, 'Success');
+            this.get_order_details(this.selected_order['order_id']);
+          }else{
+            this.toast.error('There had been a database error. Please try again later.', 'Error');
+          }
+          this.loading = false;
+        }, error => {
+          this.toast.error('There had been a database error. Please try again later.', 'Error');
+          this.loading = false;
+        })
+      }
+    })
+  }
+  order_status_change = (status) => {
+    let shipment_date = '';
+    let shipment_ref_number = '';
+    let ship_cancelled = false;
+    if(status == 'shipped'){
+      // Register shipment date and ref number
+      Swal.fire({
+        title: 'Shipment date and reference number',
+        html: `
+          <div class="flex items-center mt-3">
+            <div>Shipment date: </div>
+            <div class="w-3/5 ml-auto">
+              <input id="shipment_date" type="date" class="w-full outline-none border rounded-l-full rounded-r-full py-2 px-4 text-right w-1/2" value="${moment().format('yyyy-MM-DD')}"/>
+            </div>
+          </div>
+          <div class="flex items-center mt-3">
+            <div>Reference number: </div>
+            <div class="w-3/5 ml-auto">
+              <input id="shipment_ref_number" type="text" class="w-full outline-none border rounded-l-full rounded-r-full py-2 px-4 text-right w-1/2" />
+            </div>
+          </div>
+        `,
+        focusConfirm: false,
+        allowOutsideClick: false,
+        showCancelButton: true,
+        preConfirm: () => {
+          if(document.querySelector('#shipment_ref_number')['value'] == ''){
+            this.toast.error('You need to assign reference number.', 'Error');
+            return false;
+          }
+        }
+      }).then((result) => {
+        if(result.isDismissed){
+          shipment_date = '';
+          shipment_ref_number = '';
+          this.selected_order['status'] = 'approved';
+          ship_cancelled = true;
+          document.querySelector('#vertical-radio-approve')['checked'] = true;
+        }else{
+          shipment_date = document.querySelector('#shipment_date')['value'];
+          shipment_ref_number = document.querySelector('#shipment_ref_number')['value'];
+          this.selected_order['shipment_date'] = shipment_date;
+          this.selected_order['shipment_ref_number'] = shipment_ref_number;
+          this.selected_order['status'] = status;
+          this.updateOrderStatus();
+        }
+      })
+    }else{
+      shipment_date = '';
+      shipment_ref_number = '';
+      this.selected_order['shipment_date'] = shipment_date;
+      this.selected_order['shipment_ref_number'] = shipment_ref_number;
+      this.selected_order['status'] = status;
+      this.updateOrderStatus();
+    }
+  }
+  updateOrderStatus = () => {
+    this.loading = true;
+    this.api.updateOrderStatus(this.parseService.encode({
+      order_id: this.selected_order['order_id'],
+      status: this.selected_order['status'],
+      shipment_date: this.selected_order['shipment_date'],
+      shipment_ref_number: this.selected_order['shipment_ref_number']
+    })).pipe(first()).subscribe(data => {
+      if(data['data'] == true){
+        this.toast.success(`Order ${this.selected_order['order_id']} status changed successfully`, 'Success');
+      }else{
+        this.toast.error('There had been a database error. Please try again later.', 'Error');
+      }
+      this.loading = false;
+    }, error => {
+      this.toast.error('There had been a database error. Please try again later.', 'Error');
+      this.loading = false;
+    })
   }
 }

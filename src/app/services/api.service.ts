@@ -97,8 +97,8 @@ export class ApiService {
         return res;
       }))
   }
-  approveOrder(data){
-    return this.http.post(`${api_url}/${controller}/approve_order`, data)
+  updateOrderStatus(data){
+    return this.http.post(`${api_url}/${controller}/update_order_status`, data)
       .pipe(map(res => {
         return res;
       }))
@@ -117,6 +117,12 @@ export class ApiService {
   }
   updateOrder(data){
     return this.http.post(`${api_url}/${controller}/update_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  addAdditionalItemsToOrder(data){
+    return this.http.post(`${api_url}/${controller}/add_additional_items_to_order`, data)
       .pipe(map(res => {
         return res;
       }))
