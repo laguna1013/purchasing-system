@@ -109,6 +109,18 @@ export class ApiService {
         return res;
       }))
   }
+  deleteOrderedItem(data){
+    return this.http.post(`${api_url}/${controller}/delete_ordered_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  updateOrder(data){
+    return this.http.post(`${api_url}/${controller}/update_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
   sendMail(data){
     return this.http.post(`${api_url}/${controller}/send_mail`, data)
       .pipe(map(res => {

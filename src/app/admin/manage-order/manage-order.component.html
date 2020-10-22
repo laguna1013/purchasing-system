@@ -51,7 +51,7 @@
                     </div>
                     <span class="sm:flex hidden py-1 px-2 mr-8 rounded-full text-xs bg-theme-{{item['status'] != 'pending' ? '9' : '12'}} text-white cursor-pointer font-medium">{{item['status']}}</span>
                     <input class="input input--switch mr-5 border" type="checkbox" [checked]="item.status!='pending'" [disabled]="item.status!='pending'" (change)="approve_order(item['order_id'])">
-                    <button class="button button--sm px-2 mr-1 border text-red-700 border-theme-6" (click)="delete_order(item['order_id'])">
+                    <button class="button button--sm px-2 mr-1 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="delete_order(item['order_id'])">
                       <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="trash" class="w-4 h-4" appFeatherIcon></i> </span>
                     </button>
                   </div>
@@ -78,94 +78,80 @@
             </div>
             <button class="button border relative flex items-center text-gray-700 hidden sm:flex"> <i data-feather="file" class="w-4 h-4 mr-2"></i> Export </button>
           </div>
-          <div class="p-5">
+          <div class="p-3">
             <div class="relative flex items-center mt-5" *ngIf="!selected_order">
               Please select an order to see details
             </div>
-            <div class="relative flex items-center px-2 md:px-5 py-3 mb-3 cursor-pointer" *ngFor="let item of order_detail; index as idx;" style="border: 1px solid #eee; border-radius: 5px;" (click)="select_item(item['item_id'])">
+            <div class="relative px-2 py-3 mb-3" *ngFor="let item of order_detail; index as idx;" style="border: 1px solid #eee; border-radius: 5px;">
               <ng-template ngFor let-_item [ngForOf]="globalService.items" let-i="index">
                 <ng-template [ngIf]="_item['id'] == item['item_id']">
-                  <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                    <img alt="Purchasing system image" src="{{ _item['image'] ? _item['image'] : 'assets/images/place_holder.png' }}">
+                  <div class="flex items-center">
+                    <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
+                      <img alt="Purchasing system image" src="{{ _item['image'] ? _item['image'] : 'assets/images/place_holder.png' }}">
+                    </div>
+                    <div class="ml-4 mr-auto w-4/5 md:w-1/2">
+                      <div class="font-medium block truncate">{{_item['vendor_description']}}({{_item['description']}})</div>
+                      <div class="flex">
+                        <span class="text-gray-600 text-xs mr-3">{{item.qty}} {{item.qty == 1 ? _item.uom : _item.uom + 's'}}</span>
+                        <span class="text-theme-6 text-xs font-bold">{{_item.price != '' && _item.price != 'Market Price' ? '$' + parse_float(parse_float(_item.price) * item.qty) : 'TBD'}}</span>
+                      </div>
+                    </div>
+                    <div class="hidden md:flex items-center">
+                      <!-- <div class="inline-flex">
+                        <button class="button button--sm border text-gray-800 font-bold py-2 px-4 rounded-l-full hover:bg-gray-300 focus:outline-none">
+                          <i data-feather="minus" class="w-5 h-5 text-blue-700" appFeatherIcon></i>
+                        </button>
+                        <button class="button button--sm border text-gray-800 font-bold py-2 px-4 rounded-r-full hover:bg-gray-300 focus:outline-none">
+                          <i data-feather="plus" class="w-5 h-5 text-red-700" appFeatherIcon></i>
+                        </button>
+                      </div> -->
+                      <button class="ml-2 button button--sm px-2 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="edit_item(item)">
+                        <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="edit" class="w-4 h-4" appFeatherIcon></i> </span>
+                      </button>
+                      <button class="ml-2 button button--sm px-2 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="remove_item(item)">
+                        <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="trash" class="w-4 h-4" appFeatherIcon></i> </span>
+                      </button>
+                    </div>
                   </div>
-                  <div class="ml-4 mr-auto w-3/5 md:w-1/2">
-                    <div class="font-medium block truncate">{{_item['vendor_description']}}({{_item['description']}})</div>
-                    <div class="text-gray-600 text-xs">{{item.qty}} {{item.qty == 1 ? _item.uom : _item.uom + 's'}}</div>
+                  <div class="mt-3 md:hidden flex items-center justify-end">
+                    <button class="button button--sm px-2 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="edit_item(item)">
+                      <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="edit" class="w-4 h-4" appFeatherIcon></i> </span>
+                    </button>
+                    <button class="ml-2 button button--sm px-2 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="remove_item(item)">
+                      <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="trash" class="w-4 h-4" appFeatherIcon></i> </span>
+                    </button>
                   </div>
-                  <div class="text-theme-6"><span class="hidden md:inline">Price: </span>{{_item.price != '' && _item.price != 'Market Price' ? '$' + parse_float(parse_float(_item.price) * item.qty) : 'TBD'}}</div>
                 </ng-template>
               </ng-template>
             </div>
-            <div *ngIf="selected_order">
-              <div class="flex mb-1">
-                <div class="mr-1">
-                  Total items:
+            <div *ngIf="selected_order" class="flex justify-between">
+              <div>
+                <div class="flex mb-1">
+                  <div class="mr-1">Total items:</div>
+                  <div class="">{{order_detail ? order_detail.length : '0'}}</div>
                 </div>
-                <div class="">
-                  {{order_detail ? order_detail.length : '0'}}
+                <div class="flex mb-1">
+                  <div class="mr-1">CBM:</div>
+                  <div class="">{{sum_total_cbm(order_detail) | number}} {{cbm_tbded ? '+' : ''}} (lb)</div>
                 </div>
-              </div>
-              <div class="flex mb-1">
-                <div class="mr-1">
-                  CBM:
-                </div>
-                <div class="">
-                  {{sum_total_cbm(order_detail) | number}} {{cbm_tbded ? '+' : ''}} (lb)
+                <div class="flex font-bold">
+                  <div class="mr-1">Total charge:</div>
+                  <div class="text-theme-6">{{sum_total_price(order_detail) | currency}} {{price_tbded ? '+' : ''}}</div>
                 </div>
               </div>
-              <div class="flex font-bold">
-                <div class="mr-1">
-                  Total charge:
-                </div>
-                <div class="text-theme-6">
-                  {{sum_total_price(order_detail) | currency}} {{price_tbded ? '+' : ''}}
-                </div>
+              <div class="inline-flex items-center">
+                <input class="input input--switch mr-5 border" type="checkbox" [checked]="selected_order.status!='pending'" [disabled]="selected_order.status!='pending'" (change)="approve_order(selected_order['order_id'])">
+                <button class="button button--sm px-2 mr-5 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="add_more_items()">
+                  <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="plus" class="w-4 h-4" appFeatherIcon></i> </span>
+                </button>
+                <button class="button button--sm px-2 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="delete_order(selected_order['order_id'])">
+                  <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="trash" class="w-4 h-4" appFeatherIcon></i> </span>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="edit-item-modal">
-  <div class="modal__content">
-    <div class="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
-      <h2 class="font-medium text-base mr-auto">
-        Order item
-      </h2>
-    </div>
-    <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
-      <div class="col-span-12">
-        <h4 class="font-bold">Item details</h4>
-        <div style="border: 1px solid #eee; border-radius: 5px;" class="py-2 mt-2 mb-2">
-          <div class="px-5">{{selected_item ? selected_item['vendor_description'] + '(' + selected_item['description'] + ')' : 'TBD'}}</div>
-          <div class="flex mt-1 px-5 justify-between">
-            <div>Category: <span class="text-gray-600">{{selected_item ? selected_item['category'] : 'TBD'}}</span></div>
-            <div>Unit of measurment: <span class="text-gray-600">{{selected_item ? selected_item['uom'] : 'TBD'}}</span></div>
-          </div>
-          <div class="flex mt-1 px-5 justify-between">
-            <div>Price: <span class="text-gray-600">{{selected_item ? selected_item['price'] : 'TBD'}}</span></div>
-            <div>Max order qty: <span class="text-gray-600">{{selected_item && selected_item['moq'] != '' ? selected_item['moq'] : 'TBD'}}</span></div>
-          </div>
-          <div class="flex mt-1 px-5 justify-between">
-            <div>Packing info: <span class="text-gray-600">{{selected_item && selected_item['packing_info'] != '' ? selected_item['packing_info'] : 'TBD'}}</span></div>
-            <div>CBM: <span class="text-gray-600">{{selected_item && selected_item['cbm'] != '' ? selected_item['cbm'] : 'TBD'}}</span></div>
-          </div>
-        </div>
-        <div class="w-full border-t border-gray-200 border-dashed my-3"></div>
-        <label class="font-bold">Quantity({{selected_item ? selected_item['uom'] : ''}})</label>
-        <div class="flex mt-2 flex-1">
-          <button type="button" class="button w-12 border bg-gray-200 text-gray-600 mr-1" (click)="decrease_item()">-</button>
-          <input type="number" class="input w-full border text-center" placeholder="Item quantity" value="{{qty}}" (change)="manual_input_item($event)">
-          <button type="button" class="button w-12 border bg-gray-200 text-gray-600 ml-1" (click)="increase_item()">+</button>
-        </div>
-      </div>
-    </div>
-    <div class="px-5 py-3 text-right border-t border-gray-200">
-      <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1" (click)="reset()">Cancel</button>
-      <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white" (click)="update_item()">Add</button>
     </div>
   </div>
 </div>

@@ -34,6 +34,7 @@ export class ManageOrderComponent implements OnInit {
   selected_item: Object;
   price_tbded = false;
   cbm_tbded = false;
+  qty = 0;
 
   ngOnInit(): void {
     this.globalService.menu = 'manage-order';
@@ -172,9 +173,6 @@ export class ManageOrderComponent implements OnInit {
     }
     return sum;
   }
-  select_item = (item_id) => {
-    console.log(item_id)
-  }
   format_date_time = (date) => {
     return moment(date, 'YYYY-MM-DD HH:mm:ss').format('hh:mm A MMM DD ddd, YYYY')
   }
@@ -222,5 +220,104 @@ export class ManageOrderComponent implements OnInit {
         })
       }
     })
+  }
+
+  edit_item = (item) => {
+    let g_item = this.globalService.items.filter(_item => _item['id'] == item['item_id'])[0];
+    Swal.fire({
+      title: 'Edit item',
+      html: `
+        <div class="p-5">
+          <div class="flex items-center">
+            <p class="text-left">${g_item['vendor_description']}(${g_item['description']})</p>
+            <p class="ml-auto text-red-400">${g_item['inventory_id']}</p>
+          </div>
+          <div class="flex items-center mt-3">
+            <div>Item price($): </div>
+            <div class="w-1/2 ml-auto">
+              <input id="itemPrice" type="number" min="0" max="999" step="0.01" class="w-full outline-none border rounded-l-full rounded-r-full py-2 px-4 text-right w-1/2" value="${g_item['price']}"/>
+            </div>
+          </div>
+          <div class="flex items-center mt-3">
+            <div>Qty: </div>
+            <div class="ml-auto inline-flex w-1/2">
+              <button class="button border text-gray-800 font-bold py-2 px-4 rounded-l-full hover:bg-gray-300 outline-none"
+                onclick="(() => {
+                  if(document.querySelector('#itemQty').value > 0){
+                    document.querySelector('#itemQty').value--
+                  }
+                })()"
+              >-</button>
+              <input id="itemQty" type="number" min="0" max="${g_item['moq']}" class="border-t border-b text-center outline-none w-3/5" value="${item.qty}"/>
+              <button class="button border text-gray-800 font-bold py-2 px-4 rounded-r-full hover:bg-gray-300 outline-none"
+                onclick="(() => {
+                  if(document.querySelector('#itemQty').value < parseInt(document.querySelector('#itemQty').getAttribute('max'))){
+                    document.querySelector('#itemQty').value++
+                  }
+                })()"
+              >+</button>
+            </div>
+          </div>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: `Save`,
+      preConfirm: () => {
+        item['qty'] = document.querySelector('#itemQty')['value'];
+        g_item['price'] = document.querySelector('#itemPrice')['value'];
+        this.loading = true;
+        this.api.updateOrder(this.parseService.encode({
+          item: JSON.stringify(item),
+          g_item: JSON.stringify(g_item)
+        })).pipe(first()).subscribe(data => {
+          if(data['data'] == true){
+            this.toast.success('Order updated successfully', 'Success');
+            this.get_orders();
+          }else{
+            this.toast.error('There had been a database error. Please try again later.', 'Error');
+          }
+          this.loading = false;
+        }, error => {
+          this.toast.error('There had been a database error. Please try again later.', 'Error');
+          this.loading = false;
+        })
+      }
+    })
+  }
+  remove_item = (item) => {
+    if(this.order_detail.length == 1){
+      this.toast.warning('You can\'t remove all items from order.', 'Warning');
+      return;
+    }
+    let g_item = this.globalService.items.filter(_item => _item['id'] == item['item_id'])[0];
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `Do you want to remove ${g_item['vendor_description']}(${g_item['description']}) item from order?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
+        this.api.deleteOrderedItem(this.parseService.encode({
+          item: JSON.stringify(item)
+        })).pipe(first()).subscribe(data => {
+          if(data['data'] == true){
+            this.toast.success(`Item has been deleted from order ${this.selected_order['order_id']} successfully`, 'Success');
+            this.get_order_details(this.selected_order['order_id']);
+          }else{
+            this.toast.error('There had been a database error. Please try again later.', 'Error');
+          }
+          this.loading = false;
+        }, error => {
+          this.toast.error('There had been a database error. Please try again later.', 'Error');
+          this.loading = false;
+        })
+      }
+    })
+  }
+  add_more_items = () => {
+
   }
 }
