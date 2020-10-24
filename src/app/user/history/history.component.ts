@@ -92,6 +92,11 @@ export class HistoryComponent implements OnInit {
     );
   }
   delete_order = (order_id) => {
+    let order = this.orders.filter(item => item['order_id'] == order_id)[0];
+    if(order['status'] != 'draft'){
+      this.toast.error('You can\'t remove placed order.', 'Error');
+      return;
+    }
     Swal.fire({
       title: 'Are you sure?',
       text: 'Do you want to remove this order? ' + order_id,
@@ -141,8 +146,6 @@ export class HistoryComponent implements OnInit {
       }
     );
   }
-
-
   parse_float = (val) => {
     return Math.floor(parseFloat(val) * 100) / 100;
   }
@@ -186,6 +189,9 @@ export class HistoryComponent implements OnInit {
     return moment(date, 'YYYY-MM-DD HH:mm:ss').format('hh:mm A MMM DD ddd, YYYY')
   }
   edit_item = (item) => {
+    if(this.selected_order['status'] != 'draft'){
+      return;
+    }
     let g_item = this.globalService.items.filter(_item => _item['id'] == item['item_id'])[0];
     Swal.fire({
       title: 'Edit item',
@@ -242,6 +248,9 @@ export class HistoryComponent implements OnInit {
     })
   }
   remove_item = (item) => {
+    if(this.selected_order['status'] != 'draft'){
+      return;
+    }
     if(this.order_detail.length == 1){
       this.toast.warning('You can\'t remove all items from order.', 'Warning');
       return;
@@ -275,6 +284,9 @@ export class HistoryComponent implements OnInit {
     })
   }
   add_more_items = () => {
+    if(this.selected_order['status'] != 'draft'){
+      return;
+    }
     Swal.fire({
       title: 'Add more items',
       html: `

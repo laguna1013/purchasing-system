@@ -216,6 +216,10 @@ export class ManageOrderComponent implements OnInit {
   }
 
   edit_item = (item) => {
+    if(this.selected_order['status'] != 'pending'){
+      this.toast.error('You can\'t edit items to approved or shipped order.', 'Error');
+      return;
+    }
     let g_item = this.globalService.items.filter(_item => _item['id'] == item['item_id'])[0];
     Swal.fire({
       title: 'Edit item',
@@ -278,6 +282,10 @@ export class ManageOrderComponent implements OnInit {
     })
   }
   remove_item = (item) => {
+    if(this.selected_order['status'] != 'pending'){
+      this.toast.error('You can\'t add remove item to approved or shipped order.', 'Error');
+      return;
+    }
     if(this.order_detail.length == 1){
       this.toast.warning('You can\'t remove all items from order.', 'Warning');
       return;
@@ -311,6 +319,10 @@ export class ManageOrderComponent implements OnInit {
     })
   }
   add_more_items = () => {
+    if(this.selected_order['status'] != 'pending'){
+      this.toast.error('You can\'t add more items to approved or shipped order.', 'Error');
+      return;
+    }
     Swal.fire({
       title: 'Add more items',
       html: `

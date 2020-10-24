@@ -129,9 +129,10 @@
             </div>
           </div>
           <div class="flex mt-5 justify-between">
-            <button class="button w-32 border border-gray-400 text-gray-600" (click)="cancel_order()">Cancel Order</button>
+            <button class="button w-32 border border-gray-400 text-gray-600" (click)="cancel_order()">Cancel</button>
             <button class="button w-32 text-white bg-theme-6 shadow-md" (click)="clear_items()">Clear Items</button>
-            <a class="button w-32 text-white bg-theme-1 shadow-md" href="javascript:;" data-toggle="modal" data-target="#place-order-modal">Order</a>
+            <button class="button w-32 text-white bg-theme-12 shadow-md">Save order</button>
+            <a class="button w-32 text-white bg-theme-1 shadow-md" href="javascript:;" data-toggle="modal" data-target="#place-order-modal">Place order</a>
           </div>
         </div>
         <div class="tab-content__pane {{!ticket_created ? 'active' : ''}}" id="details">
