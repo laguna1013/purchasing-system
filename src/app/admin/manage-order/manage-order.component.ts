@@ -61,7 +61,7 @@ export class ManageOrderComponent implements OnInit {
     })).pipe(first()).subscribe(
       data => {
         if(data['status'] == 'success'){
-          this.orders = [...data['data']];
+          this.orders = [...data['data'].filter(item => item['status'] != 'draft')];
         }else{
           this.toast.error('There had been a database error. Please try again later.', 'Error');
         }

@@ -186,9 +186,6 @@ export class OrderComponent implements OnInit {
       this.toast.error('No items added. Please add items.', 'Error');
     }else{
       this.place_order(this.ordered_item);
-      this.ordered_item = [];
-      this.ticket_created = false;
-      this.reset();
     }
   }
   sum_total_price = (ordered_item) => {
@@ -243,6 +240,7 @@ export class OrderComponent implements OnInit {
       customer_id: this.user['id'],
       order_time: moment().format('YYYY-MM-DD HH:mm:ss'),
       order_id: this.po_number,
+      status: 'pending',
       items: JSON.stringify(items)
     })).pipe(first()).subscribe(data => {
       if(data['data'] == true){
@@ -253,8 +251,33 @@ export class OrderComponent implements OnInit {
       this.loading = false;
     }, error => {
       this.loading = false;
-      this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
     });
+    this.ordered_item = [];
+    this.ticket_created = false;
+    this.reset();
+  }
+  save_order = (items) => {
+    this.loading = true;
+    this.api.addOrder(this.parseService.encode({
+      customer_id: this.user['id'],
+      order_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+      order_id: this.po_number,
+      status: 'draft',
+      items: JSON.stringify(items)
+    })).pipe(first()).subscribe(data => {
+      if(data['data'] == true){
+        this.toast.success('Your order has been saved. You can edit it next time.', 'Success');
+        this.getOrders(this.user['id']);
+      }
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
+    });
+    this.ordered_item = [];
+    this.ticket_created = false;
+    this.reset();
   }
   send_email = (items) => {
     let order_details = [];
@@ -296,7 +319,7 @@ export class OrderComponent implements OnInit {
       this.loading = false;
     }, error => {
       this.loading = false;
-      this.toast.error('There is an issue with server. Please try again after refreshing browser.', 'Error');
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
     });
   }
   select_order = (order_id) => {

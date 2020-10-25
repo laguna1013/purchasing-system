@@ -131,7 +131,7 @@
           <div class="flex mt-5 justify-between">
             <button class="button w-32 border border-gray-400 text-gray-600" (click)="cancel_order()">Cancel</button>
             <button class="button w-32 text-white bg-theme-6 shadow-md" (click)="clear_items()">Clear Items</button>
-            <button class="button w-32 text-white bg-theme-12 shadow-md">Save order</button>
+            <button class="button w-32 text-white bg-theme-12 shadow-md" (click)="save_order(ordered_item)">Save order</button>
             <a class="button w-32 text-white bg-theme-1 shadow-md" href="javascript:;" data-toggle="modal" data-target="#place-order-modal">Place order</a>
           </div>
         </div>
@@ -144,7 +144,7 @@
                   <div class="font-medium">Order ID: {{item.order_id}}</div>
                   <div class="text-gray-600 text-xs">Ordered time: {{item.order_time}}</div>
                 </div>
-                <div class="py-1 px-2 rounded-full text-xs bg-theme-{{item.status != 'pending' ? '9' : '12'}} text-white cursor-pointer font-medium">{{item.status}}</div>
+                <div class="py-1 px-2 rounded-full text-xs bg-theme-{{item['status'] == 'pending' ? '12' : (item['status'] == 'approved' ? '9' : (item['status'] == 'draft' ? '6' : '1'))}} text-white cursor-pointer font-medium">{{item.status}}</div>
               </div>
               <div class="w-full border-t border-gray-200 border-dashed"></div>
             </a>
@@ -201,7 +201,7 @@
           </div>
           <div class="flex mt-1 px-5 justify-between">
             <div>Packing info: <span class="text-gray-600">{{selected_item && selected_item['packing_info'] != '' ? selected_item['packing_info'] : 'TBD'}}</span></div>
-            <div>CBM: <span class="text-gray-600">{{selected_item && selected_item['cbm'] != '' ? selected_item['cbm'] : 'TBD'}}</span></div>
+            <div>CBF: <span class="text-gray-600">{{selected_item && selected_item['cbm'] != '' ? selected_item['cbm'] : 'TBD'}}</span></div>
           </div>
         </div>
         <div class="w-full border-t border-gray-200 border-dashed my-3"></div>
@@ -243,7 +243,7 @@
           </div>
           <div class="flex mt-1 px-5 justify-between">
             <div>Packing info: <span class="text-gray-600">{{selected_item && selected_item['packing_info'] != '' ? selected_item['packing_info'] : 'TBD'}}</span></div>
-            <div>CBM: <span class="text-gray-600">{{selected_item && selected_item['cbm'] != '' ? selected_item['cbm'] : 'TBD'}}</span></div>
+            <div>CBF: <span class="text-gray-600">{{selected_item && selected_item['cbm'] != '' ? selected_item['cbm'] : 'TBD'}}</span></div>
           </div>
         </div>
         <div class="w-full border-t border-gray-200 border-dashed my-3"></div>
@@ -293,7 +293,7 @@
     </div>
     <div class="flex justify-end mx-5 mb-2">
       <span class="text-theme-1 mr-5">Total items: {{ordered_item ? ordered_item.length : '0'}}</span>
-      <span class="text-theme-1 mr-5">CBM: {{sum_total_cbm(ordered_item) | number}} {{cbm_tbded ? '+' : ''}}</span>
+      <span class="text-theme-1 mr-5">CBF: {{sum_total_cbm(ordered_item) | number}} {{cbm_tbded ? '+' : ''}}</span>
       <span class="text-theme-6">Total charge: {{sum_total_price(ordered_item) | currency}} {{price_tbded ? '+' : ''}}</span>
     </div>
     <div class="px-5 py-3 text-right border-t border-gray-200">
@@ -333,9 +333,9 @@
       </div>
     </div>
     <div class="flex justify-end mx-5 mb-2">
-      <span class="text-theme-1 mr-5">Status: <span class="py-1 px-2 rounded-full text-xs bg-theme-{{selected_order ? (selected_order['status'] != 'pending' ? '9' : '12') : ''}} text-white cursor-pointer font-medium">{{selected_order ? selected_order['status'] : ''}}</span></span>
+      <span class="text-theme-1 mr-5">Status: <span class="py-1 px-2 rounded-full text-xs bg-theme-{{selected_order ? (selected_order['status'] == 'pending' ? '12' : (selected_order['status'] == 'approved' ? '9' : (selected_order['status'] == 'draft' ? '6' : '1'))) : ''}} text-white cursor-pointer font-medium">{{selected_order ? selected_order['status'] : ''}}</span></span>
       <span class="text-theme-1 mr-5">Total items: {{ordered_item_details ? ordered_item_details.length : '0'}}</span>
-      <span class="text-theme-1 mr-5">CBM: {{sum_total_cbm(ordered_item_details)}} {{cbm_tbded ? '+' : ''}}</span>
+      <span class="text-theme-1 mr-5">CBF: {{sum_total_cbm(ordered_item_details) | number}} {{cbm_tbded ? '+' : ''}}</span>
       <span class="text-theme-6">Total charge: {{sum_total_price(ordered_item_details) | currency}} {{price_tbded ? '+' : ''}}</span>
     </div>
     <div class="px-5 py-3 text-right border-t border-gray-200">

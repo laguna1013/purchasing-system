@@ -40,7 +40,7 @@
                 <ng-template ngFor let-item [ngForOf]="orders" let-i="index">
                   <ng-template [ngIf]="(filter == 'all') || item['status'] == filter">
                     <div class="flex justify-center items-center pb-2 mb-2 border-b border-gray-200 cursor-pointer">
-                      <div class="border-l-2 border-theme-{{item['status'] == 'pending' ? '12' : (item['status'] == 'approved' ? '9' : '1')}} pl-4" (click)="get_order_details(item['order_id'])">
+                      <div class="border-l-2 border-theme-{{item['status'] == 'pending' ? '12' : (item['status'] == 'approved' ? '9' : (item['status'] == 'draft' ? '6' : '1'))}} pl-4" (click)="get_order_details(item['order_id'])">
                         <div class="flex">
                           <i data-feather="shopping-cart" class="w-4 h-4 text-blue-700 mr-3" appFeatherIcon></i>
                           <a href="javascript:;" class="font-medium">{{item['order_id']}}</a>
@@ -51,7 +51,7 @@
                         </div>
                       </div>
                       <div class="ml-auto flex items-center">
-                        <span class="sm:flex hidden py-1 px-2 mr-8 rounded-full text-xs bg-theme-{{item['status'] == 'pending' ? '12' : (item['status'] == 'approved' ? '9' : '1')}} text-white cursor-pointer font-medium">{{item['status']}}</span>
+                        <span class="sm:flex hidden py-1 px-2 mr-8 rounded-full text-xs bg-theme-{{item['status'] == 'pending' ? '12' : (item['status'] == 'approved' ? '9' : (item['status'] == 'draft' ? '6' : '1'))}} text-white cursor-pointer font-medium">{{item['status']}}</span>
                         <button class="button button--sm px-2 mr-1 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="delete_order(item['order_id'])">
                           <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="trash" class="w-4 h-4" appFeatherIcon></i> </span>
                         </button>
