@@ -120,37 +120,46 @@ export class OrderComponent implements OnInit {
     this.selected_item = item;
   }
   increase_item = () => {
-    this.qty++;
+    if (this.qty < this.selected_item['moq']) {
+      this.qty++;
+    }
   }
   decrease_item = () => {
-    if(this.qty > 1){
+    if (this.qty > 1) {
       this.qty--;
     }
   }
   manual_input_item = (event) => {
-    this.qty = event.target.value;
+    let val = parseInt(event.target.value);
+    if (event.target.value == '') val = 0;
+    if (val < parseInt(this.selected_item['moq'])) {
+      this.qty = val;
+    } else {
+      event.target.value = parseInt(this.selected_item['moq']);
+      this.qty = parseInt(this.selected_item['moq']);
+    }
   }
   add_item = () => {
-    if(this.ticket_created){
+    if (this.ticket_created) {
       let flag = false;
       this.ordered_item.forEach(item => {
-        if(item['item_id'] == this.selected_item['id']){
+        if (item['item_id'] == this.selected_item['id']) {
           flag = true;
         }
       })
-      if(flag){
+      if (flag) {
         this.ordered_item.forEach(item => {
-          if(item['item_id'] == this.selected_item['id']){
+          if (item['item_id'] == this.selected_item['id']) {
             item['qty'] += this.qty;
           }
         })
-      }else{
+      } else {
         this.ordered_item.push({
           item_id: this.selected_item['id'],
           qty: this.qty
         })
       }
-    }else{
+    } else {
       this.toast.error('You need to create a new order before adding items.', 'Error');
     }
     this.reset();
@@ -162,7 +171,7 @@ export class OrderComponent implements OnInit {
   }
   edit_item_confirm = () => {
     this.ordered_item.map(item => {
-      if(item['item_id'] == this.selected_item['id']){
+      if (item['item_id'] == this.selected_item['id']) {
         item['qty'] = this.qty;
       }
     })
@@ -182,22 +191,33 @@ export class OrderComponent implements OnInit {
     this.reset();
   }
   confirm_order = () => {
-    if(this.ordered_item.length == 0){
+    if (this.ordered_item.length == 0) {
       this.toast.error('No items added. Please add items.', 'Error');
-    }else{
+    } else {
       this.place_order(this.ordered_item);
     }
+  }
+  edit_order = () => {
+    this.ticket_created = true;
+    this.po_number = this.selected_order['order_id'];
+    this.ordered_item = [];
+    this.ordered_item_details.forEach(item => {
+      this.ordered_item.push({
+        item_id: item['item_id'],
+        qty: item['qty']
+      })
+    })
   }
   sum_total_price = (ordered_item) => {
     let sum = 0;
     this.price_tbded = false;
-    if(ordered_item.length != 0){
+    if (ordered_item.length != 0) {
       ordered_item.forEach(item => {
         this.globalService.items.forEach(_item => {
-          if(item['item_id'] == _item['id']){
-            if((_item['price'] != '') && (_item['price'] != 'Market Price')){
+          if (item['item_id'] == _item['id']) {
+            if ((_item['price'] != '') && (_item['price'] != 'Market Price')) {
               sum += this.parse_float(_item['price']) * item['qty'];
-            }else{
+            } else {
               this.price_tbded = true;
             }
           }
@@ -209,13 +229,13 @@ export class OrderComponent implements OnInit {
   sum_total_cbm = (ordered_item) => {
     let sum = 0;
     this.cbm_tbded = false;
-    if(ordered_item.length != 0){
+    if (ordered_item.length != 0) {
       ordered_item.forEach(item => {
         this.globalService.items.forEach(_item => {
-          if(item['item_id'] == _item['id']){
-            if(_item['cbm'] != ''){
+          if (item['item_id'] == _item['id']) {
+            if (_item['cbm'] != '') {
               sum += this.parse_float(_item['cbm']) * item['qty'];
-            }else{
+            } else {
               this.cbm_tbded = true;
             }
           }
@@ -243,7 +263,7 @@ export class OrderComponent implements OnInit {
       status: 'pending',
       items: JSON.stringify(items)
     })).pipe(first()).subscribe(data => {
-      if(data['data'] == true){
+      if (data['data'] == true) {
         this.toast.success('Your order has been placed successfully.', 'Success');
         this.getOrders(this.user['id']);
         this.send_email(items);
@@ -258,32 +278,36 @@ export class OrderComponent implements OnInit {
     this.reset();
   }
   save_order = (items) => {
-    this.loading = true;
-    this.api.addOrder(this.parseService.encode({
-      customer_id: this.user['id'],
-      order_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-      order_id: this.po_number,
-      status: 'draft',
-      items: JSON.stringify(items)
-    })).pipe(first()).subscribe(data => {
-      if(data['data'] == true){
-        this.toast.success('Your order has been saved. You can edit it next time.', 'Success');
-        this.getOrders(this.user['id']);
-      }
-      this.loading = false;
-    }, error => {
-      this.loading = false;
-      this.toast.error('There is an issue with server. Please try again later.', 'Error');
-    });
-    this.ordered_item = [];
-    this.ticket_created = false;
-    this.reset();
+    if (items.length > 0) {
+      this.loading = true;
+      this.api.addOrder(this.parseService.encode({
+        customer_id: this.user['id'],
+        order_time: moment().format('YYYY-MM-DD HH:mm:ss'),
+        order_id: this.po_number,
+        status: 'draft',
+        items: JSON.stringify(items)
+      })).pipe(first()).subscribe(data => {
+        if (data['data'] == true) {
+          this.toast.success('Your order has been saved. You can edit it next time.', 'Success');
+          this.getOrders(this.user['id']);
+        }
+        this.loading = false;
+      }, error => {
+        this.loading = false;
+        this.toast.error('There is an issue with server. Please try again later.', 'Error');
+      });
+      this.ordered_item = [];
+      this.ticket_created = false;
+      this.reset();
+    } else {
+      this.toast.error('No items were added.', 'Error');
+    }
   }
   send_email = (items) => {
     let order_details = [];
     items.forEach(item => {
       this.globalService.items.forEach(gitem => {
-        if(gitem['id'] == item['item_id']){
+        if (gitem['id'] == item['item_id']) {
           order_details.push({
             "branch_id": this.user['name'],
             "g_weight": gitem['gross_weight'],
@@ -313,7 +337,7 @@ export class OrderComponent implements OnInit {
       order_details: JSON.stringify(order_details),
       po_id: this.po_number
     })).pipe(first()).subscribe(data => {
-      if(data['data'] == true){
+      if (data['data'] == true) {
         this.toast.success('Purchasing order mail sent successfully to your email.', 'Success');
       }
       this.loading = false;
@@ -347,10 +371,10 @@ export class OrderComponent implements OnInit {
     this.search_key = event.target.value;
   }
   filter_item = (item) => {
-    if(this.search_key == ''){
+    if (this.search_key == '') {
       return true;
-    }else{
-      if((item['description'].toLowerCase().indexOf(this.search_key.toLowerCase()) != -1) || (item['vendor_description'].toLowerCase().indexOf(this.search_key.toLowerCase()) != -1)){
+    } else {
+      if ((item['description'].toLowerCase().indexOf(this.search_key.toLowerCase()) != -1) || (item['vendor_description'].toLowerCase().indexOf(this.search_key.toLowerCase()) != -1)) {
         return true;
       }
       return false;
@@ -359,7 +383,7 @@ export class OrderComponent implements OnInit {
   export_excel = () => {
     /* table id is passed over here */
     let element = document.getElementById('export-table');
-    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');

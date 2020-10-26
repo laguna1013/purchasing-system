@@ -48,9 +48,9 @@ export class ManageOrderComponent implements OnInit {
     this.filter = filter;
   }
   get_filtered_order_length = () => {
-    if(this.filter == 'all'){
+    if (this.filter == 'all') {
       return this.orders.length;
-    }else{
+    } else {
       return this.orders.filter(item => item['status'] == this.filter).length;
     }
   }
@@ -60,9 +60,9 @@ export class ManageOrderComponent implements OnInit {
       company: this.authService.currentUser()['company']
     })).pipe(first()).subscribe(
       data => {
-        if(data['status'] == 'success'){
+        if (data['status'] == 'success') {
           this.orders = [...data['data'].filter(item => item['status'] != 'draft')];
-        }else{
+        } else {
           this.toast.error('There had been a database error. Please try again later.', 'Error');
         }
         this.loading = false;
@@ -97,9 +97,9 @@ export class ManageOrderComponent implements OnInit {
     this.loading = true;
     this.api.getPsUsers().pipe(first()).subscribe(
       data => {
-        if(data['status'] == 'success'){
+        if (data['status'] == 'success') {
           this.users = [...data['data']];
-        }else{
+        } else {
           this.toast.error('There had been a database error. Please try again later.', 'Error');
         }
         this.loading = false;
@@ -119,9 +119,9 @@ export class ManageOrderComponent implements OnInit {
       order_id: order_id
     })).pipe(first()).subscribe(
       data => {
-        if(data['status'] == 'success'){
+        if (data['status'] == 'success') {
           this.order_detail = [...data['data']];
-        }else{
+        } else {
           this.toast.error('There had been a database error. Please try again later.', 'Error');
         }
         this.loading = false;
@@ -133,13 +133,13 @@ export class ManageOrderComponent implements OnInit {
     );
   }
   get_user_name = (id) => {
-    if(this.users.length != 0){
+    if (this.users.length != 0) {
       let ret = this.users.filter(item => item['id'] == id)[0];
       return ret['name'];
     }
   }
   get_user_email = (id) => {
-    if(this.users.length != 0){
+    if (this.users.length != 0) {
       let ret = this.users.filter(item => item['id'] == id)[0];
       return ret['email'];
     }
@@ -150,13 +150,13 @@ export class ManageOrderComponent implements OnInit {
   sum_total_price = (ordered_item) => {
     let sum = 0;
     this.price_tbded = false;
-    if(ordered_item.length != 0){
+    if (ordered_item.length != 0) {
       ordered_item.forEach(item => {
         this.globalService.items.forEach(_item => {
-          if(item['item_id'] == _item['id']){
-            if((_item['price'] != '') && (_item['price'] != 'Market Price')){
+          if (item['item_id'] == _item['id']) {
+            if ((_item['price'] != '') && (_item['price'] != 'Market Price')) {
               sum += this.parse_float(_item['price']) * item['qty'];
-            }else{
+            } else {
               this.price_tbded = true;
             }
           }
@@ -168,13 +168,13 @@ export class ManageOrderComponent implements OnInit {
   sum_total_cbm = (ordered_item) => {
     let sum = 0;
     this.cbm_tbded = false;
-    if(ordered_item.length != 0){
+    if (ordered_item.length != 0) {
       ordered_item.forEach(item => {
         this.globalService.items.forEach(_item => {
-          if(item['item_id'] == _item['id']){
-            if(_item['cbm'] != ''){
+          if (item['item_id'] == _item['id']) {
+            if (_item['cbm'] != '') {
               sum += this.parse_float(_item['cbm']) * item['qty'];
-            }else{
+            } else {
               this.cbm_tbded = true;
             }
           }
@@ -200,10 +200,10 @@ export class ManageOrderComponent implements OnInit {
         this.api.deleteOrder(this.parseService.encode({
           order_id: order_id
         })).pipe(first()).subscribe(data => {
-          if(data['data'] == true){
+          if (data['data'] == true) {
             this.toast.success('Order deleted successfully', 'Success');
             this.get_orders();
-          }else{
+          } else {
             this.toast.error('There had been a database error. Please try again later.', 'Error');
           }
           this.loading = false;
@@ -216,7 +216,7 @@ export class ManageOrderComponent implements OnInit {
   }
 
   edit_item = (item) => {
-    if(this.selected_order['status'] != 'pending'){
+    if (this.selected_order['status'] != 'pending') {
       this.toast.error('You can\'t edit items to approved or shipped order.', 'Error');
       return;
     }
@@ -267,10 +267,10 @@ export class ManageOrderComponent implements OnInit {
           item: JSON.stringify(item),
           g_item: JSON.stringify(g_item)
         })).pipe(first()).subscribe(data => {
-          if(data['data'] == true){
+          if (data['data'] == true) {
             this.toast.success('Order updated successfully', 'Success');
             this.get_orders();
-          }else{
+          } else {
             this.toast.error('There had been a database error. Please try again later.', 'Error');
           }
           this.loading = false;
@@ -282,11 +282,11 @@ export class ManageOrderComponent implements OnInit {
     })
   }
   remove_item = (item) => {
-    if(this.selected_order['status'] != 'pending'){
+    if (this.selected_order['status'] != 'pending') {
       this.toast.error('You can\'t add remove item to approved or shipped order.', 'Error');
       return;
     }
-    if(this.order_detail.length == 1){
+    if (this.order_detail.length == 1) {
       this.toast.warning('You can\'t remove all items from order.', 'Warning');
       return;
     }
@@ -304,10 +304,10 @@ export class ManageOrderComponent implements OnInit {
         this.api.deleteOrderedItem(this.parseService.encode({
           item: JSON.stringify(item)
         })).pipe(first()).subscribe(data => {
-          if(data['data'] == true){
+          if (data['data'] == true) {
             this.toast.success(`Item has been deleted from order ${this.selected_order['order_id']} successfully`, 'Success');
             this.get_order_details(this.selected_order['order_id']);
-          }else{
+          } else {
             this.toast.error('There had been a database error. Please try again later.', 'Error');
           }
           this.loading = false;
@@ -319,7 +319,7 @@ export class ManageOrderComponent implements OnInit {
     })
   }
   add_more_items = () => {
-    if(this.selected_order['status'] != 'pending'){
+    if (this.selected_order['status'] != 'pending') {
       this.toast.error('You can\'t add more items to approved or shipped order.', 'Error');
       return;
     }
@@ -328,25 +328,25 @@ export class ManageOrderComponent implements OnInit {
       html: `
         <div class="mt-3 p-5 overflow-auto h-64">
           ${(() => {
-            let tag = ``;
-            let remaining_items = [];
-            // Exclude exsiting items in current order
-            this.globalService.items.forEach(g_item => {
-              let found = false;
-              this.order_detail.forEach(item => {
-                if(item['item_id'] == g_item['id']) found = true;
-              })
-              if(!found) remaining_items.push(g_item);
+          let tag = ``;
+          let remaining_items = [];
+          // Exclude exsiting items in current order
+          this.globalService.items.forEach(g_item => {
+            let found = false;
+            this.order_detail.forEach(item => {
+              if (item['item_id'] == g_item['id']) found = true;
             })
-            remaining_items.forEach(item => {
-              tag += `
+            if (!found) remaining_items.push(g_item);
+          })
+          remaining_items.forEach(item => {
+            tag += `
                 <div class="flex items-center justify-start mt-2">
                   <input name="items" type="checkbox" class="input border mr-4" id="vertical-checkbox-chris-evans-${item['description']}" data-item-id="${item['id']}">
                   <label class="cursor-pointer select-none" for="vertical-checkbox-chris-evans-${item['description']}">${item['vendor_description']}(${item['description']})</label>
                 </div>`;
-            })
-            return tag;
-          })()}
+          })
+          return tag;
+        })()}
         </div>
       `,
       showCancelButton: true,
@@ -364,10 +364,10 @@ export class ManageOrderComponent implements OnInit {
           order_id: this.selected_order['order_id'],
           items: JSON.stringify(items)
         })).pipe(first()).subscribe(data => {
-          if(data['data'] == true){
+          if (data['data'] == true) {
             this.toast.success(`${items.length} items have been added to order ${this.selected_order['order_id']} successfully`, 'Success');
             this.get_order_details(this.selected_order['order_id']);
-          }else{
+          } else {
             this.toast.error('There had been a database error. Please try again later.', 'Error');
           }
           this.loading = false;
@@ -382,7 +382,7 @@ export class ManageOrderComponent implements OnInit {
     let shipment_date = '';
     let shipment_ref_number = '';
     let ship_cancelled = false;
-    if(status == 'shipped'){
+    if (status == 'shipped') {
       // Register shipment date and ref number
       Swal.fire({
         title: 'Shipment date and reference number',
@@ -404,19 +404,19 @@ export class ManageOrderComponent implements OnInit {
         allowOutsideClick: false,
         showCancelButton: true,
         preConfirm: () => {
-          if(document.querySelector('#shipment_ref_number')['value'] == ''){
+          if (document.querySelector('#shipment_ref_number')['value'] == '') {
             this.toast.error('You need to assign reference number.', 'Error');
             return false;
           }
         }
       }).then((result) => {
-        if(result.isDismissed){
+        if (result.isDismissed) {
           shipment_date = '';
           shipment_ref_number = '';
           this.selected_order['status'] = 'approved';
           ship_cancelled = true;
           document.querySelector('#vertical-radio-approve')['checked'] = true;
-        }else{
+        } else {
           shipment_date = document.querySelector('#shipment_date')['value'];
           shipment_ref_number = document.querySelector('#shipment_ref_number')['value'];
           this.selected_order['shipment_date'] = shipment_date;
@@ -425,7 +425,7 @@ export class ManageOrderComponent implements OnInit {
           this.updateOrderStatus();
         }
       })
-    }else{
+    } else {
       shipment_date = '';
       shipment_ref_number = '';
       this.selected_order['shipment_date'] = shipment_date;
@@ -442,9 +442,10 @@ export class ManageOrderComponent implements OnInit {
       shipment_date: this.selected_order['shipment_date'],
       shipment_ref_number: this.selected_order['shipment_ref_number']
     })).pipe(first()).subscribe(data => {
-      if(data['data'] == true){
+      if (data['data'] == true) {
         this.toast.success(`Order ${this.selected_order['order_id']} status changed successfully`, 'Success');
-      }else{
+        this.get_orders();
+      } else {
         this.toast.error('There had been a database error. Please try again later.', 'Error');
       }
       this.loading = false;
