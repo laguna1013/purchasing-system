@@ -74,22 +74,50 @@
               Please select an order to see details
             </div>
             <div class="sticky bg-white pt-3 order-manage-controls" style="z-index: 10;">
-              <div *ngIf="selected_order" class="flex justify-between">
-                <div>
-                  <div class="flex mb-1">
-                    <div class="mr-1">Total items:</div>
-                    <div class="">{{order_detail ? order_detail.length : '0'}}</div>
+              <div *ngIf="selected_order" class="flex flex-col">
+                <div class="flex flex-col md:flex-row md:justify-between mt-2">
+                  <div class="flex flex-row justify-around md:ml-5 md:w-3/5 w-full">
+                    <div class="flex flex-col justify-between">
+                      <circle-progress
+                        [percent]="sum_total_cbm_dry(order_detail)['reminder_percent']"
+                        [subtitle]="[
+                          'Frozen CBF',
+                          sum_total_cbm_dry(order_detail)['fill_cbf'] + ' lb to fill up.',
+                          'Total: ' + sum_total_cbm_dry(order_detail)['total_pallet'] + ' pallet' + (sum_total_cbm_dry(order_detail)['total_pallet'] == 1 ? '' : 's')
+                        ]"
+                        [outerStrokeColor]="'#FBC500'"
+                      ></circle-progress>
+                      <small>Total Dry CBF(lb): {{sum_total_cbm_dry(order_detail)['total_cbf'] | number:'.2-2'}}</small>
+                      <small>1 pallet CBF(lb): {{sum_total_cbm_dry(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
+                      <small>Total pallets: {{sum_total_cbm_dry(order_detail)['total_pallet']}}</small>
+                    </div>
+                    <div class="flex flex-col justify-between">
+                      <circle-progress
+                        [percent]="sum_total_cbm_frozen(order_detail)['reminder_percent']"
+                        [subtitle]="[
+                          'Dry CBF',
+                          sum_total_cbm_frozen(order_detail)['fill_cbf'] + ' lb to fill up.',
+                          'Total: ' + sum_total_cbm_frozen(order_detail)['total_pallet'] + ' pallet' + (sum_total_cbm_frozen(order_detail)['total_pallet'] == 1 ? '' : 's')
+                        ]"
+                        [outerStrokeColor]="'#1C3FAA'"
+                      ></circle-progress>
+                      <small>Total Dry CBF(lb): {{sum_total_cbm_frozen(order_detail)['total_cbf'] | number:'.2-2'}}</small>
+                      <small>1 pallet CBF(lb): {{sum_total_cbm_frozen(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
+                      <small>Total pallets: {{sum_total_cbm_frozen(order_detail)['total_pallet']}}</small>
+                    </div>
                   </div>
-                  <div class="flex mb-1">
-                    <div class="mr-1">CBF:</div>
-                    <div class="">{{sum_total_cbm(order_detail) | number}} {{cbm_tbded ? '+' : ''}} (lb)</div>
-                  </div>
-                  <div class="flex font-bold">
-                    <div class="mr-1">Total charge:</div>
-                    <div class="text-theme-6">{{sum_total_price(order_detail) | currency}} {{price_tbded ? '+' : ''}}</div>
+                  <div class="flex flex-col justify-end md:items-start md:mt-0 mt-2 ml-5 md:mr-5 md:w-2/5 w-full">
+                    <span class="mt-1">Total items: {{order_detail ? order_detail.length : '0'}}</span>
+                    <span>Status:
+                      <span class="py-1 px-2 rounded-full text-xs bg-theme-{{
+                          selected_order ? (selected_order['status'] == 'pending' ? '12' : (selected_order['status'] == 'approved' ? '9' : (selected_order['status'] == 'draft' ? '6' : '1'))) : ''}}
+                          text-white cursor-pointer font-medium">{{selected_order ? selected_order['status'] : ''}}
+                      </span>
+                    </span>
+                    <div class="text-theme-6 mt-1">Total charge: {{sum_total_price(order_detail) | currency}} {{price_tbded ? '+' : ''}}</div>
                   </div>
                 </div>
-                <div class="inline-flex items-center">
+                <div class="flex items-center justify-end mt-2">
                   <button *ngIf="selected_order['status']=='draft'" class="button button--sm px-2 mr-2 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="add_more_items()">
                     <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="plus" class="w-4 h-4" appFeatherIcon></i> </span>
                   </button>

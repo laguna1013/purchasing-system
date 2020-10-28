@@ -87,15 +87,43 @@
               Please select an order to see details
             </div>
             <div class="sticky bg-white pt-3 order-manage-controls" style="z-index: 10;">
+              <div *ngIf="selected_order" class="mb-3 w-full">
+                <div class="flex flex-row justify-around md:ml-5 w-full">
+                  <div class="flex flex-col justify-between">
+                    <circle-progress
+                      [percent]="sum_total_cbm_dry(order_detail)['reminder_percent']"
+                      [subtitle]="[
+                        'Frozen CBF',
+                        sum_total_cbm_dry(order_detail)['fill_cbf'] + ' lb to fill up.',
+                        'Total: ' + sum_total_cbm_dry(order_detail)['total_pallet'] + ' pallet' + (sum_total_cbm_dry(order_detail)['total_pallet'] == 1 ? '' : 's')
+                      ]"
+                      [outerStrokeColor]="'#FBC500'"
+                    ></circle-progress>
+                    <small>Total Dry CBF(lb): {{sum_total_cbm_dry(order_detail)['total_cbf'] | number:'.2-2'}}</small>
+                    <small>1 pallet CBF(lb): {{sum_total_cbm_dry(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
+                    <small>Total pallets: {{sum_total_cbm_dry(order_detail)['total_pallet']}}</small>
+                  </div>
+                  <div class="flex flex-col justify-between">
+                    <circle-progress
+                      [percent]="sum_total_cbm_frozen(order_detail)['reminder_percent']"
+                      [subtitle]="[
+                        'Dry CBF',
+                        sum_total_cbm_frozen(order_detail)['fill_cbf'] + ' lb to fill up.',
+                        'Total: ' + sum_total_cbm_frozen(order_detail)['total_pallet'] + ' pallet' + (sum_total_cbm_frozen(order_detail)['total_pallet'] == 1 ? '' : 's')
+                      ]"
+                      [outerStrokeColor]="'#1C3FAA'"
+                    ></circle-progress>
+                    <small>Total Dry CBF(lb): {{sum_total_cbm_frozen(order_detail)['total_cbf'] | number:'.2-2'}}</small>
+                    <small>1 pallet CBF(lb): {{sum_total_cbm_frozen(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
+                    <small>Total pallets: {{sum_total_cbm_frozen(order_detail)['total_pallet']}}</small>
+                  </div>
+                </div>
+              </div>
               <div *ngIf="selected_order" class="flex justify-between">
                 <div>
                   <div class="flex mb-1">
                     <div class="mr-1">Total items:</div>
                     <div class="">{{order_detail ? order_detail.length : '0'}}</div>
-                  </div>
-                  <div class="flex mb-1">
-                    <div class="mr-1">CBF:</div>
-                    <div class="">{{sum_total_cbm(order_detail) | number}} {{cbm_tbded ? '+' : ''}} (lb)</div>
                   </div>
                   <div class="flex font-bold">
                     <div class="mr-1">Total charge:</div>

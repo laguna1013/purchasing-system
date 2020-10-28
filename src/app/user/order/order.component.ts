@@ -28,6 +28,11 @@ export class OrderComponent implements OnInit {
     private authService: AuthService
   ) { }
 
+  // dry_cbf_pallet = 83.50;
+  // frozen_cbf_pallet = 76.00;
+  dry_cbf_pallet = 2.35;
+  frozen_cbf_pallet = 1.15;
+
   loading = false;
   item_display_style = 'list';
   category: string = 'all';
@@ -43,7 +48,6 @@ export class OrderComponent implements OnInit {
   qty: number = 1;
 
   ordered_item_details: Array<Object> = [];
-
 
   po_number: String = '';
   order_selected: boolean = false;
@@ -64,6 +68,9 @@ export class OrderComponent implements OnInit {
   category_change = (event) => {
     this.category = event.target.value;
   }
+  sortby_change = (event) => {
+    this.sort_global_item(event.target.value);
+  }
   item_display_style_change = (style) => {
     this.item_display_style = style;
   }
@@ -77,7 +84,8 @@ export class OrderComponent implements OnInit {
       data => {
         if (data['status'] == 'success') {
           let items = data['data'];
-          this.globalService.items = [...items]
+          this.globalService.items = [...items];
+          this.sort_global_item('moq')
         } else {
           this.toast.error('There is an issue with server. Please try again.', 'Error');
         }
@@ -244,6 +252,50 @@ export class OrderComponent implements OnInit {
     }
     return sum;
   }
+  sum_total_cbm_dry = (ordered_item) => {
+    let sum = 0;
+    if (ordered_item.length != 0) {
+      ordered_item.forEach(item => {
+        this.globalService.items.forEach(_item => {
+          if (item['item_id'] == _item['id']) {
+            if ((_item['cbm'] != '') && (_item['category'] == 'dry')) {
+              sum += this.parse_float(_item['cbm']) * item['qty'];
+            }
+          }
+        })
+      })
+    }
+    return {
+      total_cbf: Math.floor(sum * 100) / 100,
+      total_pallet: sum == 0 ? 0 : Math.floor(sum / this.dry_cbf_pallet) + 1,
+      reminder_cbf: Math.round((sum % this.dry_cbf_pallet) * 100) / 100,
+      reminder_percent: Math.round((sum % this.dry_cbf_pallet) / this.dry_cbf_pallet * 100),
+      fill_cbf: Math.round((this.dry_cbf_pallet - Math.round((sum % this.dry_cbf_pallet) * 100) / 100) * 100) / 100,
+      one_pallet_cbf: this.dry_cbf_pallet
+    }
+  }
+  sum_total_cbm_frozen = (ordered_item) => {
+    let sum = 0;
+    if (ordered_item.length != 0) {
+      ordered_item.forEach(item => {
+        this.globalService.items.forEach(_item => {
+          if (item['item_id'] == _item['id']) {
+            if ((_item['cbm'] != '') && (_item['category'] == 'frozen')) {
+              sum += this.parse_float(_item['cbm']) * item['qty'];
+            }
+          }
+        })
+      })
+    }
+    return {
+      total_cbf: Math.floor(sum * 100) / 100,
+      total_pallet: sum == 0 ? 0 : Math.floor(sum / this.frozen_cbf_pallet) + 1,
+      reminder_cbf: Math.round((sum % this.frozen_cbf_pallet) * 100) / 100,
+      reminder_percent: Math.round((sum % this.frozen_cbf_pallet) / this.frozen_cbf_pallet * 100),
+      fill_cbf: Math.round((this.frozen_cbf_pallet - Math.round((sum % this.frozen_cbf_pallet) * 100) / 100) * 100) / 100,
+      one_pallet_cbf: this.frozen_cbf_pallet
+    }
+  }
   parse_float = (val) => {
     return Math.floor(parseFloat(val) * 100) / 100;
   }
@@ -356,6 +408,21 @@ export class OrderComponent implements OnInit {
       data => {
         if (data['status'] == 'success') {
           this.ordered_item_details = [...data['data']];
+          // sort frozen & dry
+          this.ordered_item_details.sort((a, b) => {
+            let c1 = '', c2 = '';
+            this.globalService.items.forEach(item => {
+              if(a['item_id'] == item['id']) c1 = item['category'];
+              if(b['item_id'] == item['id']) c2 = item['category'];
+            })
+            if(c1 == c2){
+              return 0
+            }else if(c1 == 'frozen'){
+              return -1
+            }else{
+              return 1;
+            }
+          })
         } else {
           this.toast.error('There is an issue with server. Please try again.', 'Error');
         }
@@ -378,6 +445,52 @@ export class OrderComponent implements OnInit {
         return true;
       }
       return false;
+    }
+  }
+  sort_global_item = (key) => {
+    if(key == 'category'){
+      this.globalService.items.sort((a, b) => {
+        if(a['category'] == b['category']){
+          return 0;
+        }else if(a['category'] == 'frozen'){
+          return -1;
+        }else{
+          return 1;
+        }
+      })
+    }
+    if(key == 'moq'){
+      this.globalService.items.sort((a, b) => {
+        if(parseInt(a['moq']) == parseInt(b['moq'])){
+          return 0;
+        }else if(parseInt(a['moq']) < parseInt(b['moq'])){
+          return -1;
+        }else{
+          return 1;
+        }
+      })
+    }
+    if(key == 'price'){
+      this.globalService.items.sort((a, b) => {
+        if(parseFloat(a['price']) == parseFloat(b['price'])){
+          return 0;
+        }else if(parseFloat(a['price']) < parseFloat(b['price'])){
+          return -1;
+        }else{
+          return 1;
+        }
+      })
+    }
+    if(key == 'description'){
+      this.globalService.items.sort((a, b) => {
+        if(a['description'] == b['description']){
+          return 0;
+        }else if(a['description']  < b['description']){
+          return -1;
+        }else{
+          return 1;
+        }
+      })
     }
   }
   export_excel = () => {

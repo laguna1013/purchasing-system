@@ -37,6 +37,9 @@ export class ManageOrderComponent implements OnInit {
   qty = 0;
   filter = 'all';
 
+  dry_cbf_pallet = 2.35;
+  frozen_cbf_pallet = 1.15;
+
   ngOnInit(): void {
     this.globalService.menu = 'manage-order';
     this.get_item();
@@ -182,6 +185,50 @@ export class ManageOrderComponent implements OnInit {
       })
     }
     return sum;
+  }
+  sum_total_cbm_dry = (ordered_item) => {
+    let sum = 0;
+    if (ordered_item.length != 0) {
+      ordered_item.forEach(item => {
+        this.globalService.items.forEach(_item => {
+          if (item['item_id'] == _item['id']) {
+            if ((_item['cbm'] != '') && (_item['category'] == 'dry')) {
+              sum += this.parse_float(_item['cbm']) * item['qty'];
+            }
+          }
+        })
+      })
+    }
+    return {
+      total_cbf: Math.floor(sum * 100) / 100,
+      total_pallet: sum == 0 ? 0 : Math.floor(sum / this.dry_cbf_pallet) + 1,
+      reminder_cbf: Math.round((sum % this.dry_cbf_pallet) * 100) / 100,
+      reminder_percent: Math.round((sum % this.dry_cbf_pallet) / this.dry_cbf_pallet * 100),
+      fill_cbf: Math.round((this.dry_cbf_pallet - Math.round((sum % this.dry_cbf_pallet) * 100) / 100) * 100) / 100,
+      one_pallet_cbf: this.dry_cbf_pallet
+    }
+  }
+  sum_total_cbm_frozen = (ordered_item) => {
+    let sum = 0;
+    if (ordered_item.length != 0) {
+      ordered_item.forEach(item => {
+        this.globalService.items.forEach(_item => {
+          if (item['item_id'] == _item['id']) {
+            if ((_item['cbm'] != '') && (_item['category'] == 'frozen')) {
+              sum += this.parse_float(_item['cbm']) * item['qty'];
+            }
+          }
+        })
+      })
+    }
+    return {
+      total_cbf: Math.floor(sum * 100) / 100,
+      total_pallet: sum == 0 ? 0 : Math.floor(sum / this.frozen_cbf_pallet) + 1,
+      reminder_cbf: Math.round((sum % this.frozen_cbf_pallet) * 100) / 100,
+      reminder_percent: Math.round((sum % this.frozen_cbf_pallet) / this.frozen_cbf_pallet * 100),
+      fill_cbf: Math.round((this.frozen_cbf_pallet - Math.round((sum % this.frozen_cbf_pallet) * 100) / 100) * 100) / 100,
+      one_pallet_cbf: this.frozen_cbf_pallet
+    }
   }
   format_date_time = (date) => {
     return moment(date, 'YYYY-MM-DD HH:mm:ss').format('hh:mm A MMM DD ddd, YYYY')

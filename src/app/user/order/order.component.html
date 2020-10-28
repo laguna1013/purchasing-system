@@ -13,7 +13,7 @@
   <div class="pos intro-y grid grid-cols-12 gap-5 mt-2">
     <!-- BEGIN: Item List -->
     <div class="col-span-12 lg:col-span-4">
-      <div class="intro-y pr-1">
+      <div class="intro-y">
         <div class="box p-2">
           <div class="pos__tabs nav-tabs justify-center flex">
             <a *ngIf="ticket_created" data-toggle="tab" data-target="#ticket" href="javascript:;" class="flex-1 py-2 rounded-md text-center active">Current order</a>
@@ -50,8 +50,18 @@
               <div class="font-medium text-base">{{sum_total_price(ordered_item) | currency}} {{price_tbded ? '+' : ''}}</div>
             </div>
             <div class="flex mt-4">
-              <div class="mr-auto font-medium text-base">CBM</div>
-              <div class="font-medium text-base">{{sum_total_cbm(ordered_item) | number}} {{cbm_tbded ? '+' : ''}}</div>
+              <div class="mr-auto font-medium text-base">Dry CBF</div>
+              <div class="font-medium text-base">
+                {{sum_total_cbm_dry(ordered_item)['reminder_cbf'] | number}}/{{sum_total_cbm_dry(ordered_item)['one_pallet_cbf']}}
+                ({{sum_total_cbm_dry(ordered_item)['total_pallet']}} pallet{{sum_total_cbm_dry(ordered_item)['total_pallet'] == 1 ? '' : 's'}} : Total {{sum_total_cbm_dry(ordered_item)['total_cbf']}} lb)
+              </div>
+            </div>
+            <div class="flex mt-4">
+              <div class="mr-auto font-medium text-base">Frozen CBF</div>
+              <div class="font-medium text-base">
+                {{sum_total_cbm_frozen(ordered_item)['reminder_cbf'] | number}}/{{sum_total_cbm_frozen(ordered_item)['one_pallet_cbf']}}
+                ({{sum_total_cbm_frozen(ordered_item)['total_pallet']}} pallet{{sum_total_cbm_frozen(ordered_item)['total_pallet'] == 1 ? '' : 's'}} : Total {{sum_total_cbm_frozen(ordered_item)['total_cbf']}} lb)
+              </div>
             </div>
           </div>
           <div class="flex mt-5 justify-between">
@@ -79,16 +89,39 @@
       </div>
     </div>
     <div class="intro-y col-span-12 lg:col-span-8">
-      <div class="flex intro-y">
-        <div class="hidden md:block relative text-gray-700">
-          <input type="text" class="input input--lg w-full lg:w-64 box pr-10 placeholder-theme-13" placeholder="Search item..." (keyup)="search_item($event)">
-          <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search" appFeatherIcon></i>
-        </div>
-        <select class="input input--lg box lg:mt-0 md:ml-auto" (change)="category_change($event)">
-          <option value="all">Choose category</option>
+      <div class="flex md:hidden">
+        <select class="input input--md box lg:mt-0 mr-2" (change)="category_change($event)">
+          <option value="all">All categories</option>
           <option value="dry">Dry</option>
           <option value="frozen">Frozen</option>
         </select>
+        <select class="input input--md box lg:mt-0 ml-auto" (change)="sortby_change($event)">
+          <option value="">Sort by</option>
+          <option value="description">Description(A-Z)</option>
+          <option value="price">Price</option>
+          <option value="moq">Max order qty</option>
+          <option value="category">Category</option>
+        </select>
+      </div>
+      <div class="flex intro-y mt-2 md:mt-0">
+        <div class="relative text-gray-700">
+          <input type="text" class="input input--lg w-full lg:w-64 box pr-10 placeholder-theme-13" placeholder="Search item..." (keyup)="search_item($event)">
+          <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-feather="search" appFeatherIcon></i>
+        </div>
+        <div class="hidden md:flex md:ml-auto">
+          <select class="input input--md box lg:mt-0 mr-2" (change)="category_change($event)">
+            <option value="all">All categories</option>
+            <option value="dry">Dry</option>
+            <option value="frozen">Frozen</option>
+          </select>
+          <select class="input input--md box lg:mt-0" (change)="sortby_change($event)">
+            <option value="">Sort by</option>
+            <option value="description">Description(A-Z)</option>
+            <option value="price">Price</option>
+            <option value="moq">Max order qty</option>
+            <option value="category">Category</option>
+          </select>
+        </div>
         <div class="box p-2 md:ml-2 sm:hide ml-auto">
           <div class="w-20 flex justify-around items-center h-full item-layout-style">
             <a class="{{item_display_style == 'list' ? 'active' : ''}}" (click)="item_display_style_change('list')"><i class="h-5" data-feather="list" appFeatherIcon></i></a>
@@ -107,8 +140,10 @@
                 <div class="ml-4 mr-auto">
                   <div class="font-medium">Description: {{item.vendor_description}} ({{item.description}})</div>
                   <div class="text-gray-600 text-xs">
-                    <span><em>Qty</em>: {{(item.qty_display == 'true' && (item.qty != '')) ? item.qty + ' ' + item.uom : 'TBD'}}</span>
-                    <span class="ml-5"><em>Packing info</em>: {{item.packing_info}}</span>
+                    <span><em>Max order qty</em>: {{(item.qty_display == 'true' && (item.moq != '')) ? item.moq + ' ' + item.uom : 'TBD'}}</span>
+                    <span class="ml-5"><em>CBF</em>: {{item.cbm}}</span>
+                    <span *ngIf="item.category=='frozen'" class="ml-5 rounded-full border border-theme-1 text-theme-1" style="padding: 2px 5px;">{{item.category}}</span>
+                    <span *ngIf="item.category=='dry'" class="ml-5 rounded-full border border-theme-12 text-theme-12" style="padding: 2px 5px;">{{item.category}}</span>
                   </div>
                 </div>
                 <div class="text-theme-6">Price: {{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</div>
@@ -180,11 +215,16 @@
           <div style="border: 1px solid #eee; border-radius: 5px;" class="py-2 mt-2 mb-2">
             <div class="px-5">{{selected_item ? selected_item['vendor_description'] + '(' + selected_item['description'] + ')' : 'TBD'}}</div>
             <div class="flex mt-1 px-5 justify-between">
-              <div>Category: <span class="text-gray-600">{{selected_item ? selected_item['category'] : 'TBD'}}</span></div>
+              <div>Category:
+                <ng-template [ngIf]="selected_item">
+                  <span *ngIf="selected_item.category=='frozen'" class="rounded-full border border-theme-1 text-theme-1" style="padding: 1px 5px;">{{selected_item.category}}</span>
+                  <span *ngIf="selected_item.category=='dry'" class="rounded-full border border-theme-12 text-theme-12" style="padding: 1px 5px;">{{selected_item.category}}</span>
+                </ng-template>
+              </div>
               <div>Unit of measurment: <span class="text-gray-600">{{selected_item ? selected_item['uom'] : 'TBD'}}</span></div>
             </div>
             <div class="flex mt-1 px-5 justify-between">
-              <div>Price: <span class="text-gray-600">{{selected_item ? selected_item['price'] : 'TBD'}}</span></div>
+              <div>Price: <span class="text-red-600">${{selected_item ? selected_item['price'] : 'TBD'}}</span></div>
               <div>Max order qty: <span class="text-gray-600">{{selected_item && selected_item['moq'] != '' ? selected_item['moq'] : 'TBD'}}</span></div>
             </div>
             <div class="flex mt-1 px-5 justify-between">
@@ -222,11 +262,16 @@
           <div style="border: 1px solid #eee; border-radius: 5px;" class="py-2 mt-2 mb-2">
             <div class="px-5">{{selected_item ? selected_item['vendor_description'] + '(' + selected_item['description'] + ')' : 'TBD'}}</div>
             <div class="flex mt-1 px-5 justify-between">
-              <div>Category: <span class="text-gray-600">{{selected_item ? selected_item['category'] : 'TBD'}}</span></div>
+              <div>Category:
+                <ng-template [ngIf]="selected_item">
+                  <span *ngIf="selected_item.category=='frozen'" class="rounded-full border border-theme-1 text-theme-1" style="padding: 1px 5px;">{{selected_item.category}}</span>
+                  <span *ngIf="selected_item.category=='dry'" class="rounded-full border border-theme-12 text-theme-12" style="padding: 1px 5px;">{{selected_item.category}}</span>
+                </ng-template>
+              </div>
               <div>Unit of measurment: <span class="text-gray-600">{{selected_item ? selected_item['uom'] : 'TBD'}}</span></div>
             </div>
             <div class="flex mt-1 px-5 justify-between">
-              <div>Price: <span class="text-gray-600">{{selected_item ? selected_item['price'] : 'TBD'}}</span></div>
+              <div>Price: <span class="text-red-600">${{selected_item ? selected_item['price'] : 'TBD'}}</span></div>
               <div>Max order qty: <span class="text-gray-600">{{selected_item && selected_item['moq'] != '' ? selected_item['moq'] : 'TBD'}}</span></div>
             </div>
             <div class="flex mt-1 px-5 justify-between">
@@ -259,6 +304,42 @@
           Your order: {{po_number}}
         </h2>
       </div>
+      <div class="flex flex-col md:flex-row md:justify-between mt-2">
+        <div class="flex flex-row justify-around md:ml-5 md:w-3/5 w-full">
+          <div class="flex flex-col justify-between">
+            <circle-progress
+              [percent]="sum_total_cbm_dry(ordered_item)['reminder_percent']"
+              [subtitle]="[
+                'Frozen CBF',
+                sum_total_cbm_dry(ordered_item)['fill_cbf'] + ' lb to fill up.',
+                'Total: ' + sum_total_cbm_dry(ordered_item)['total_pallet'] + ' pallet' + (sum_total_cbm_dry(ordered_item)['total_pallet'] == 1 ? '' : 's')
+              ]"
+              [outerStrokeColor]="'#FBC500'"
+            ></circle-progress>
+            <small>Total Dry CBF(lb): {{sum_total_cbm_dry(ordered_item)['total_cbf'] | number:'.2-2'}}</small>
+            <small>1 pallet CBF(lb): {{sum_total_cbm_dry(ordered_item)['one_pallet_cbf'] | number:'.2-2'}}</small>
+            <small>Total pallets: {{sum_total_cbm_dry(ordered_item)['total_pallet']}}</small>
+          </div>
+          <div class="flex flex-col justify-between">
+            <circle-progress
+              [percent]="sum_total_cbm_frozen(ordered_item)['reminder_percent']"
+              [subtitle]="[
+                'Dry CBF',
+                sum_total_cbm_frozen(ordered_item)['fill_cbf'] + ' lb to fill up.',
+                'Total: ' + sum_total_cbm_frozen(ordered_item)['total_pallet'] + ' pallet' + (sum_total_cbm_frozen(ordered_item)['total_pallet'] == 1 ? '' : 's')
+              ]"
+              [outerStrokeColor]="'#1C3FAA'"
+            ></circle-progress>
+            <small>Total Dry CBF(lb): {{sum_total_cbm_frozen(ordered_item)['total_cbf'] | number:'.2-2'}}</small>
+            <small>1 pallet CBF(lb): {{sum_total_cbm_frozen(ordered_item)['one_pallet_cbf'] | number:'.2-2'}}</small>
+            <small>Total pallets: {{sum_total_cbm_frozen(ordered_item)['total_pallet']}}</small>
+          </div>
+        </div>
+        <div class="flex flex-col justify-end md:items-start md:mt-0 mt-2 ml-5 md:mr-5 md:w-2/5 w-full">
+          <span class="mt-1">Total items: {{ordered_item ? ordered_item.length : '0'}}</span>
+          <div class="text-theme-6 mt-1">Total charge: {{sum_total_price(ordered_item) | currency}} {{price_tbded ? '+' : ''}}</div>
+        </div>
+      </div>
       <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
         <div class="col-span-12" style="max-height: 500px; overflow: auto;">
           <div *ngFor="let item of ordered_item; index as idx;">
@@ -279,11 +360,6 @@
           </div>
         </div>
       </div>
-      <div class="flex justify-end mx-5 mb-2">
-        <span class="text-theme-1 mr-5">Total items: {{ordered_item ? ordered_item.length : '0'}}</span>
-        <span class="text-theme-1 mr-5">CBF: {{sum_total_cbm(ordered_item) | number}} {{cbm_tbded ? '+' : ''}}</span>
-        <span class="text-theme-6">Total charge: {{sum_total_price(ordered_item) | currency}} {{price_tbded ? '+' : ''}}</span>
-      </div>
       <div class="px-5 py-3 text-right border-t border-gray-200">
         <button type="button" data-dismiss="modal" class="button w-24 border text-gray-700 mr-1">Cancel</button>
         <button type="button" data-dismiss="modal" class="button w-24 bg-theme-1 text-white" (click)="confirm_order()">Confrim</button>
@@ -299,6 +375,48 @@
         </h2>
         <small>{{selected_order ? selected_order['order_time'] : ''}}</small>
       </div>
+      <div class="flex flex-col md:flex-row md:justify-between mt-2">
+        <div class="flex flex-row justify-around md:ml-5 md:w-3/5 w-full">
+          <div class="flex flex-col justify-between">
+            <circle-progress
+              [percent]="sum_total_cbm_dry(ordered_item_details)['reminder_percent']"
+              [subtitle]="[
+                'Frozen CBF',
+                sum_total_cbm_dry(ordered_item_details)['fill_cbf'] + ' lb to fill up.',
+                'Total: ' + sum_total_cbm_dry(ordered_item_details)['total_pallet'] + ' pallet' + (sum_total_cbm_dry(ordered_item_details)['total_pallet'] == 1 ? '' : 's')
+              ]"
+              [outerStrokeColor]="'#FBC500'"
+            ></circle-progress>
+            <small>Total Dry CBF(lb): {{sum_total_cbm_dry(ordered_item_details)['total_cbf'] | number:'.2-2'}}</small>
+            <small>1 pallet CBF(lb): {{sum_total_cbm_dry(ordered_item_details)['one_pallet_cbf'] | number:'.2-2'}}</small>
+            <small>Total pallets: {{sum_total_cbm_dry(ordered_item_details)['total_pallet']}}</small>
+          </div>
+          <div class="flex flex-col justify-between">
+            <circle-progress
+              [percent]="sum_total_cbm_frozen(ordered_item_details)['reminder_percent']"
+              [subtitle]="[
+                'Dry CBF',
+                sum_total_cbm_frozen(ordered_item_details)['fill_cbf'] + ' lb to fill up.',
+                'Total: ' + sum_total_cbm_frozen(ordered_item_details)['total_pallet'] + ' pallet' + (sum_total_cbm_frozen(ordered_item_details)['total_pallet'] == 1 ? '' : 's')
+              ]"
+              [outerStrokeColor]="'#1C3FAA'"
+            ></circle-progress>
+            <small>Total Dry CBF(lb): {{sum_total_cbm_frozen(ordered_item_details)['total_cbf'] | number:'.2-2'}}</small>
+            <small>1 pallet CBF(lb): {{sum_total_cbm_frozen(ordered_item_details)['one_pallet_cbf'] | number:'.2-2'}}</small>
+            <small>Total pallets: {{sum_total_cbm_frozen(ordered_item_details)['total_pallet']}}</small>
+          </div>
+        </div>
+        <div class="flex flex-col justify-end md:items-start md:mt-0 mt-2 ml-5 md:mr-5 md:w-2/5 w-full">
+          <span class="mt-1">Total items: {{ordered_item_details ? ordered_item_details.length : '0'}}</span>
+          <span>Status:
+            <span class="py-1 px-2 rounded-full text-xs bg-theme-{{
+                selected_order ? (selected_order['status'] == 'pending' ? '12' : (selected_order['status'] == 'approved' ? '9' : (selected_order['status'] == 'draft' ? '6' : '1'))) : ''}}
+                text-white cursor-pointer font-medium">{{selected_order ? selected_order['status'] : ''}}
+            </span>
+          </span>
+          <div class="text-theme-6 mt-1">Total charge: {{sum_total_price(ordered_item_details) | currency}} {{price_tbded ? '+' : ''}}</div>
+        </div>
+      </div>
       <div class="p-5 grid grid-cols-12 gap-4 row-gap-3">
         <div class="col-span-12" style="max-height: 500px; overflow: auto;">
           <div *ngFor="let item of ordered_item_details; index as idx;">
@@ -310,7 +428,11 @@
                   </div>
                   <div class="ml-4 mr-auto" style="max-width: 50%;">
                     <div class="font-medium block truncate">{{_item['vendor_description']}}({{_item['description']}})</div>
-                    <div class="text-gray-600 text-xs">{{item.qty}} {{item.qty == 1 ? _item.uom : _item.uom + 's'}}</div>
+                    <div class="text-gray-600 text-xs">
+                      <span class="mr-2">{{item.qty}} {{item.qty == 1 ? _item.uom : _item.uom + 's'}}</span>
+                      <span *ngIf="_item.category=='frozen'" class="rounded-full border border-theme-1 text-theme-1" style="padding: 2px 5px;">{{_item.category}}</span>
+                      <span *ngIf="_item.category=='dry'" class="rounded-full border border-theme-12 text-theme-12" style="padding: 2px 5px;">{{_item.category}}</span>
+                    </div>
                   </div>
                   <div class="text-theme-6">Price: {{_item.price != '' && _item.price != 'Market Price' ? '$' + parse_float(parse_float(_item.price) * item.qty) : 'TBD'}}</div>
                 </div>
@@ -318,17 +440,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="flex justify-end mx-5 mb-2">
-        <span class="text-theme-1 mr-5">Status:
-          <span class="py-1 px-2 rounded-full text-xs bg-theme-{{
-              selected_order ? (selected_order['status'] == 'pending' ? '12' : (selected_order['status'] == 'approved' ? '9' : (selected_order['status'] == 'draft' ? '6' : '1'))) : ''}}
-              text-white cursor-pointer font-medium">{{selected_order ? selected_order['status'] : ''}}
-          </span>
-        </span>
-        <span class="text-theme-1 mr-5">Total items: {{ordered_item_details ? ordered_item_details.length : '0'}}</span>
-        <span class="text-theme-1 mr-5">CBF: {{sum_total_cbm(ordered_item_details) | number}} {{cbm_tbded ? '+' : ''}}</span>
-        <span class="text-theme-6">Total charge: {{sum_total_price(ordered_item_details) | currency}} {{price_tbded ? '+' : ''}}</span>
       </div>
       <div class="px-5 py-3 text-right border-t border-gray-200">
         <button *ngIf="selected_order && (selected_order['status'] == 'draft')" type="button" data-dismiss="modal" class="button w-24 bg-theme-12 text-white mr-3" (click)="edit_order()">Edit order</button>

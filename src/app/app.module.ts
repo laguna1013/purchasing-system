@@ -23,6 +23,7 @@ import { LoaderComponent } from './fragments/loader/loader.component';
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ManageOrderComponent } from './admin/manage-order/manage-order.component';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,18 @@ import { ManageOrderComponent } from './admin/manage-order/manage-order.componen
     HttpClientModule,
     FormsModule,
     ToastrModule.forRoot(),
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 60,
+      outerStrokeWidth: 6,
+      innerStrokeWidth: 3,
+      innerStrokeColor: "#eaeaea",
+      animationDuration: 300,
+      space: -3,
+      titleFontSize: '16px',
+      subtitleFontSize: '12px'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
