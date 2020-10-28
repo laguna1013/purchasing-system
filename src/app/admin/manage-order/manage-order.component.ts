@@ -501,4 +501,27 @@ export class ManageOrderComponent implements OnInit {
       this.loading = false;
     })
   }
+  export_excel = (po_number) => {
+    if(po_number){
+      /* table id is passed over here */
+      let element = document.getElementById('export-table');
+      const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+      let wscols = [
+        {wch:10},
+        {wch:10},
+        {wch:15},
+        {wch:20},
+        {wch:30},
+        {wch:30}
+      ];
+      ws['!cols'] = wscols;
+      /* generate workbook and add the worksheet */
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      /* save to file */
+      XLSX.writeFile(wb, `${po_number}.xlsx`);
+    }else{
+      this.toast.error('Please select order to export.', 'Error');
+    }
+  }
 }

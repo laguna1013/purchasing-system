@@ -310,7 +310,7 @@
             <circle-progress
               [percent]="sum_total_cbm_dry(ordered_item)['reminder_percent']"
               [subtitle]="[
-                'Frozen CBF',
+                'Dry CBF',
                 sum_total_cbm_dry(ordered_item)['fill_cbf'] + ' lb to fill up.',
                 'Total: ' + sum_total_cbm_dry(ordered_item)['total_pallet'] + ' pallet' + (sum_total_cbm_dry(ordered_item)['total_pallet'] == 1 ? '' : 's')
               ]"
@@ -324,13 +324,13 @@
             <circle-progress
               [percent]="sum_total_cbm_frozen(ordered_item)['reminder_percent']"
               [subtitle]="[
-                'Dry CBF',
+                'Frozen CBF',
                 sum_total_cbm_frozen(ordered_item)['fill_cbf'] + ' lb to fill up.',
                 'Total: ' + sum_total_cbm_frozen(ordered_item)['total_pallet'] + ' pallet' + (sum_total_cbm_frozen(ordered_item)['total_pallet'] == 1 ? '' : 's')
               ]"
               [outerStrokeColor]="'#1C3FAA'"
             ></circle-progress>
-            <small>Total Dry CBF(lb): {{sum_total_cbm_frozen(ordered_item)['total_cbf'] | number:'.2-2'}}</small>
+            <small>Total Frozen CBF(lb): {{sum_total_cbm_frozen(ordered_item)['total_cbf'] | number:'.2-2'}}</small>
             <small>1 pallet CBF(lb): {{sum_total_cbm_frozen(ordered_item)['one_pallet_cbf'] | number:'.2-2'}}</small>
             <small>Total pallets: {{sum_total_cbm_frozen(ordered_item)['total_pallet']}}</small>
           </div>
@@ -381,7 +381,7 @@
             <circle-progress
               [percent]="sum_total_cbm_dry(ordered_item_details)['reminder_percent']"
               [subtitle]="[
-                'Frozen CBF',
+                'Dry CBF',
                 sum_total_cbm_dry(ordered_item_details)['fill_cbf'] + ' lb to fill up.',
                 'Total: ' + sum_total_cbm_dry(ordered_item_details)['total_pallet'] + ' pallet' + (sum_total_cbm_dry(ordered_item_details)['total_pallet'] == 1 ? '' : 's')
               ]"
@@ -395,13 +395,13 @@
             <circle-progress
               [percent]="sum_total_cbm_frozen(ordered_item_details)['reminder_percent']"
               [subtitle]="[
-                'Dry CBF',
+                'Frozen CBF',
                 sum_total_cbm_frozen(ordered_item_details)['fill_cbf'] + ' lb to fill up.',
                 'Total: ' + sum_total_cbm_frozen(ordered_item_details)['total_pallet'] + ' pallet' + (sum_total_cbm_frozen(ordered_item_details)['total_pallet'] == 1 ? '' : 's')
               ]"
               [outerStrokeColor]="'#1C3FAA'"
             ></circle-progress>
-            <small>Total Dry CBF(lb): {{sum_total_cbm_frozen(ordered_item_details)['total_cbf'] | number:'.2-2'}}</small>
+            <small>Total Frozen CBF(lb): {{sum_total_cbm_frozen(ordered_item_details)['total_cbf'] | number:'.2-2'}}</small>
             <small>1 pallet CBF(lb): {{sum_total_cbm_frozen(ordered_item_details)['one_pallet_cbf'] | number:'.2-2'}}</small>
             <small>Total pallets: {{sum_total_cbm_frozen(ordered_item_details)['total_pallet']}}</small>
           </div>
@@ -447,49 +447,5 @@
       </div>
     </div>
   </div>
-  <table id="export-table" style="display: none;">
-    <thead>
-      <tr>
-        <td>Branch ID</td>
-        <td>sorting order by weights</td>
-        <td>Inventory ID</td>
-        <td>Vendor description</td>
-        <td>Description</td>
-        <td>Packing info</td>
-        <td>Cost</td>
-        <td>Q'ty</td>
-        <td>Customer Unit of Measurment</td>
-        <td>Subtotal</td>
-        <td>G.W. (lb)</td>
-        <td>Total G.W. (lb)</td>
-        <td>Subcharge(20%)</td>
-        <td>max order q'ty</td>
-        <td>cbm</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of ordered_item">
-        <ng-template ngFor let-gitem [ngForOf]="globalService.items" let-i="index">
-          <ng-template [ngIf]="gitem['id']==item['item_id']">
-            <td>{{user['name']}}</td>
-            <td>{{gitem['gross_weight']}}</td>
-            <td>{{gitem['inventory_id']}}</td>
-            <td>{{gitem['vendor_description']}}</td>
-            <td>{{gitem['description']}}</td>
-            <td>{{gitem['packing_info']}}</td>
-            <td>{{gitem['price']}}</td>
-            <td>{{item['qty']}}</td>
-            <td>{{gitem['uom']}}</td>
-            <td>{{gitem['price'] != '' && gitem['price'] != 'Market Price' ? parse_float(gitem['price'] * item['qty']) : 'TBD'}}</td>
-            <td>{{gitem['gross_weight']}}</td>
-            <td>{{gitem['gross_weight'] ? parse_float(gitem['gross_weight'] * item['qty']) : ''}}</td>
-            <td>{{gitem['price'] != '' && gitem['price'] != 'Market Price' ? parse_float(gitem['price'] * item['qty'] * 0.2) : 'TBD'}}</td>
-            <td>{{gitem['moq']}}</td>
-            <td>{{gitem['cbm']}}</td>
-          </ng-template>
-        </ng-template>
-      </tr>
-    </tbody>
-  </table>
   <!-- END: Place Order Modal -->
 </div>

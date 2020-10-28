@@ -81,7 +81,7 @@
                       <circle-progress
                         [percent]="sum_total_cbm_dry(order_detail)['reminder_percent']"
                         [subtitle]="[
-                          'Frozen CBF',
+                          'Dry CBF',
                           sum_total_cbm_dry(order_detail)['fill_cbf'] + ' lb to fill up.',
                           'Total: ' + sum_total_cbm_dry(order_detail)['total_pallet'] + ' pallet' + (sum_total_cbm_dry(order_detail)['total_pallet'] == 1 ? '' : 's')
                         ]"
@@ -95,13 +95,13 @@
                       <circle-progress
                         [percent]="sum_total_cbm_frozen(order_detail)['reminder_percent']"
                         [subtitle]="[
-                          'Dry CBF',
+                          'Frozen CBF',
                           sum_total_cbm_frozen(order_detail)['fill_cbf'] + ' lb to fill up.',
                           'Total: ' + sum_total_cbm_frozen(order_detail)['total_pallet'] + ' pallet' + (sum_total_cbm_frozen(order_detail)['total_pallet'] == 1 ? '' : 's')
                         ]"
                         [outerStrokeColor]="'#1C3FAA'"
                       ></circle-progress>
-                      <small>Total Dry CBF(lb): {{sum_total_cbm_frozen(order_detail)['total_cbf'] | number:'.2-2'}}</small>
+                      <small>Total Frozen CBF(lb): {{sum_total_cbm_frozen(order_detail)['total_cbf'] | number:'.2-2'}}</small>
                       <small>1 pallet CBF(lb): {{sum_total_cbm_frozen(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
                       <small>Total pallets: {{sum_total_cbm_frozen(order_detail)['total_pallet']}}</small>
                     </div>
