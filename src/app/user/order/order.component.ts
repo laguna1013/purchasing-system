@@ -318,7 +318,7 @@ export class OrderComponent implements OnInit {
       if (data['data'] == true) {
         this.toast.success('Your order has been placed successfully.', 'Success');
         this.getOrders(this.user['id']);
-        this.send_email(items);
+        //this.send_email(items);
       }
       this.loading = false;
     }, error => {
