@@ -37,8 +37,8 @@ export class ManageOrderComponent implements OnInit {
   qty = 0;
   filter = 'all';
 
-  dry_cbf_pallet = 2.35;
-  frozen_cbf_pallet = 1.15;
+  dry_cbf_pallet = 83.50;
+  frozen_cbf_pallet = 76.00;
 
   ngOnInit(): void {
     this.globalService.menu = 'manage-order';

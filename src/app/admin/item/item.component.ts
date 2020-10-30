@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Item } from './item';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-item',
@@ -151,46 +152,58 @@ export class ItemComponent implements OnInit {
         let _item = new Item();
         Object.entries(raw_item).map(([key, value]) => {
           switch (key) {
-            case 'Cost':
+            case 'Price':
               _item.price = value.toString();
               break;
-            case 'Customer Unit of Measure':
+            case 'Unit':
               _item.uom = value.toString();
               break;
-            case 'Description':
+            case 'Name':
               _item.description = value.toString();
+              break;
+            case 'Image':
+              _item.image = value.toString();
+              break;
+            case 'Category':
+              _item.category = value.toString();
               break;
             case 'G.W.\r\n(lb)':
               _item.gross_weight = value.toString();
               break;
-            case 'Inventory ID':
+            case 'Item No.':
               _item.inventory_id = value.toString();
               break;
-            case 'Packing Info':
+            case 'Model':
               _item.packing_info = value.toString();
               break;
-            case 'Q\'ty':
+            case 'Qty':
               _item.qty = value.toString();
               break;
-            case 'Subcharge (20%)':
+            case 'Sales Price':
+              _item.sales_price = value.toString();
               break;
             case 'Subtotal':
               break;
-            case 'Total \nG.W. (lb)':
+            case 'Cbf':
+              _item.cbm = value.toString();
               break;
-            case 'Vendor Description':
+            case 'Total \nG.W.(lb)':
+              break;
+            case '品名':
               _item.vendor_description = value.toString();
               break;
             case 'max order q\'ty':
               _item.moq = value.toString();
               break;
-            case 'sorting order by weights':
+            case 'SQ':
               break;
             default:
               break;
           }
         })
-        _item.category = category;
+        if(!_item.category){
+          _item.category = category;
+        }
         _item.created_user_id = this.authService.currentUser()['id'];
         if (_item.inventory_id != "") {
           items.push(_item)
@@ -228,7 +241,7 @@ export class ItemComponent implements OnInit {
           if (data['invalid_ids'].length == 0) {
             this.toast.info(`${items.length} items were added to database.`, 'Success');
           } else {
-            this.toast.info(`${items.length - data['invalid_ids'].length} items were added to database. ${data['invalid_ids'].length} items were not added due to id conflict.`, 'Success');
+            this.toast.info(`${items.length - data['invalid_ids'].length} items were added to database. ${data['invalid_ids'].length} items were updated.`, 'Success');
           }
           this.getItem();
         } else {
@@ -241,5 +254,15 @@ export class ItemComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+  export_excel = () => {
+    /* table id is passed over here */
+    let element = document.getElementById('export-table');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'All items');
+    /* save to file */
+    XLSX.writeFile(wb, `ITEMS_${this.authService.currentUser()['company']}_${moment().format('YYYY-MM-DD')}.xlsx`);
   }
 }

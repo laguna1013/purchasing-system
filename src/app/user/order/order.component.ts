@@ -28,10 +28,10 @@ export class OrderComponent implements OnInit {
     private authService: AuthService
   ) { }
 
-  // dry_cbf_pallet = 83.50;
-  // frozen_cbf_pallet = 76.00;
-  dry_cbf_pallet = 2.35;
-  frozen_cbf_pallet = 1.15;
+  dry_cbf_pallet = 83.50;
+  frozen_cbf_pallet = 76.00;
+  // dry_cbf_pallet = 2.35;
+  // frozen_cbf_pallet = 1.15;
 
   loading = false;
   item_display_style = 'list';

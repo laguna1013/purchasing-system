@@ -8,6 +8,9 @@
       <app-loader></app-loader>
     </div>
     <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+      <button class="dropdown-toggle button px-2 box text-gray-700 flex mr-3" (click)="export_excel()">
+        <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="file" appFeatherIcon></i> </span><span>Export</span>
+      </button>
       <div class="dropdown relative ml-auto sm:ml-0">
         <button class="dropdown-toggle button px-2 box text-gray-700 flex">
           <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="plus" appFeatherIcon></i> </span><span>Add New Item</span>
@@ -35,13 +38,14 @@
               <th width="10%" class="text-center">Vendor description</th>
               <th width="10%" class="text-center">Description</th>
               <th width="10%" class="text-center">Packing info</th>
-              <th width="3%" class="text-center">Cost</th>
+              <th width="3%" class="text-center">Price</th>
+              <th width="5%" class="text-center">Sales price</th>
               <th width="3%" class="text-center">QTY</th>
-              <th width="3%" class="text-center">CBM</th>
+              <th width="3%" class="text-center">CBF</th>
               <th width="3%" class="text-center">Customer UOM</th>
               <th width="3%" class="text-center">G.W.(lb)</th>
               <th width="5%" class="text-center">Total G.W.(lb)</th>
-              <th width="5%" class="text-center">Subcharge (20%)</th>
+
               <th width="5%" class="text-center">Max order qty</th>
               <th width="10%" class="text-center">Added date</th>
               <th width="10%" class="text-center">Status</th>
@@ -71,12 +75,12 @@
               </td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.packing_info}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</td>
+              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.sales_price != 'Market Price' ? ('$' + parse_float(item.sales_price)) : item.sales_price}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.qty_display=='true' ? item.qty : '-'}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.cbm}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.uom}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.gross_weight}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.gross_weight * item.qty | number}}</td>
-              <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price != 'Market Price' ? ('$' + parse_float(item.price * 0.2)) : item.price}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.moq}}</td>
               <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.created_at}}</td>
               <td class="border-b">
@@ -95,3 +99,41 @@
     </div>
   </div>
 </div>
+<table id="export-table" style="display: none;">
+  <thead>
+    <tr>
+      <td width="3%">Category</td>
+      <td width="3%">SQ</td>
+      <td width="10%">Item No.</td>
+      <td width="15%">品名</td>
+      <td width="20%">Name</td>
+      <td width="20%">Model</td>
+      <td width="3%">Price</td>
+      <td width="3%">Sales Price</td>
+      <td width="3%">Qty</td>
+      <td width="3%">Unit</td>
+      <td width="3%">G.W. (lb)</td>
+      <td width="3%">Total G.W.(lb)</td>
+      <td width="3%">max order q'ty</td>
+      <td width="3%">cbm</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of globalService.items">
+      <td>{{item['category']}}</td>
+      <td>XA</td>
+      <td>{{item['inventory_id']}}</td>
+      <td>{{item['vendor_description']}}</td>
+      <td>{{item['description']}}</td>
+      <td>{{item['packing_info']}}</td>
+      <td>{{item['price']}}</td>
+      <td>{{item['sales_price']}}</td>
+      <td>{{item['qty']}}</td>
+      <td>{{item['uom']}}</td>
+      <td>{{item['gross_weight']}}</td>
+      <td>{{item['gross_weight'] ? parse_float(item['gross_weight'] * item['qty']) : ''}}</td>
+      <td>{{item['moq']}}</td>
+      <td>{{item['cbm']}}</td>
+    </tr>
+  </tbody>
+</table>
