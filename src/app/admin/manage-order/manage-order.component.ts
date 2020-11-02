@@ -410,6 +410,7 @@ export class ManageOrderComponent implements OnInit {
       if (data['data'] == true) {
         this.toast.success(`Order ${this.selected_order['order_id']} status changed successfully`, 'Success');
         this.get_orders();
+        this.send_mail_order_status_update(this.selected_order);
       } else {
         this.toast.error('There had been a database error. Please try again later.', 'Error');
       }
@@ -418,6 +419,25 @@ export class ManageOrderComponent implements OnInit {
       this.toast.error('There had been a database error. Please try again later.', 'Error');
       this.loading = false;
     })
+  }
+  send_mail_order_status_update = (order) => {
+    let user = this.users.filter(user => user['id'] == order['customer_id'])[0];
+    console.log(order)
+    console.log(user)
+    this.api.sendStatusUpdateMail(this.parseService.encode({
+      user: JSON.stringify(user),
+      order: JSON.stringify(order),
+      subject: `Your order has been updated!`,
+      message: `Hi ${user['name']}, Your order has been updated and ${order['status']}. ${order['status'] == 'shipped' ? 'Shipment date is ' + order['shipment_date'] + ' and reference ID is ' + order['shipment_ref_number'] + '.' : 'You will be get notified if your order is shipped.'} Thank you for your business. \n\r ${user['company']} `
+    })).pipe(first()).subscribe(data => {
+      if (data['data'] == true) {
+        this.toast.success('Notification email sent to user.', 'Success');
+      }
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
+    });
   }
   export_excel = (po_number) => {
     if(po_number){

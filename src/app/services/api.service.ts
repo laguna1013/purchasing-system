@@ -97,6 +97,12 @@ export class ApiService {
         return res;
       }))
   }
+  getPsAdmin(data){
+    return this.http.post(`${api_url}/${controller}/get_ps_admin`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
   updateOrderStatus(data){
     return this.http.post(`${api_url}/${controller}/update_order_status`, data)
       .pipe(map(res => {
@@ -128,7 +134,19 @@ export class ApiService {
       }))
   }
   sendMail(data){
-    return this.http.post(`${api_url}/${controller}/send_mail`, data)
+    return this.http.post(`${api_url}/${controller}/send_mail_to_user`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  sendMailToAdmin(data){
+    return this.http.post(`${api_url}/${controller}/send_mail_to_admin`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  sendStatusUpdateMail(data){
+    return this.http.post(`${api_url}/${controller}/send_status_update_mail`, data)
       .pipe(map(res => {
         return res;
       }))

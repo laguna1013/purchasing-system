@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Item } from '../admin/item/item';
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +13,7 @@ export class GlobalService {
   frozen_cbf_pallet = 76.00;
   price_tbded = false;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   sum_total_cbm_dry = (ordered_item) => {
     let sum = 0;
@@ -74,12 +75,40 @@ export class GlobalService {
         })
       })
     }
-    return sum;
+    return this.parse_float(sum);
   }
   parse_float = (val) => {
     return Math.floor(parseFloat(val) * 100) / 100;
   }
   parse_int = (val) => {
     return parseInt(val);
+  }
+  // For emails
+  get_item_details = (items) => {
+    let order_details = [];
+    items.forEach(item => {
+      this.items.forEach(gitem => {
+        if(gitem['id'] == item['item_id']){
+          order_details.push({
+            "branch_id": this.authService.currentUser['name'],
+            "g_weight": gitem['gross_weight'],
+            "i_id": gitem['inventory_id'],
+            "v_desc": gitem['vendor_description'],
+            "desc": gitem['description'],
+            "p_info": gitem['packing_info'],
+            "cost": gitem['price'],
+            "qty": item['qty'],
+            "uom": gitem['uom'],
+            "subtotal": gitem['price'] != '' && gitem['price'] != 'Market Price' ? this.parse_float(parseFloat(gitem['price']) * item['qty']).toFixed(2) : 'TBD',
+            "gw": gitem['gross_weight'],
+            "t_gw": gitem['gross_weight'] ? this.parse_float(parseFloat(gitem['gross_weight']) * item['qty']).toFixed(2) : '',
+            "subcharge": gitem['price'] != '' && gitem['price'] != 'Market Price' ? this.parse_float(parseFloat(gitem['price']) * item['qty'] * 0.2).toFixed(2) : 'TBD',
+            "moq": gitem['moq'],
+            "cbm": gitem['cbm']
+          });
+        }
+      })
+    })
+    return order_details;
   }
 }

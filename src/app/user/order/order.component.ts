@@ -50,6 +50,7 @@ export class OrderComponent implements OnInit {
   cbm_tbded: boolean = false;
 
   user: Object;
+  admin: Object;
 
   search_key = '';
 
@@ -58,6 +59,26 @@ export class OrderComponent implements OnInit {
     this.user = this.authService.currentUser();
     this.getItem();
     this.getOrders(this.user['id']);
+    this.get_admin(this.user['company']);
+  }
+  get_admin = (company) => {
+    this.loading = true;
+    this.api.getPsAdmin(this.parseService.encode({
+      company: company
+    })).pipe(first()).subscribe(
+      data => {
+        if (data['status'] == 'success') {
+          this.admin = [...data['data']][0];
+        } else {
+          this.toast.error('There had been a database error. Please try again later.', 'Error');
+        }
+        this.loading = false;
+      },
+      error => {
+        this.toast.error('There had been a database error. Please try again later.', 'Error');
+        this.loading = true;
+      }
+    );
   }
   category_change = (event) => {
     this.category = event.target.value;
@@ -227,7 +248,7 @@ export class OrderComponent implements OnInit {
       if (data['data'] == true) {
         this.toast.success('Your order has been placed successfully.', 'Success');
         this.getOrders(this.user['id']);
-        this.send_email(items);
+        this.send_mail_to_user(items);
       }
       this.loading = false;
     }, error => {
@@ -264,49 +285,51 @@ export class OrderComponent implements OnInit {
       this.toast.error('No items were added.', 'Error');
     }
   }
-  send_email = (items) => {
-    console.log(items)
-    // let order_details = [];
-    // items.forEach(item => {
-    //   this.globalService.items.forEach(gitem => {
-    //     if (gitem['id'] == item['item_id']) {
-    //       order_details.push({
-    //         "branch_id": this.user['name'],
-    //         "g_weight": gitem['gross_weight'],
-    //         "i_id": gitem['inventory_id'],
-    //         "v_desc": gitem['vendor_description'],
-    //         "desc": gitem['description'],
-    //         "p_info": gitem['packing_info'],
-    //         "cost": gitem['price'],
-    //         "qty": item['qty'],
-    //         "uom": gitem['uom'],
-    //         "subtotal": gitem['price'] != '' && gitem['price'] != 'Market Price' ? this.parse_float(parseFloat(gitem['price']) * item['qty']).toFixed(2) : 'TBD',
-    //         "gw": gitem['gross_weight'],
-    //         "t_gw": gitem['gross_weight'] ? this.parse_float(parseFloat(gitem['gross_weight']) * item['qty']).toFixed(2) : '',
-    //         "subcharge": gitem['price'] != '' && gitem['price'] != 'Market Price' ? this.parse_float(parseFloat(gitem['price']) * item['qty'] * 0.2).toFixed(2) : 'TBD',
-    //         "moq": gitem['moq'],
-    //         "cbm": gitem['cbm']
-    //       });
-    //     }
-    //   })
-    // })
-    // this.api.sendMail(this.parseService.encode({
-    //   to: this.user['email'],
-    //   user_name: this.user['name'],
-    //   company: this.user['company'],
-    //   subject: "Your order has been placed successfully",
-    //   message: "Order details will be attached.",
-    //   order_details: JSON.stringify(order_details),
-    //   po_id: this.po_number
-    // })).pipe(first()).subscribe(data => {
-    //   if (data['data'] == true) {
-    //     this.toast.success('Purchasing order mail sent successfully to your email.', 'Success');
-    //   }
-    //   this.loading = false;
-    // }, error => {
-    //   this.loading = false;
-    //   this.toast.error('There is an issue with server. Please try again later.', 'Error');
-    // });
+  send_mail_to_user = (items) => {
+    this.api.sendMail(this.parseService.encode({
+      item_details: JSON.stringify(this.globalService.get_item_details(items)),
+      total_price: this.globalService.sum_total_price(items),
+      info_dry: JSON.stringify(this.globalService.sum_total_cbm_dry(items)),
+      info_frozen: JSON.stringify(this.globalService.sum_total_cbm_frozen(items)),
+      order_id: this.po_number,
+      user_name: this.user['name'],
+      company: this.user['company'],
+      to: this.user['email'],
+      subject: "Your order has been placed successfully",
+      message: "Your order has been placed successfully and notified to purchasing system department admin. You will be get notified when the order is approved and shipped.",
+    })).pipe(first()).subscribe(data => {
+      if (data['status'] == 'success') {
+        this.send_mail_to_admin(items);
+        this.toast.success('Purchasing order mail sent successfully to your email.', 'Success');
+      }
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
+    });
+  }
+  send_mail_to_admin = (items) => {
+    this.api.sendMailToAdmin(this.parseService.encode({
+      item_details: JSON.stringify(this.globalService.get_item_details(items)),
+      total_price: this.globalService.sum_total_price(items),
+      info_dry: JSON.stringify(this.globalService.sum_total_cbm_dry(items)),
+      info_frozen: JSON.stringify(this.globalService.sum_total_cbm_frozen(items)),
+      order_id: this.po_number,
+      admin_name: this.admin['name'],
+      user_name: this.user['name'],
+      company: this.user['company'],
+      to: this.admin['email'],
+      subject: "There is an incoming order",
+      message: `${this.user['name']} has placed an order. Please review it and take a further action.`,
+    })).pipe(first()).subscribe(data => {
+      if (data['status'] == 'success') {
+        //this.toast.success('Purchasing order mail sent successfully to your email.', 'Success');
+      }
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
+    });
   }
   select_order = (order_id) => {
     this.selected_order = this.globalService.orders.filter(item => item['order_id'] == order_id)[0];
