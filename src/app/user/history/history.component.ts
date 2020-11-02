@@ -36,10 +36,6 @@ export class HistoryComponent implements OnInit {
   qty = 0;
   filter = 'all';
 
-  dry_cbf_pallet = 83.50;
-  frozen_cbf_pallet = 76.00;
-
-
   ngOnInit(): void {
     this.globalService.menu = 'history';
     this.get_item();
@@ -149,89 +145,6 @@ export class HistoryComponent implements OnInit {
         this.loading = true;
       }
     );
-  }
-  parse_float = (val) => {
-    return Math.floor(parseFloat(val) * 100) / 100;
-  }
-  sum_total_price = (ordered_item) => {
-    let sum = 0;
-    this.price_tbded = false;
-    if(ordered_item.length != 0){
-      ordered_item.forEach(item => {
-        this.globalService.items.forEach(_item => {
-          if(item['item_id'] == _item['id']){
-            if((_item['price'] != '') && (_item['price'] != 'Market Price')){
-              sum += this.parse_float(_item['price']) * item['qty'];
-            }else{
-              this.price_tbded = true;
-            }
-          }
-        })
-      })
-    }
-    return sum;
-  }
-  sum_total_cbm = (ordered_item) => {
-    let sum = 0;
-    this.cbm_tbded = false;
-    if(ordered_item.length != 0){
-      ordered_item.forEach(item => {
-        this.globalService.items.forEach(_item => {
-          if(item['item_id'] == _item['id']){
-            if(_item['cbm'] != ''){
-              sum += this.parse_float(_item['cbm']) * item['qty'];
-            }else{
-              this.cbm_tbded = true;
-            }
-          }
-        })
-      })
-    }
-    return sum;
-  }
-  sum_total_cbm_dry = (ordered_item) => {
-    let sum = 0;
-    if (ordered_item.length != 0) {
-      ordered_item.forEach(item => {
-        this.globalService.items.forEach(_item => {
-          if (item['item_id'] == _item['id']) {
-            if ((_item['cbm'] != '') && (_item['category'] == 'dry')) {
-              sum += this.parse_float(_item['cbm']) * item['qty'];
-            }
-          }
-        })
-      })
-    }
-    return {
-      total_cbf: sum,
-      total_pallet: Math.floor(sum / this.dry_cbf_pallet) + 1,
-      reminder_cbf: Math.round((sum % this.dry_cbf_pallet) * 100) / 100,
-      reminder_percent: Math.round((sum % this.dry_cbf_pallet) / this.dry_cbf_pallet * 100),
-      fill_cbf: Math.round((this.dry_cbf_pallet - Math.round((sum % this.dry_cbf_pallet) * 100) / 100) * 100) / 100,
-      one_pallet_cbf: this.dry_cbf_pallet
-    }
-  }
-  sum_total_cbm_frozen = (ordered_item) => {
-    let sum = 0;
-    if (ordered_item.length != 0) {
-      ordered_item.forEach(item => {
-        this.globalService.items.forEach(_item => {
-          if (item['item_id'] == _item['id']) {
-            if ((_item['cbm'] != '') && (_item['category'] == 'frozen')) {
-              sum += this.parse_float(_item['cbm']) * item['qty'];
-            }
-          }
-        })
-      })
-    }
-    return {
-      total_cbf: sum,
-      total_pallet: Math.floor(sum / this.frozen_cbf_pallet) + 1,
-      reminder_cbf: Math.round((sum % this.frozen_cbf_pallet) * 100) / 100,
-      reminder_percent: Math.round((sum % this.frozen_cbf_pallet) / this.frozen_cbf_pallet * 100),
-      fill_cbf: Math.round((this.frozen_cbf_pallet - Math.round((sum % this.frozen_cbf_pallet) * 100) / 100) * 100) / 100,
-      one_pallet_cbf: this.frozen_cbf_pallet
-    }
   }
   format_date_time = (date) => {
     return moment(date, 'YYYY-MM-DD HH:mm:ss').format('hh:mm A MMM DD ddd, YYYY')

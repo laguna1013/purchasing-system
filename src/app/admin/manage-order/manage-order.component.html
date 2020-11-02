@@ -91,31 +91,31 @@
                 <div class="flex flex-row justify-around md:ml-5 w-full">
                   <div class="flex flex-col justify-between">
                     <circle-progress
-                      [percent]="sum_total_cbm_dry(order_detail)['reminder_percent']"
+                      [percent]="globalService.sum_total_cbm_dry(order_detail)['reminder_percent']"
                       [subtitle]="[
                         'Dry CBF',
-                        sum_total_cbm_dry(order_detail)['fill_cbf'] + ' lb to fill up.',
-                        'Total: ' + sum_total_cbm_dry(order_detail)['total_pallet'] + ' pallet' + (sum_total_cbm_dry(order_detail)['total_pallet'] == 1 ? '' : 's')
+                        globalService.sum_total_cbm_dry(order_detail)['fill_cbf'] + ' lb to fill up.',
+                        'Total: ' + globalService.sum_total_cbm_dry(order_detail)['total_pallet'] + ' pallet' + (globalService.sum_total_cbm_dry(order_detail)['total_pallet'] == 1 ? '' : 's')
                       ]"
                       [outerStrokeColor]="'#FBC500'"
                     ></circle-progress>
-                    <small>Total Dry CBF(lb): {{sum_total_cbm_dry(order_detail)['total_cbf'] | number:'.2-2'}}</small>
-                    <small>1 pallet CBF(lb): {{sum_total_cbm_dry(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
-                    <small>Total pallets: {{sum_total_cbm_dry(order_detail)['total_pallet']}}</small>
+                    <small>Total Dry CBF(lb): {{globalService.sum_total_cbm_dry(order_detail)['total_cbf'] | number:'.2-2'}}</small>
+                    <small>1 pallet CBF(lb): {{globalService.sum_total_cbm_dry(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
+                    <small>Total pallets: {{globalService.sum_total_cbm_dry(order_detail)['total_pallet']}}</small>
                   </div>
                   <div class="flex flex-col justify-between">
                     <circle-progress
-                      [percent]="sum_total_cbm_frozen(order_detail)['reminder_percent']"
+                      [percent]="globalService.sum_total_cbm_frozen(order_detail)['reminder_percent']"
                       [subtitle]="[
                         'Frozen CBF',
-                        sum_total_cbm_frozen(order_detail)['fill_cbf'] + ' lb to fill up.',
-                        'Total: ' + sum_total_cbm_frozen(order_detail)['total_pallet'] + ' pallet' + (sum_total_cbm_frozen(order_detail)['total_pallet'] == 1 ? '' : 's')
+                        globalService.sum_total_cbm_frozen(order_detail)['fill_cbf'] + ' lb to fill up.',
+                        'Total: ' + globalService.sum_total_cbm_frozen(order_detail)['total_pallet'] + ' pallet' + (globalService.sum_total_cbm_frozen(order_detail)['total_pallet'] == 1 ? '' : 's')
                       ]"
                       [outerStrokeColor]="'#1C3FAA'"
                     ></circle-progress>
-                    <small>Total Frozen CBF(lb): {{sum_total_cbm_frozen(order_detail)['total_cbf'] | number:'.2-2'}}</small>
-                    <small>1 pallet CBF(lb): {{sum_total_cbm_frozen(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
-                    <small>Total pallets: {{sum_total_cbm_frozen(order_detail)['total_pallet']}}</small>
+                    <small>Total Frozen CBF(lb): {{globalService.sum_total_cbm_frozen(order_detail)['total_cbf'] | number:'.2-2'}}</small>
+                    <small>1 pallet CBF(lb): {{globalService.sum_total_cbm_frozen(order_detail)['one_pallet_cbf'] | number:'.2-2'}}</small>
+                    <small>Total pallets: {{globalService.sum_total_cbm_frozen(order_detail)['total_pallet']}}</small>
                   </div>
                 </div>
               </div>
@@ -127,7 +127,7 @@
                   </div>
                   <div class="flex font-bold">
                     <div class="mr-1">Total charge:</div>
-                    <div class="text-theme-6">{{sum_total_price(order_detail) | currency}} {{price_tbded ? '+' : ''}}</div>
+                    <div class="text-theme-6">{{globalService.sum_total_price(order_detail) | currency}} {{globalService.price_tbded ? '+' : ''}}</div>
                   </div>
                 </div>
                 <div class="inline-flex items-center">
@@ -172,7 +172,7 @@
                       <div class="font-medium block truncate">{{_item['vendor_description']}}({{_item['description']}})</div>
                       <div class="flex">
                         <span class="text-gray-600 text-xs mr-3">{{item.qty}} {{item.qty == 1 ? _item.uom : _item.uom + 's'}}</span>
-                        <span class="text-theme-6 text-xs font-bold">{{_item.price != '' && _item.price != 'Market Price' ? '$' + parse_float(parse_float(_item.price) * item.qty) : 'TBD'}}</span>
+                        <span class="text-theme-6 text-xs font-bold">{{_item.price != '' && _item.price != 'Market Price' ? '$' + globalService.parse_float(globalService.parse_float(_item.price) * item.qty) : 'TBD'}}</span>
                       </div>
                     </div>
                     <div class="hidden md:flex items-center">
@@ -234,9 +234,9 @@
           <td>{{gitem['price']}}</td>
           <td>{{item['qty']}}</td>
           <td>{{gitem['uom']}}</td>
-          <td>{{gitem['price'] != '' && gitem['price'] != 'Market Price' ? parse_float(gitem['price'] * item['qty']) : 'TBD'}}</td>
+          <td>{{gitem['price'] != '' && gitem['price'] != 'Market Price' ? globalService.parse_float(gitem['price'] * item['qty']) : 'TBD'}}</td>
           <td>{{gitem['gross_weight']}}</td>
-          <td>{{gitem['gross_weight'] ? parse_float(gitem['gross_weight'] * item['qty']) : ''}}</td>
+          <td>{{gitem['gross_weight'] ? globalService.parse_float(gitem['gross_weight'] * item['qty']) : ''}}</td>
           <td>{{gitem['sales_price']}}</td>
           <td>{{gitem['moq']}}</td>
           <td>{{gitem['cbm']}}</td>
