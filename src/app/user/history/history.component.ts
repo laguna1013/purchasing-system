@@ -74,7 +74,7 @@ export class HistoryComponent implements OnInit {
   get_item = () => {
     this.loading = true;
     this.api.getItem(this.parseService.encode({
-      company: this.authService.currentUser()['company']
+      branch_id: this.authService.currentUser()['branch_id']
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {

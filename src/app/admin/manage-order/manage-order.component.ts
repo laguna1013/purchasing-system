@@ -60,7 +60,7 @@ export class ManageOrderComponent implements OnInit {
   get_orders = () => {
     this.loading = true;
     this.api.getAllOrders(this.parseService.encode({
-      company: this.authService.currentUser()['company']
+      branch_id: this.authService.currentUser()['branch_id']
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
@@ -79,7 +79,7 @@ export class ManageOrderComponent implements OnInit {
   get_item = () => {
     this.loading = true;
     this.api.getItem(this.parseService.encode({
-      company: this.authService.currentUser()['company']
+      branch_id: this.authService.currentUser()['branch_id']
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
@@ -422,15 +422,19 @@ export class ManageOrderComponent implements OnInit {
   }
   send_mail_order_status_update = (order) => {
     let user = this.users.filter(user => user['id'] == order['customer_id'])[0];
-    console.log(order)
-    console.log(user)
     this.api.sendStatusUpdateMail(this.parseService.encode({
       user: JSON.stringify(user),
       order: JSON.stringify(order),
       subject: `Your order has been updated!`,
-      message: `Hi ${user['name']}, Your order has been updated and ${order['status']}. ${order['status'] == 'shipped' ? 'Shipment date is ' + order['shipment_date'] + ' and reference ID is ' + order['shipment_ref_number'] + '.' : 'You will be get notified if your order is shipped.'} Thank you for your business. \n\r ${user['company']} `
+      message: `
+        <span style="font-size: 15px;">Hi <em>${user['name']}</em></span>,
+        <br/>
+        Your order <span style="color: red; font-weight: 700;">${order['order_id']}</span> has been updated and <span style="color: red;">${order['status']}</span>. <br/> ${order['status'] == 'shipped' ?
+            'Shipment date is <span style="color: blue;">' + order['shipment_date'] + '</span> and reference ID is <span style="color: blue;">' + order['shipment_ref_number'] + '</span>.' :
+            'You will be get notified if your order is shipped.'} Thank you for your business. <br/><br/> <span style="font-size: 15px; color: red;">${user['company']}</span>
+        `
     })).pipe(first()).subscribe(data => {
-      if (data['data'] == true) {
+      if (data['status'] == 'success') {
         this.toast.success('Notification email sent to user.', 'Success');
       }
       this.loading = false;
