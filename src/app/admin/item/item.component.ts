@@ -40,7 +40,7 @@ export class ItemComponent implements OnInit {
     this.loading = true;
     this.api.getItem(
       this.parseService.encode({
-        branch_id: this.authService.currentUser()['branch_id']
+        company: this.authService.currentUser()['company']
       })
     ).pipe(first()).subscribe(
       data => {
@@ -263,6 +263,6 @@ export class ItemComponent implements OnInit {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'All items');
     /* save to file */
-    XLSX.writeFile(wb, `ITEMS_${this.authService.currentUser()['branch_id']}_${moment().format('YYYY-MM-DD')}.xlsx`);
+    XLSX.writeFile(wb, `ITEMS_${this.authService.currentUser()['company']}_${moment().format('YYYY-MM-DD')}.xlsx`);
   }
 }

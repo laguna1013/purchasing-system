@@ -53,7 +53,7 @@
                       <div class="ml-auto flex items-center">
                         <div class="md:flex mr-5 hidden" (click)="get_order_details(item['order_id'])">
                           <i data-feather="user" class="w-4 h-4 text-blue-700 mr-2" appFeatherIcon></i>
-                          <span class="">{{get_user_name(item['customer_id'])}}( <span class="text-gray-600">{{get_user_email(item['customer_id'])}}</span> )</span>
+                          <span class="">{{get_user_name(item['customer_id'])}}( <span class="text-gray-600">{{get_user_email(item['customer_id'])}} | {{get_user_branch_id(item['customer_id'])}}</span> )</span>
                         </div>
                         <span class="sm:flex hidden py-1 px-2 mr-8 rounded-full text-xs bg-theme-{{item['status'] == 'pending' ? '12' : (item['status'] == 'approved' ? '9' : '1')}} text-white cursor-pointer font-medium">{{item['status']}}</span>
                         <button class="button button--sm px-2 mr-1 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="delete_order(item['order_id'])">
@@ -225,7 +225,7 @@
     <tr *ngFor="let item of order_detail">
       <ng-template ngFor let-gitem [ngForOf]="globalService.items" let-i="index">
         <ng-template [ngIf]="gitem['id']==item['item_id']">
-          <td>{{get_user_name(selected_order['customer_id'])}}</td>
+          <td>{{get_user_branch_id(selected_order['customer_id'])}}</td>
           <td>{{gitem['gross_weight']}}</td>
           <td>{{gitem['inventory_id']}}</td>
           <td>{{gitem['vendor_description']}}</td>

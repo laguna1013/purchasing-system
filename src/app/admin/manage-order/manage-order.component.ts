@@ -60,7 +60,7 @@ export class ManageOrderComponent implements OnInit {
   get_orders = () => {
     this.loading = true;
     this.api.getAllOrders(this.parseService.encode({
-      branch_id: this.authService.currentUser()['branch_id']
+      company: this.authService.currentUser()['company']
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
@@ -79,7 +79,7 @@ export class ManageOrderComponent implements OnInit {
   get_item = () => {
     this.loading = true;
     this.api.getItem(this.parseService.encode({
-      branch_id: this.authService.currentUser()['branch_id']
+      company: this.authService.currentUser()['company']
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
@@ -145,6 +145,12 @@ export class ManageOrderComponent implements OnInit {
     if (this.users.length != 0) {
       let ret = this.users.filter(item => item['id'] == id)[0];
       return ret['email'];
+    }
+  }
+  get_user_branch_id = (id) => {
+    if (this.users.length != 0) {
+      let ret = this.users.filter(item => item['id'] == id)[0];
+      return ret['branch_id'];
     }
   }
 

@@ -93,7 +93,7 @@ export class OrderComponent implements OnInit {
     this.loading = true;
     this.api.getItem(
       this.parseService.encode({
-        branch_id: this.authService.currentUser()['branch_id']
+        company: this.authService.currentUser()['company']
       })
     ).pipe(first()).subscribe(
       data => {
