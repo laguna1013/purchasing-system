@@ -2,7 +2,7 @@
 <div class="content">
   <div class="intro-y flex items-center mt-8">
     <h2 class="text-lg font-medium mr-auto flex">
-      My orders
+      Order Management
       <span *ngIf="loading" class="mr-3 absolute" style="left: 170px; top: -8px;">
         <app-loader></app-loader>
       </span>
@@ -64,6 +64,9 @@
                           <span class="">{{item.name}}( <span class="text-gray-600">{{item.email}} | {{item.branch}}</span> )</span>
                         </div>
                         <span class="sm:flex hidden py-1 px-2 mr-8 rounded-full text-xs bg-theme-{{item['status'] == 'pending' ? '12' : (item['status'] == 'processing' ? '9' : '1')}} text-white cursor-pointer font-medium">{{item['status']}}</span>
+                        <button *ngIf="item['status'] == 'completed'" class="button button--sm px-2 mr-1 border text-red-700 hover:bg-gray-300 focus:outline-none" (click)="delete_order(item['id'])">
+                          <span class="w-5 h-5 flex items-center justify-center"> <i data-feather="trash" class="w-4 h-4" appFeatherIcon></i> </span>
+                        </button>
                       </div>
                     </div>
                   </ng-template>

@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService, private cookieService: CookieService,) {
     if (authService.isLoggedIn()) {
       if(authService.currentUserRole == 'admin'){
-        router.navigate(['item']);
+        router.navigate(['orders']);
       }else{
         router.navigate(['order']);
       }
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
             }
             this.success_message = data['msg'];
             if(data['res']['role'] == 'admin'){
-              this.returnUrl = '/item';
+              this.returnUrl = '/orders';
             }else{
               this.returnUrl = '/order';
             }

@@ -9,6 +9,8 @@ const api_url = 'http://198.11.172.117/sbm-dashboard';
 
 const controller = 'ps';
 
+const purchasing_controller = 'purchasing';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,6 +33,7 @@ export class ApiService {
         return res;
       }))
   }
+  
   getItemById(data) {
     return this.http.post(`${api_url}/${controller}/get_item_by_id`, data)
       .pipe(map(res => {
@@ -147,6 +150,157 @@ export class ApiService {
   }
   sendStatusUpdateMail(data){
     return this.http.post(`${api_url}/${controller}/send_status_update_mail`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+
+
+  // Rebase 
+  purchasingSystemGetItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/get_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemAddBatchItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/add_batch_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemUpdateItemStatus(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/update_item_status`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemRemoveItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/remove_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemAddItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/add_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemGetItemById(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/get_item_by_id`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemUpdateItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/update_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+  // Orders 
+  purchasingSystemGetAllOrders(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/get_all_orders`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemGetOrderDetails(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/get_order_details`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemApproveItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/approve_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemRemoveApprovedItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/remove_approved_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemShipOrder(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/ship_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemCompleteOrder(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/complete_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+  // User 
+  purchasingSystemGetUserItems(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/get_user_items`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+  purchasingSystemCreateOrder(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/create_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+  purchasingSystemGetCurrentOrder(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/get_current_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemGetOrderedItems(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/get_ordered_items`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+  purchasingSystemAddOrderedItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/add_ordered_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+  purchasingSystemRemoveOrderDetailItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/remove_order_detail_item`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemPlaceOrder(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/place_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemCancelOrder(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/cancel_order`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+
+  purchasingSystemGetOrderHistory(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/get_order_history`, data)
+      .pipe(map(res => {
+        return res;
+      }))
+  }
+  purchasingSystemAcceptItem(data: FormData) {
+    return this.http.post(`${api_url}/${purchasing_controller}/accept_item`, data)
       .pipe(map(res => {
         return res;
       }))

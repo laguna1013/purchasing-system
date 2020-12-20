@@ -11,11 +11,11 @@ import * as XLSX from 'xlsx';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'app-history',
-  templateUrl: './history.component.html',
-  styleUrls: ['./history.component.css']
+  selector: 'app-orders',
+  templateUrl: './orders.component.html',
+  styleUrls: ['./orders.component.css']
 })
-export class HistoryComponent implements OnInit {
+export class OrdersComponent implements OnInit {
 
   constructor(
     public globalService: GlobalService,
@@ -32,19 +32,18 @@ export class HistoryComponent implements OnInit {
   filter = 'all'
 
   ngOnInit(): void {
-    this.globalService.menu = 'history';
+    this.globalService.menu = 'orders';
     this.get_orders();
   }
+
   get_orders = () => {
     this.loading = true;
-    this.api.purchasingSystemGetOrderHistory(this.parseService.encode({
+    this.api.purchasingSystemGetAllOrders(this.parseService.encode({
       company: this.authService.currentUser()['company'],
-      shop: this.authService.currentUser()['shop_name'],
-      branch: this.authService.currentUser()['branch_id']
+      shop: this.authService.currentUser()['shop_name']
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
-          console.log(data)
           this.orders = data['data'].filter((item: { [x: string]: string; }) => item['status'] != 'draft');
         } else {
           this.toast.error('There had been a database error. Please try again later.', 'Error');
@@ -58,7 +57,7 @@ export class HistoryComponent implements OnInit {
     );
   }
   get_order_details = (order_id) => {
-    this.router.navigate(['/history/detail/', order_id])
+    this.router.navigate(['/orders/detail/', order_id])
   }
   change_filter = (filter: string) => {
     this.filter = filter;
@@ -72,5 +71,33 @@ export class HistoryComponent implements OnInit {
   }
   format_date_time = (date) => {
     return moment(date, 'YYYY-MM-DD HH:mm:ss').format('hh:mm A MMM DD ddd, YYYY')
+  }
+  delete_order = (order_id) => {
+    // Swal.fire({
+    //   title: 'Are you sure?',
+    //   text: 'Do you want to remove this order? ' + order_id,
+    //   icon: 'warning',
+    //   showCancelButton: true,
+    //   confirmButtonText: 'Yes',
+    //   cancelButtonText: 'No'
+    // }).then((result) => {
+    //   if (result.value) {
+    //     this.loading = true;
+    //     this.api.deleteOrder(this.parseService.encode({
+    //       order_id: order_id
+    //     })).pipe(first()).subscribe(data => {
+    //       if (data['data'] == true) {
+    //         this.toast.success('Order deleted successfully', 'Success');
+    //         this.get_orders();
+    //       } else {
+    //         this.toast.error('There had been a database error. Please try again later.', 'Error');
+    //       }
+    //       this.loading = false;
+    //     }, error => {
+    //       this.toast.error('There had been a database error. Please try again later.', 'Error');
+    //       this.loading = false;
+    //     })
+    //   }
+    // })
   }
 }

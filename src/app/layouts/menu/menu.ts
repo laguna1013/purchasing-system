@@ -1,26 +1,45 @@
 export const MENU: Object[] = [
+  // {
+  //   link: 'overview',
+  //   label: 'Overview',
+  //   icon: 'eye',
+  //   role: 'admin'
+  // },
   {
-    link: 'item',
-    label: 'Items',
-    icon: 'box',
+    link: 'orders',
+    label: 'Orders management',
+    icon: 'database',
     role: 'admin'
   },
   {
+    link: 'items',
+    label: 'Items management',
+    icon: 'box',
+    role: 'admin'
+  },
+  
+  // {
+  //   link: 'item',
+  //   label: 'Items-old',
+  //   icon: 'box',
+  //   role: 'admin'
+  // },
+  // {
+  //   link: 'manage-order',
+  //   label: 'Orders-old',
+  //   icon: 'database',
+  //   role: 'admin'
+  // },
+  {
     link: 'order',
-    label: 'Orders',
+    label: 'Place order',
     icon: 'database',
     role: 'user'
   },
   {
     link: 'history',
-    label: 'History',
+    label: 'Order history',
     icon: 'activity',
     role: 'user'
-  },
-  {
-    link: 'manage-order',
-    label: 'Orders',
-    icon: 'database',
-    role: 'admin'
   },
 ];

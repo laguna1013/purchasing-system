@@ -1,0 +1,297 @@
+<app-menu></app-menu>
+<div class="content">
+  <div class="intro-y flex items-center mt-8">
+    <h2 class="text-lg font-medium mr-auto">
+      Order details and shipment management
+    </h2>
+  </div>
+  <div class="grid grid-cols-12 gap-6">
+      <!-- BEGIN: Profile Menu -->
+    <div class="col-span-12 lg:col-span-4 xxl:col-span-3 flex lg:block flex-col-reverse">
+      <div class="intro-y box mt-5">
+        <div class="relative flex items-center p-5">
+          <div>
+            <div class="font-medium text-base">#{{order_detail['order_ref']}}</div>
+            <div class="text-gray-600">{{order_detail['order_time']}}</div>
+          </div>
+          <div class="ml-auto">
+            <div class="font-medium text-base">Type: {{order_detail['order_type']}}</div>
+            <div class="text-gray-600">{{order_detail['branch']}}</div>
+          </div>
+        </div>
+        <div class="pb-5 pl-5 pr-5 border-t border-gray-200">
+          <div class="mt-5 hover:text-theme-10 cursor-pointer 
+            {{selected_item['inventory_id']  == item['inventory_id'] ? 'font-bold text-theme-1' : ''}}" 
+            *ngFor="let item of order_items" 
+            (click)="select_item(item)"
+          >
+            <a class="flex items-center flex">
+              <span>{{item.inventory_id}}</span>
+              <span class="ml-auto">{{get_approved_qty(item.id)}}/{{item.order_qty}}</span>
+            </a>
+            <a class="flex items-center">{{item.description}} </a>
+          </div>
+        </div>
+        <div class="p-5 border-t flex">
+          <button *ngIf="order_detail['status'] != 'completed'" type="button" class="button block bg-theme-1 text-white" (click)="complete_order()">Complete order</button>
+          <div class="text-theme-1" *ngIf="order_detail['status'] == 'completed'">This order has been completed. </div>
+          <button type="button" class="button w-20 border text-gray-700 ml-auto" (click)="back()">Back</button>
+        </div>
+      </div>
+    </div>
+    <!-- END: Profile Menu -->
+    <div class="col-span-12 lg:col-span-8 xxl:col-span-9">
+      <!-- BEGIN: Display Information -->
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 lg:col-span-6 xxl:col-span-6">
+          <div class="intro-y box lg:mt-5">
+            <div class="flex items-center p-5 border-b border-gray-200">
+              <h2 class="font-medium text-base mr-auto">
+                  Item Information
+              </h2>
+            </div>
+            <div class="p-5">
+              <div *ngIf="selected_item['inventory_id'] != ''" class="flex items-start px-5">
+                <div class="w-full flex flex-col lg:flex-row items-center">
+                  <div class="w-16 h-16 image-fit">
+                    <img class="rounded-md" src="{{selected_item['image'] != '' ? selected_item['image'] : 'assets/images/place_holder.png'}}" alt="Purchasing system image"/>
+                  </div>
+                  <div class="lg:ml-4 text-center lg:text-left mt-3 lg:mt-0">
+                    <a href="" class="font-medium">{{selected_item['description']}}</a> 
+                    <div class="text-gray-600 text-xs">{{selected_item['vendor_description']}}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center lg:text-left pt-5 pl-5 pr-5">
+                <div class="flex mb-1">
+                  <div class="w-1/2">
+                    <span>Item No.: </span>
+                    <span class="font-bold">{{selected_item['inventory_id']}}</span>
+                  </div>
+                  <div class="w-1/2">
+                    <span>Category: </span>
+                    <span class="font-bold">{{selected_item['category']}}</span>
+                  </div>
+                </div>
+                <div class="flex mb-1">
+                  <div class="w-1/2">
+                    <span>Packing info: </span>
+                    <span class="font-bold">{{selected_item['packing_info'] ? selected_item['packing_info'] : 'unknown'}}</span>
+                  </div>
+                  <div class="w-1/2">
+                    <span>Unit: </span>
+                    <span class="font-bold">{{selected_item['unit'] ? selected_item['unit'] : 'unknown'}}</span>
+                  </div>
+                </div>
+                <div class="flex mb-1">
+                  <div class="w-1/2">
+                    <span>CBF: </span>
+                    <span class="font-bold">{{selected_item['cbf'] ? selected_item['cbf'] : 'unknown'}}</span>
+                  </div>
+                  <div class="w-1/2">
+                    <span>Gross weight: </span>
+                    <span class="font-bold">{{selected_item['gross_weight'] ? selected_item['gross_weight'] : 'unknown'}}</span>
+                  </div>
+                </div>
+                <div class="flex mb-1">
+                  <div class="w-1/2">
+                    <span>Qty in stock: </span>
+                    <span class="font-bold">{{selected_item['qty'] ? selected_item['qty'] : 'unknown'}}</span>
+                  </div>
+                  <div class="w-1/2">
+                    <span>Max order qty: </span>
+                    <span class="font-bold">{{selected_item['moq'] ? selected_item['moq'] : 'unknown'}}</span>
+                  </div>
+                </div>
+                <div class="flex mb-1">
+                  <div class="w-1/2">
+                    <span>Ordered qty: </span>
+                    <span class="font-bold">{{selected_item['order_qty']}}</span>
+                  </div>
+                  <div class="w-1/2">
+                    <span>Total approved/shipped qty: </span>
+                    <span class="font-bold">{{get_approved_qty(selected_item['id'])}}</span>
+                  </div>
+                </div>
+                <div class="flex mb-1 pb-3 border-b">
+                  <div class="w-1/2">
+                    <span>Remaining qty: </span>
+                    <span class="font-bold">{{selected_item['order_qty'] - get_approved_qty(selected_item['id'])}}</span>
+                  </div>
+                  <div class="w-1/2">
+                    <span>Item price: </span>
+                    <span class="font-bold">{{selected_item['price'] | currency}}</span>
+                  </div>
+                </div>
+                <div class="flex mt-2">
+                  <div class="w-1/2 ml-2 mr-2">
+                    <input type="number" step="0.1" min="0" max="{{selected_item['order_qty'] - get_approved_qty(selected_item['id'])}}" 
+                      class="input input--sm w-full border mt-2" placeholder="Approvement qty. Max: {{selected_item['order_qty'] - get_approved_qty(selected_item['id'])}}"
+                      [(ngModel)]="approvement_qty"
+                    />
+                    <div class="text-xs text-gray-600 mt-1">Input approvement qty. Max: {{selected_item['order_qty'] - get_approved_qty(selected_item['id'])}}</div>
+                  </div>
+                  <div class="w-1/2 ml-2 mr-2">
+                    <input type="number" step="0.01" min="0" class="input input--sm w-full border mt-2" 
+                      placeholder="Approvement price"
+                      [(ngModel)]="approvement_price"
+                    />
+                    <div class="text-xs text-gray-600 mt-1">Input approvement price</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-5 border-t">
+              <div class="flex justify-end">
+                <button *ngIf="order_detail['status'] != 'completed'" type="button" class="button w-20 bg-theme-1 text-white" (click)="approve_item()">Approve</button>
+                <div class="text-theme-9" *ngIf="order_detail['status'] == 'completed'">This order has been completed. </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-12 lg:col-span-6 xxl:col-span-6">
+          <div class="intro-y box lg:mt-5">
+            <div class="flex items-center p-5 border-b border-gray-200">
+              <h2 class="font-medium text-base mr-auto">
+                  Approvement
+              </h2>
+            </div>
+            <div class="p-5">
+              <div *ngIf="order_approvements.length == 0" class="mb-3 px-5">Please add items to approve</div>
+              <div *ngFor="let item of order_approvements" class="flex items-start px-5 mb-3">
+                <div class="w-full flex flex-col lg:flex-row items-center">
+                  <div class="w-12 h-12 image-fit">
+                    <img class="rounded-lg" src="{{item['image'] != '' ? item['image'] : 'assets/images/place_holder.png'}}" alt="Purchasing system image"/>
+                  </div>
+                  <div class="lg:ml-4 text-center lg:text-left mt-3 lg:mt-0 w-48 truncate">
+                    <div class="font-medium">{{item['description']}}</div> 
+                    <div class="text-gray-600 text-xs">{{item['vendor_description']}}</div>
+                  </div>
+                  <div class="ml-2">
+                    <p class="text-theme-6 text-xs">{{item.approved_price | currency}}</p>
+                    <p class="{{item.category == 'frozen' ? 'text-theme-1' : 'text-theme-12'}} text-xs">{{item.cbf | number}}</p>
+                  </div>
+                  <div class="ml-2">
+                    <span class="font-bold">x {{item.approved_qty}}</span>
+                  </div>
+                  <div class="ml-2">
+                    <span class="rounded-full border {{item.category == 'frozen' ? 'text-theme-1 border-theme-1' : 'text-theme-12 border-theme-12'}} text-xs p-1">{{item.category}}</span>
+                  </div>
+                  <div class="ml-auto w-12">
+                    <p class="font-bold text-theme-6">{{item.approved_price * item.approved_qty | currency}}</p>
+                    <p class="font-bold {{item.category == 'frozen' ? 'text-theme-1' : 'text-theme-12'}}">{{item.cbf * item.approved_qty | number}} (lb)</p>
+                  </div>
+                  <div class="ml-auto">
+                    <button class="button px-2 mr-1 mb-2 border text-gray-700" (click)="remove_approved_item(item.approvement_id)">
+                      <i data-feather="trash" class="text-theme-6 w-4 h-4 flex items-center justify-center" appFeatherIcon></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3 border-t">
+                <div class="mt-2 flex justify-end">
+                  <span class="font-bold text-theme-6 text-lg">{{get_total_approvement_price() | currency}}</span>
+                </div>
+                <div class="mt-2 flex justify-end">
+                  <div>
+                    <div class="flex items-center" *ngIf="get_total_approvement_cbf().frozen != 0">
+                      <i data-feather="box" class="text-theme-1 w-4 h-4 mr-2" appFeatherIcon></i>
+                      <span class="font-bold text-theme-1 text-lg">{{get_total_approvement_cbf().frozen | number}} lb </span>
+                      <span class="text-theme-1 text-lg ml-2">({{get_pallet(get_total_approvement_cbf().frozen / frozen_cbf_pallet) | number}} pallets)</span>
+                    </div>
+                    <div class="flex items-center" *ngIf="get_total_approvement_cbf().dry != 0">
+                      <i data-feather="box" class="text-theme-12 w-4 h-4 mr-2" appFeatherIcon></i>
+                      <span class="font-bold text-theme-12 text-lg">{{get_total_approvement_cbf().dry | number}} lb </span>
+                      <span class="text-theme-12 text-lg ml-2">
+                        ({{get_pallet(get_total_approvement_cbf().dry / dry_cbf_pallet) | number}} pallets)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-5 border-t">
+              <div class="flex justify-end">
+                <button *ngIf="order_detail['status'] != 'completed'" type="button" class="button w-20 bg-theme-1 text-white" (click)="ship_items()">Ship</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END: Display Information -->
+      <!-- BEGIN: Personal Information -->
+      <div class="intro-y box mt-5">
+        <div class="flex items-center p-5 border-b border-gray-200">
+          <h2 class="font-medium text-base mr-auto">
+              Partial shipments({{partial_shipments.length}})
+          </h2>
+        </div>
+        <div class="pl-5 pr-5">
+          <div class="accordion">
+            <div *ngFor="let item of partial_shipments" class="accordion__pane border-b border-gray-200 pb-4 pt-4"> 
+              <a href="javascript:;" class="accordion__pane__toggle font-medium block">
+                <div class="flex">
+                  <div class="w-1/2">
+                    <p class="font-medium">Ref: {{item.shipment_ref_number}}</p>
+                    <p class="text-gray-600">Shipment date: {{item.shipment_date}}</p>
+                  </div>
+                  <div class="ml-auto">
+                    <div class="flex justify-end">
+                      <span class="font-bold text-theme-6">{{get_total_shipment_price(item.shipment_id) | currency}}</span>
+                    </div>
+                    <div class="flex justify-end">
+                      <div>
+                        <div class="flex items-center" *ngIf="get_total_shipment_cbf(item.shipment_id).frozen != 0">
+                          <i data-feather="box" class="text-theme-1 w-4 h-4 mr-2" appFeatherIcon></i>
+                          <span class="font-bold text-theme-1">{{get_total_shipment_cbf(item.shipment_id).frozen | number}} lb </span>
+                          <span class="text-theme-1 ml-2">({{get_pallet(get_total_shipment_cbf(item.shipment_id).frozen / frozen_cbf_pallet) | number}} pallets)</span>
+                        </div>
+                        <div class="flex items-center" *ngIf="get_total_shipment_cbf(item.shipment_id).dry != 0">
+                          <i data-feather="box" class="text-theme-12 w-4 h-4 mr-2" appFeatherIcon></i>
+                          <span class="font-bold text-theme-12">{{get_total_shipment_cbf(item.shipment_id).dry | number}} lb </span>
+                          <span class="text-theme-12 ml-2">
+                            ({{get_pallet(get_total_shipment_cbf(item.shipment_id).dry / dry_cbf_pallet) | number}} pallets)
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+              <div class="accordion__pane__content mt-5 text-gray-700 leading-relaxed">
+                <div class="mb-2" *ngFor="let _item of order_shipments">
+                  <ng-template [ngIf]="_item.shipment_id == item.shipment_id">
+                    <div class="w-full flex flex-col lg:flex-row items-center">
+                      <div class="w-12 h-12 image-fit">
+                        <img class="rounded-lg" src="{{_item['image'] != '' ? _item['image'] : 'assets/images/place_holder.png'}}" alt="Purchasing system image"/>
+                      </div>
+                      <div class="lg:ml-4 text-center lg:text-left mt-3 lg:mt-0 w-48 truncate">
+                        <div class="font-medium">{{_item['description']}}</div> 
+                        <div class="text-gray-600 text-xs">{{_item['vendor_description']}}</div>
+                      </div>
+                      <div class="ml-2">
+                        <p class="text-theme-6 text-xs">{{_item.approved_price | currency}}</p>
+                        <p class="{{_item.category == 'frozen' ? 'text-theme-1' : 'text-theme-12'}} text-xs">{{_item.cbf | number}}</p>
+                      </div>
+                      <div class="ml-2">
+                        <span class="font-bold">x {{_item.approved_qty}}</span>
+                      </div>
+                      <div class="ml-2">
+                        <span class="rounded-full border {{_item.category == 'frozen' ? 'text-theme-1 border-theme-1' : 'text-theme-12 border-theme-12'}} text-xs p-1">{{_item.category}}</span>
+                      </div>
+                      <div class="ml-auto w-12">
+                        <p class="text-theme-6">{{_item.approved_price * _item.approved_qty | currency}}</p>
+                        <p class="{{_item.category == 'frozen' ? 'text-theme-1' : 'text-theme-12'}}">{{_item.cbf * _item.approved_qty | number}} (lb)</p>
+                      </div>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+         </div>
+        </div>
+      </div>
+      <!-- END: Personal Information -->
+    </div>
+  </div>
+</div>

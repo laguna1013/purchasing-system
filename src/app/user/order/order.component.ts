@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { customAlphabet } from 'nanoid'
+
 import { ApiService } from '../../services/api.service';
 import { ParseService } from '../../services/parse.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
-import { Item } from '../../admin/item/item';
 import * as moment from 'moment';
 import * as XLSX from 'xlsx';
 
 import { GlobalService } from '../../services/global.service'
 
+const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 17)
 @Component({
   selector: 'app-order',
   templateUrl: './order.component.html',
@@ -28,9 +30,13 @@ export class OrderComponent implements OnInit {
     private authService: AuthService
   ) { }
 
+  dry_cbf_pallet = 83.50;
+  frozen_cbf_pallet = 76.00;
+
   loading = false;
-  item_display_style = 'list';
+  item_display_style = 'grid';
   category: string = 'all';
+  categories = []
   ticket_created: boolean = false;
 
   ordered_item: Array<Object> = [];
@@ -45,6 +51,7 @@ export class OrderComponent implements OnInit {
   ordered_item_details: Array<Object> = [];
 
   po_number: String = '';
+  order_id = ''
   order_selected: boolean = false;
 
   cbm_tbded: boolean = false;
@@ -58,49 +65,32 @@ export class OrderComponent implements OnInit {
     this.globalService.menu = 'order';
     this.user = this.authService.currentUser();
     this.getItem();
-    this.getOrders(this.user['id']);
-    this.get_admin(this.user['company']);
+    this.getCurrentOrder()
   }
-  get_admin = (company) => {
-    this.loading = true;
-    this.api.getPsAdmin(this.parseService.encode({
-      company: company
-    })).pipe(first()).subscribe(
-      data => {
-        if (data['status'] == 'success') {
-          this.admin = [...data['data']][0];
-        } else {
-          this.toast.error('There had been a database error. Please try again later.', 'Error');
-        }
-        this.loading = false;
-      },
-      error => {
-        this.toast.error('There had been a database error. Please try again later.', 'Error');
-        this.loading = true;
-      }
-    );
-  }
+  
   category_change = (event) => {
     this.category = event.target.value;
-  }
-  sortby_change = (event) => {
-    this.sort_global_item(event.target.value);
   }
   item_display_style_change = (style) => {
     this.item_display_style = style;
   }
   getItem = () => {
     this.loading = true;
-    this.api.getItem(
+    this.api.purchasingSystemGetUserItems(
       this.parseService.encode({
-        company: this.authService.currentUser()['company']
+        company: this.authService.currentUser()['company'],
+        shop: this.authService.currentUser()['shop_name']
       })
     ).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
           let items = data['data'];
+          items.forEach(item => {
+            if(!this.categories.includes(item.category)){
+              this.categories.push(item.category)
+            }
+          })
           this.globalService.items = [...items];
-          this.sort_global_item('moq')
         } else {
           this.toast.error('There is an issue with server. Please try again.', 'Error');
         }
@@ -112,32 +102,74 @@ export class OrderComponent implements OnInit {
       }
     );
   }
-  getOrders = (user_id) => {
-    this.loading = true;
-    this.api.getOrders(this.parseService.encode({
-      customer_id: user_id,
-      limit: 8
+
+  getCurrentOrder = () => {
+    this.api.purchasingSystemGetCurrentOrder(this.parseService.encode({
+      company: this.authService.currentUser()['company'],
+      shop: this.authService.currentUser()['shop_name']
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
-          let orders = data['data'];
-          this.globalService.orders = [...orders];
+          if(data['data'].length != 0){
+            this.ticket_created = true
+            this.po_number = data['data'][0].order_ref
+            this.order_id = data['data'][0].id
+            this.getOrderedItems(data['data'][0].id)
+          }else{
+            this.ticket_created = false 
+            this.ordered_item = []
+          }
         } else {
           this.toast.error('There is an issue with server. Please try again.', 'Error');
         }
-        this.loading = false;
       },
       error => {
         console.log(error)
-        this.loading = false;
       }
     );
   }
+
+  getOrderedItems = (order_id) => {
+    this.api.purchasingSystemGetOrderedItems(this.parseService.encode({
+      id: order_id
+    })).pipe(first()).subscribe(
+      data => {
+        if (data['status'] == 'success') {
+          let items = data['data']
+          this.ordered_item = [...items]
+        } else {
+          this.toast.error('There is an issue with server. Please try again.', 'Error');
+        }
+      },
+      error => {
+        console.log(error)
+      }
+    );
+  }
+
+
+  getOrders = (user_id) => {
+    
+  }
   generate_po_number = () => {
-    this.po_number = this.user['name'] + moment().format('hhmmssMMDDYYYY');
+    this.po_number = nanoid()
   }
   create_ticket = () => {
     this.ticket_created = true;
+    this.api.purchasingSystemCreateOrder(this.parseService.encode({
+      'company': this.authService.currentUser()['company'],
+      'shop': this.authService.currentUser()['shop_name'],
+      'branch': this.authService.currentUser()['branch_id'],
+      'customer_id': this.authService.currentUser()['id'],
+      'order_ref': this.po_number
+    })).pipe(first()).subscribe(data => {
+      if (data['status'] == 'success') {
+        this.order_id = data['data']
+        this.toast.success('Order created successfully. Please add items', 'Success');
+      }
+    }, error => {
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
+    });
   }
   select_item = (item) => {
     this.selected_item = item;
@@ -166,124 +198,80 @@ export class OrderComponent implements OnInit {
     if (this.ticket_created) {
       let flag = false;
       this.ordered_item.forEach(item => {
-        if (item['item_id'] == this.selected_item['id']) {
+        if (item['id'] == this.selected_item['id']) {
           flag = true;
         }
       })
+      let final_qty = 0
       if (flag) {
         this.ordered_item.forEach(item => {
-          if (item['item_id'] == this.selected_item['id']) {
-            item['qty'] += this.qty;
+          if (item['id'] == this.selected_item['id']) {
+            final_qty = parseInt(item['ordered_qty']) + this.qty
           }
         })
       } else {
-        this.ordered_item.push({
-          item_id: this.selected_item['id'],
-          qty: this.qty
-        })
+        final_qty = this.qty 
       }
+
+      this.api.purchasingSystemAddOrderedItem(this.parseService.encode({
+        'order_ref': this.po_number,
+        'order_qty': final_qty,
+        'item_id': this.selected_item['id']
+      })).pipe(first()).subscribe(data => {
+        if (data['status'] == 'success') {
+          this.ordered_item = [...data['data']]
+        }
+      }, error => {
+        this.toast.error('There is an issue with server. Please try again later.', 'Error');
+      });
+
     } else {
       this.toast.error('You need to create a new order before adding items.', 'Error');
     }
     this.reset();
   }
-  edit_item = (id) => {
-    this.reset();
-    this.selected_item = this.globalService.items.filter(item => item['id'] == id)[0];
-    this.qty = this.ordered_item.filter(item => item['item_id'] == id)[0]['qty'];
-  }
-  edit_item_confirm = () => {
-    this.ordered_item.map(item => {
-      if (item['item_id'] == this.selected_item['id']) {
-        item['qty'] = this.qty;
+  
+  remove_item = (item_id) => {
+    this.api.purchasingSystemRemoveOrderDetailItem(this.parseService.encode({
+      'order_id': this.order_id,
+      'item_id': item_id
+    })).pipe(first()).subscribe(data => {
+      if (data['status'] == 'success') {
+        this.ordered_item = [...data['data']]
       }
-    })
-    this.reset();
-  }
-  remove_item = () => {
-    this.ordered_item = [...this.ordered_item.filter(item => item['item_id'] != this.selected_item['id'])];
-    this.reset();
-  }
-  clear_items = () => {
-    this.ordered_item = [];
-    this.reset();
+    }, error => {
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
+    });
+    //this.reset();
   }
   cancel_order = () => {
-    this.ticket_created = false;
-    this.ordered_item = [];
-    this.reset();
+    this.api.purchasingSystemCancelOrder(this.parseService.encode({
+      'order_id': this.order_id
+    })).pipe(first()).subscribe(data => {
+      if ((data['status'] == 'success') && data['data']) {
+        this.getCurrentOrder()
+        this.toast.success('Your order has been cancelled successfully.', 'Success');
+      }
+    }, error => {
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
+    });
   }
-  confirm_order = () => {
-    if (this.ordered_item.length == 0) {
-      this.toast.error('No items added. Please add items.', 'Error');
-    } else {
-      this.place_order(this.ordered_item);
-    }
-  }
-  edit_order = () => {
-    this.ticket_created = true;
-    this.po_number = this.selected_order['order_id'];
-    this.ordered_item = [];
-    this.ordered_item_details.forEach(item => {
-      this.ordered_item.push({
-        item_id: item['item_id'],
-        qty: item['qty']
-      })
-    })
+  place_order = () => {
+    this.api.purchasingSystemPlaceOrder(this.parseService.encode({
+      'order_id': this.order_id
+    })).pipe(first()).subscribe(data => {
+      if ((data['status'] == 'success') && data['data']) {
+        this.getCurrentOrder()
+        this.toast.success('Your order has been placed successfully.', 'Success');
+      }
+    }, error => {
+      this.toast.error('There is an issue with server. Please try again later.', 'Error');
+    });
   }
 
   reset = () => {
     this.selected_item = null;
     this.qty = 1;
-  }
-  place_order = (items) => {
-    this.loading = true;
-    this.api.addOrder(this.parseService.encode({
-      customer_id: this.user['id'],
-      order_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-      order_id: this.po_number,
-      status: 'pending',
-      items: JSON.stringify(items)
-    })).pipe(first()).subscribe(data => {
-      if (data['data'] == true) {
-        this.toast.success('Your order has been placed successfully.', 'Success');
-        this.getOrders(this.user['id']);
-        this.send_mail_to_user(items);
-      }
-      this.loading = false;
-    }, error => {
-      this.loading = false;
-      this.toast.error('There is an issue with server. Please try again later.', 'Error');
-    });
-    this.ordered_item = [];
-    this.ticket_created = false;
-    this.reset();
-  }
-  save_order = (items) => {
-    if (items.length > 0) {
-      this.loading = true;
-      this.api.addOrder(this.parseService.encode({
-        customer_id: this.user['id'],
-        order_time: moment().format('YYYY-MM-DD HH:mm:ss'),
-        order_id: this.po_number,
-        status: 'draft',
-        items: JSON.stringify(items)
-      })).pipe(first()).subscribe(data => {
-        if (data['data'] == true) {
-          this.toast.success('Your order has been saved. You can edit it next time.', 'Success');
-          this.getOrders(this.user['id']);
-        }
-        this.loading = false;
-      }, error => {
-        this.loading = false;
-        this.toast.error('There is an issue with server. Please try again later.', 'Error');
-      });
-      this.ordered_item = [];
-      this.ticket_created = false;
-      this.reset();
-    } else {
-      this.toast.error('No items were added.', 'Error');
-    }
   }
   send_mail_to_user = (items) => {
     this.api.sendMail(this.parseService.encode({
@@ -331,42 +319,7 @@ export class OrderComponent implements OnInit {
       this.toast.error('There is an issue with server. Please try again later.', 'Error');
     });
   }
-  select_order = (order_id) => {
-    this.selected_order = this.globalService.orders.filter(item => item['order_id'] == order_id)[0];
-    this.ordered_item_details = [];
-    this.loading = true;
-    this.api.getOrderDetails(this.parseService.encode({
-      order_id: order_id
-    })).pipe(first()).subscribe(
-      data => {
-        if (data['status'] == 'success') {
-          this.ordered_item_details = [...data['data']];
-          // sort frozen & dry
-          this.ordered_item_details.sort((a, b) => {
-            let c1 = '', c2 = '';
-            this.globalService.items.forEach(item => {
-              if(a['item_id'] == item['id']) c1 = item['category'];
-              if(b['item_id'] == item['id']) c2 = item['category'];
-            })
-            if(c1 == c2){
-              return 0
-            }else if(c1 == 'frozen'){
-              return -1
-            }else{
-              return 1;
-            }
-          })
-        } else {
-          this.toast.error('There is an issue with server. Please try again.', 'Error');
-        }
-        this.loading = false;
-      },
-      error => {
-        console.log(error)
-        this.loading = false;
-      }
-    );
-  }
+
   search_item = (event) => {
     this.search_key = event.target.value;
   }
@@ -380,52 +333,7 @@ export class OrderComponent implements OnInit {
       return false;
     }
   }
-  sort_global_item = (key) => {
-    if(key == 'category'){
-      this.globalService.items.sort((a, b) => {
-        if(a['category'] == b['category']){
-          return 0;
-        }else if(a['category'] == 'frozen'){
-          return -1;
-        }else{
-          return 1;
-        }
-      })
-    }
-    if(key == 'moq'){
-      this.globalService.items.sort((a, b) => {
-        if(parseInt(a['moq']) == parseInt(b['moq'])){
-          return 0;
-        }else if(parseInt(a['moq']) < parseInt(b['moq'])){
-          return -1;
-        }else{
-          return 1;
-        }
-      })
-    }
-    if(key == 'price'){
-      this.globalService.items.sort((a, b) => {
-        if(parseFloat(a['price']) == parseFloat(b['price'])){
-          return 0;
-        }else if(parseFloat(a['price']) < parseFloat(b['price'])){
-          return -1;
-        }else{
-          return 1;
-        }
-      })
-    }
-    if(key == 'description'){
-      this.globalService.items.sort((a, b) => {
-        if(a['description'] == b['description']){
-          return 0;
-        }else if(a['description']  < b['description']){
-          return -1;
-        }else{
-          return 1;
-        }
-      })
-    }
-  }
+  
   export_excel = () => {
     /* table id is passed over here */
     let element = document.getElementById('export-table');
@@ -435,5 +343,30 @@ export class OrderComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     /* save to file */
     XLSX.writeFile(wb, `${this.po_number}.xlsx`);
+  }
+
+  get_pallet(cbf){
+    return Math.ceil(cbf)
+  }
+  get_total_order_price(){
+    let price = 0
+    this.ordered_item.forEach(item => {
+      price += (parseFloat(item['ordered_qty']) * parseFloat(item['price']))
+    })
+    return price
+  }
+  get_total_order_cbf(){
+    let ret = {
+      dry: 0, 
+      frozen: 0
+    }
+    this.ordered_item.forEach(item => {
+      if(item['category'] == 'frozen'){
+        ret.frozen += (parseFloat(item['cbf']) * item['qty'])
+      }else{
+        ret.dry += (parseFloat(item['cbf']) * item['qty'])
+      }
+    })
+    return {...ret}
   }
 }

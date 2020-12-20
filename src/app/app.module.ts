@@ -25,6 +25,14 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ManageOrderComponent } from './admin/manage-order/manage-order.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 
+import { ItemsComponent } from './admin/items/items.component';
+import { AddItemsComponent } from './admin/items/add-items/add-items.component';
+import { EditItemsComponent } from './admin/items/edit-items/edit-items.component';
+import { OrdersComponent } from './admin/orders/orders.component';
+import { DetailComponent } from './admin/orders/detail/detail.component';
+import { OverviewComponent } from './admin/overview/overview.component';
+import { HistoryDetailComponent } from './user/history/history-detail/history-detail.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +48,14 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     UnauthorizedComponent,
     PageNotFoundComponent,
     LoaderComponent,
-    ManageOrderComponent
+    ManageOrderComponent,
+    ItemsComponent,
+    AddItemsComponent,
+    EditItemsComponent,
+    OrdersComponent,
+    DetailComponent,
+    OverviewComponent,
+    HistoryDetailComponent
   ],
   imports: [
     BrowserModule,
