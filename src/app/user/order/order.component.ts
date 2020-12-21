@@ -67,7 +67,7 @@ export class OrderComponent implements OnInit {
     this.getItem();
     this.getCurrentOrder()
   }
-  
+
   category_change = (event) => {
     this.category = event.target.value;
   }
@@ -116,7 +116,7 @@ export class OrderComponent implements OnInit {
             this.order_id = data['data'][0].id
             this.getOrderedItems(data['data'][0].id)
           }else{
-            this.ticket_created = false 
+            this.ticket_created = false
             this.ordered_item = []
           }
         } else {
@@ -149,7 +149,7 @@ export class OrderComponent implements OnInit {
 
 
   getOrders = (user_id) => {
-    
+
   }
   generate_po_number = () => {
     this.po_number = nanoid()
@@ -210,27 +210,32 @@ export class OrderComponent implements OnInit {
           }
         })
       } else {
-        final_qty = this.qty 
+        final_qty = this.qty
       }
 
-      this.api.purchasingSystemAddOrderedItem(this.parseService.encode({
-        'order_ref': this.po_number,
-        'order_qty': final_qty,
-        'item_id': this.selected_item['id']
-      })).pipe(first()).subscribe(data => {
-        if (data['status'] == 'success') {
-          this.ordered_item = [...data['data']]
-        }
-      }, error => {
-        this.toast.error('There is an issue with server. Please try again later.', 'Error');
-      });
+      if(final_qty > parseFloat(this.selected_item['moq'])){
+        this.toast.error('Order qty can not exceed max order qty.', 'Error');
+      }else{
+        this.api.purchasingSystemAddOrderedItem(this.parseService.encode({
+          'order_ref': this.po_number,
+          'order_qty': final_qty,
+          'item_id': this.selected_item['id']
+        })).pipe(first()).subscribe(data => {
+          if (data['status'] == 'success') {
+            this.ordered_item = [...data['data']]
+          }
+        }, error => {
+          this.toast.error('There is an issue with server. Please try again later.', 'Error');
+        });
+      }
+
 
     } else {
       this.toast.error('You need to create a new order before adding items.', 'Error');
     }
     this.reset();
   }
-  
+
   remove_item = (item_id) => {
     this.api.purchasingSystemRemoveOrderDetailItem(this.parseService.encode({
       'order_id': this.order_id,
@@ -333,7 +338,7 @@ export class OrderComponent implements OnInit {
       return false;
     }
   }
-  
+
   export_excel = () => {
     /* table id is passed over here */
     let element = document.getElementById('export-table');
@@ -357,7 +362,7 @@ export class OrderComponent implements OnInit {
   }
   get_total_order_cbf(){
     let ret = {
-      dry: 0, 
+      dry: 0,
       frozen: 0
     }
     this.ordered_item.forEach(item => {
