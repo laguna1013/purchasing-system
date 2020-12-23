@@ -46,8 +46,7 @@ export class ItemsComponent implements OnInit {
     this.loading = true;
     this.api.purchasingSystemGetItem(
       this.parseService.encode({
-        company: this.authService.currentUser()['company'],
-        shop: this.authService.currentUser()['shop_name']
+        company: this.authService.currentUser()['company']
       })
     ).pipe(first()).subscribe(
       data => {
@@ -81,7 +80,7 @@ export class ItemsComponent implements OnInit {
     this.loading = true;
     this.api.purchasingSystemUpdateItemStatus(this.parseService.encode({
       status: item.status,
-      inventory_id: item.inventory_id
+      id: item.id
     })).pipe(first()).subscribe(data => {
       if (data['data'] == 1) {
         this.toast.success('Item status changed successfully!', 'Success');
@@ -107,7 +106,7 @@ export class ItemsComponent implements OnInit {
       if (result.value) {
         this.loading = true;
         this.api.purchasingSystemRemoveItem(this.parseService.encode({
-          inventory_id: item.inventory_id
+          id: item.id
         })).pipe(first()).subscribe(data => {
           this.getItem();
           this.loading = false;
@@ -200,7 +199,6 @@ export class ItemsComponent implements OnInit {
           }
         })
         _item.company = this.authService.currentUser()['company']
-        _item.shop = this.authService.currentUser()['shop_name']
 
         if(_item.inventory_id != ""){
           items.push(_item)

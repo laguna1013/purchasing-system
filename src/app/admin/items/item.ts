@@ -1,7 +1,6 @@
 export class Item {
   inventory_id: string = ''
   company: string = ''
-  shop: string = ''
   gross_weight: string = '0'
   category: string = ''
   vendor_description: string = ''
@@ -20,7 +19,6 @@ export class Item {
   public reset() {
     this.inventory_id = ''
     this.company = ''
-    this.shop = ''
     this.gross_weight = '0'
     this.category = ''
     this.vendor_description = ''

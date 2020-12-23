@@ -78,8 +78,7 @@ export class OrderComponent implements OnInit {
     this.loading = true;
     this.api.purchasingSystemGetUserItems(
       this.parseService.encode({
-        company: this.authService.currentUser()['company'],
-        shop: this.authService.currentUser()['shop_name']
+        company: this.authService.currentUser()['company']
       })
     ).pipe(first()).subscribe(
       data => {

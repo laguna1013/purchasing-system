@@ -37,11 +37,10 @@ export class EditItemsComponent implements OnInit {
   ngOnInit(): void {
     this.globalService.menu = 'items';
     this.item_id = this.route.snapshot.paramMap.get('id')
-    this.apiService.purchasingSystemGetItemById(this.parseService.encode({inventory_id: this.item_id}))
+    this.apiService.purchasingSystemGetItemById(this.parseService.encode({id: this.item_id}))
       .pipe(first())
       .subscribe(data =>{
         this.item = {...data['data']}
-        console.log(this.item)
         this.original_item = {...data['data']}
       }, error =>{});
   }
@@ -58,7 +57,6 @@ export class EditItemsComponent implements OnInit {
     this.item.image = '';
   }
   switch($e, property){
-    console.log($e, property)
     if(property == 'status'){
       this.item.status = $e.target.checked
     }else{

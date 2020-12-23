@@ -58,7 +58,7 @@
           <tbody>
             <tr class="edit-item cursor-pointer" *ngFor="let item of globalService.items; index as idx;">
               <ng-template [ngIf]="(selected_category == 'all') || (selected_category == item.category)">
-                <td class="text-left border-b" (click)='editItem(item.inventory_id)'>
+                <td class="text-left border-b" (click)='editItem(item.id)'>
                   <div class="flex sm:justify-start">
                     <div class="w-10 h-10 image-fit">
                       <img src="{{item.image != '' ? item.image : 'assets/images/place_holder.png'}}" alt="Purchasing system image">
@@ -68,23 +68,23 @@
                 <td class="border-b">
                   <div class="font-medium text-center">{{item.category}}</div>
                 </td>
-                <td class="border-b text-center" (click)='editItem(item.inventory_id)'>
+                <td class="border-b text-center" (click)='editItem(item.id)'>
                   <div class="font-medium">{{item.inventory_id}}</div>
                 </td>
-                <td class="border-b" (click)='editItem(item.inventory_id)'>
+                <td class="border-b" (click)='editItem(item.id)'>
                   <div class="text-center font-medium">{{item.description}}</div>
                 </td>
-                <td class="border-b" (click)='editItem(item.inventory_id)'>
+                <td class="border-b" (click)='editItem(item.id)'>
                   <div class="text-center font-medium">{{item.vendor_description}}</div>
                 </td>
-                <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.packing_info}}</td>
-                <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</td>
-                <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.qty_display=='true' ? item.qty : '-'}}</td>
-                <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.cbf}}</td>
-                <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.unit}}</td>
-                <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.gross_weight}}</td>
-                <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.gross_weight * item.qty | number}}</td>
-                <td class="text-center border-b" (click)='editItem(item.inventory_id)'>{{item.moq}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.packing_info}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.qty_display=='true' ? item.qty : '-'}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.cbf}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.unit}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.gross_weight}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.gross_weight * item.qty | number}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.moq}}</td>
                 <td class="border-b">
                   <div class="flex m-auto justify-center">
                     <input class="input input--switch border mr-2" type="checkbox" [checked]="item.status=='true'" (change)="status_change(item)">

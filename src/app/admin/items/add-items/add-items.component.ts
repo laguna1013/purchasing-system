@@ -36,7 +36,6 @@ export class AddItemsComponent implements OnInit {
     this.globalService.menu = 'items';
     this.item.inventory_id = uuidv4()
     this.item.company = this.authService.currentUser()['company']
-    this.item.shop = this.authService.currentUser()['shop_name']
   }
 
   onSelect(event: { addedFiles: File[]; }) {
@@ -54,7 +53,6 @@ export class AddItemsComponent implements OnInit {
     this.item.reset();
     this.item.inventory_id = uuidv4()
     this.item.company = this.authService.currentUser()['company']
-    this.item.shop = this.authService.currentUser()['shop_name']
   }
 
   onSubmit = () => {
