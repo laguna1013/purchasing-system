@@ -145,8 +145,14 @@ export class HistoryDetailComponent implements OnInit {
     return price
   }
 
-  accept_item(approvement_id){
-    this.apiService.purchasingSystemAcceptItem(this.parseService.encode({id: approvement_id}))
+  accept_item(item){
+    this.apiService.purchasingSystemAcceptItem(this.parseService.encode({
+      item: JSON.stringify(item),
+      company: this.authService.currentUser()['company'],
+      shop: this.authService.currentUser()['shop_name'],
+      branch_id: this.authService.currentUser()['branch_id'],
+      customer_id: this.authService.currentUser()['id']
+    }))
     .pipe(first())
     .subscribe(data =>{
       if(data['status'] == 'success'){

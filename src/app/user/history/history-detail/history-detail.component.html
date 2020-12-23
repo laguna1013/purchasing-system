@@ -112,7 +112,7 @@
                           <p class="{{_item.category == 'frozen' ? 'text-theme-1' : 'text-theme-12'}}">{{_item.cbf * _item.approved_qty | number}} (lb)</p>
                         </div>
                         <div>
-                          <button *ngIf="_item.item_status != 'accepted'" class="button button--sm rounded-full ml-2 mb-2 bg-theme-1 text-white" (click)="accept_item(_item.approvement_id)">Accept</button>
+                          <button *ngIf="_item.item_status != 'accepted'" class="button button--sm rounded-full ml-2 mb-2 bg-theme-1 text-white" (click)="accept_item(_item)">Accept</button>
                           <button *ngIf="_item.item_status == 'accepted'" class="button button--sm rounded-full ml-2 mb-2 border border-theme-9 text-theme-9">Accepted</button>
                         </div>
                       </div>

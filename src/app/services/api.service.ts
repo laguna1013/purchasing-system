@@ -300,7 +300,7 @@ export class ApiService {
       }))
   }
   purchasingSystemAcceptItem(data: FormData) {
-    return this.http.post(`${api_url}/${purchasing_controller}/accept_item`, data)
+    return this.http.post(`${api_url}/${purchasing_controller}/accept_item_purchasing`, data)
       .pipe(map(res => {
         return res;
       }))
