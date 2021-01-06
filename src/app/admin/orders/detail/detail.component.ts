@@ -125,6 +125,12 @@ export class DetailComponent implements OnInit {
             </div>
           </div>
           <div class="flex items-center mt-3">
+            <div>Shipment ETA: </div>
+            <div class="w-3/5 ml-auto">
+              <input id="shipment_eta" type="date" class="w-full outline-none border rounded-l-full rounded-r-full py-2 px-4 text-right w-1/2" value="${moment().add(1, 'days').format('yyyy-MM-DD')}"/>
+            </div>
+          </div>
+          <div class="flex items-center mt-3">
             <div>Reference number: </div>
             <div class="w-3/5 ml-auto">
               <input id="shipment_ref_number" type="text" class="w-full outline-none border rounded-l-full rounded-r-full py-2 px-4 text-right w-1/2" />
@@ -144,9 +150,11 @@ export class DetailComponent implements OnInit {
         if (result.isDismissed) {
         } else {
           let shipment_date = document.querySelector('#shipment_date')['value'];
+          let shipment_eta = document.querySelector('#shipment_eta')['value'];
           let shipment_ref_number = document.querySelector('#shipment_ref_number')['value'];
           this.apiService.purchasingSystemShipOrder(this.parseService.encode({
             shipment_date: shipment_date,
+            shipment_eta: shipment_eta,
             shipment_ref_number: shipment_ref_number,
             order_id: this.order_detail['id']
           })).pipe(first())
@@ -255,6 +263,7 @@ export class DetailComponent implements OnInit {
         partial_shipments.push({
           shipment_id: item.shipment_id,
           shipment_date: item.shipment_date,
+          shipment_eta: item.shipment_eta,
           shipment_ref_number: item.shipment_ref_number
         })
       }
