@@ -24,7 +24,7 @@
             {{selected_item['inventory_id']  == item['inventory_id'] ? 'font-bold text-theme-1' : ''}}" 
             *ngFor="let item of order_items"
           >
-            <a class="flex items-center flex items-center">
+            <a *ngIf="item.description" class="flex items-center flex items-center">
               <div class="w-12 h-12 image-fit">
                 <img class="rounded-lg" src="{{item['image'] != '' ? item['image'] : 'assets/images/place_holder.png'}}" alt="Purchasing system image"/>
               </div>
@@ -33,7 +33,10 @@
                 <p class="text-gray-600">{{item.vendor_description}}</p>
               </div>
             </a>
-            <div class="ml-auto">{{get_approved_qty(item.id)}}/{{item.order_qty}}</div>
+            <div *ngIf="item.description" class="ml-auto">{{get_approved_qty(item.id)}}/{{item.order_qty}}</div>
+            <div *ngIf="!item.description">
+              Items are not found
+            </div>
           </div>
         </div>
         <div class="p-5 border-t flex">

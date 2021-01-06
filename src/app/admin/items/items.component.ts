@@ -34,8 +34,8 @@ export class ItemsComponent implements OnInit {
   }
 
   loading = false;
-  categories = []
-  selected_category = 'all'
+  categories = ['All categories']
+  selected_category = 'All categories'
   parse_float = (val: string) => {
     return Math.floor(parseFloat(val) * 100) / 100;
   }
@@ -52,7 +52,7 @@ export class ItemsComponent implements OnInit {
       data => {
         if (data['status'] == 'success') {
           let items = data['data'];
-          this.categories = []
+          this.categories = ['All categories']
           items.forEach((_item: { category: any; }) => {
             if(this.categories.indexOf(_item.category) == -1){
               this.categories.push(_item.category)
@@ -69,6 +69,14 @@ export class ItemsComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+
+  categoryItemCount(){
+    if(this.selected_category == 'All categories'){
+      return this.globalService.items.length
+    }else{
+      return this.globalService.items.filter(item => (item.category == this.selected_category)).length
+    }
   }
 
   status_change = item => {
@@ -171,6 +179,12 @@ export class ItemsComponent implements OnInit {
               break;
             case 'Category':
               _item.category = value.toString();
+              break;
+            case 'Vendor name':
+              _item.vendor_name = value.toString();
+              break;
+            case 'Vendor item No.':
+              _item.vendor_item_num = value.toString();
               break;
             case 'G.W.\r\n(lb)':
               _item.gross_weight = value.toString();

@@ -1,1 +1,5 @@
 thead th { position: sticky; top: 0; background: #fafafa; z-index: 2; border-bottom: 1px solid #eaeaea; }
+
+.select2-selection.select2-selection--single .select2-selection__rendered{
+  display: flex !important;
+}

@@ -26,7 +26,7 @@
             (click)="select_item(item)"
           >
             <a class="flex items-center flex">
-              <span>{{item.inventory_id}}</span>
+              <span>{{item.inventory_id ? item.inventory_id : 'Item not found'}}</span>
               <span class="ml-auto">{{get_approved_qty(item.id)}}/{{item.order_qty}}</span>
             </a>
             <a class="flex items-center">{{item.description}} </a>
@@ -96,7 +96,12 @@
                 <div class="flex mb-1">
                   <div class="w-1/2">
                     <span>Qty in stock: </span>
-                    <span class="font-bold">{{selected_item['qty'] ? selected_item['qty'] : 'unknown'}}</span>
+                    <span class="font-bold">
+                      {{
+                        selected_item['qty_display'] == 'true' ? 
+                          (selected_item['qty_enabled'] == 'true' ? (selected_item['qty'] ? selected_item['qty'] : 'unknown') : 'Unlimited') : '-'
+                      }}
+                    </span>
                   </div>
                   <div class="w-1/2">
                     <span>Max order qty: </span>

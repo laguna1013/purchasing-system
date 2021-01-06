@@ -14,7 +14,10 @@ export class Item {
   moq: string = '0'
   status: any = 'true'
   qty_display: any = 'true'
+  qty_enabled: any = 'true'
   user_access: string = 'all'
+  vendor_name: string = ''
+  vendor_item_num: string = ''
 
   public reset() {
     this.inventory_id = ''
@@ -32,6 +35,9 @@ export class Item {
     this.moq = '0'
     this.status = 'true'
     this.qty_display = 'true'
+    this.qty_enabled = 'true'
     this.user_access = 'all'
+    this.vendor_name = ''
+    this.vendor_item_num = ''
   }
 }

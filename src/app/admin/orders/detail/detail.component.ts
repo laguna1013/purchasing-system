@@ -81,7 +81,11 @@ export class DetailComponent implements OnInit {
         this.toast.error(`Approvement qty can not exceed ${this.selected_item['order_qty'] - this.get_approved_qty(this.selected_item['id'])}`, 'Approval error')
         return
       }
-      if(this.selected_item['qty'] - this.get_approved_qty(this.selected_item['id']) < 0){
+      if((this.selected_item['qty_enabled'] == 'true') && (this.selected_item['qty'] < 1)){
+        this.toast.error(`Not enough items in stock.`, 'Approval error')
+        return
+      }
+      if((this.selected_item['qty_enabled'] == 'true') && (this.selected_item['qty'] - this.get_approved_qty(this.selected_item['id']) < 0)){
         this.toast.error(`Not enough items in stock.`, 'Approval error')
         return
       }
@@ -90,6 +94,7 @@ export class DetailComponent implements OnInit {
         return
       }
       this.apiService.purchasingSystemApproveItem(this.parseService.encode({
+        qty_enabled: this.selected_item['qty_enabled'],
         order_id: this.order_detail['id'],
         item_id: this.selected_item['id'],
         approved_price: this.approvement_price,
@@ -257,8 +262,12 @@ export class DetailComponent implements OnInit {
     this.partial_shipments = [...partial_shipments]
   }
   remove_approved_item(approvement_id){
+    let approved_item = this.order_approvements.filter(item => item.approvement_id == approvement_id)[0]
     this.apiService.purchasingSystemRemoveApprovedItem(this.parseService.encode({
-      approvement_id: approvement_id
+      approvement_id: approvement_id,
+      qty_enabled: approved_item['qty_enabled'],
+      approved_qty: parseInt(approved_item['approved_qty']),
+      purchasing_id: approved_item['id']
     })).pipe(first())
     .subscribe(data =>{
       if(data['status'] == 'success'){

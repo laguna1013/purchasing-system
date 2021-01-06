@@ -59,8 +59,10 @@ export class EditItemsComponent implements OnInit {
   switch($e, property){
     if(property == 'status'){
       this.item.status = $e.target.checked
-    }else{
+    }else if(property == 'qty_display'){
       this.item.qty_display = $e.target.checked
+    }else{
+      this.item.qty_enabled = $e.target.checked
     }
   }
   onSubmit = () => {

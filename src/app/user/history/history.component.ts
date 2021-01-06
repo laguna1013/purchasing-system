@@ -44,7 +44,6 @@ export class HistoryComponent implements OnInit {
     })).pipe(first()).subscribe(
       data => {
         if (data['status'] == 'success') {
-          console.log(data)
           this.orders = data['data'].filter((item: { [x: string]: string; }) => item['status'] != 'draft');
         } else {
           this.toast.error('There had been a database error. Please try again later.', 'Error');

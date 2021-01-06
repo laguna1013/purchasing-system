@@ -32,7 +32,8 @@ import { OrdersComponent } from './admin/orders/orders.component';
 import { DetailComponent } from './admin/orders/detail/detail.component';
 import { OverviewComponent } from './admin/overview/overview.component';
 import { HistoryDetailComponent } from './user/history/history-detail/history-detail.component';
-
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgSelect2Module } from 'ng-select2';
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,6 +65,8 @@ import { HistoryDetailComponent } from './user/history/history-detail/history-de
     NgxDropzoneModule,
     HttpClientModule,
     FormsModule,
+    NgSelectModule,
+    NgSelect2Module,
     ToastrModule.forRoot(),
     SweetAlert2Module.forRoot(),
     NgCircleProgressModule.forRoot({

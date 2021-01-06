@@ -3,16 +3,19 @@
   <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
     <h2 class="text-lg font-medium mr-auto">
       Total {{globalService.items.length}} items
+      {{selected_category != 'All categories' ? ' | ' + selected_category + ': ' + categoryItemCount() : ''}}
     </h2>
     <div *ngIf="loading" class="mr-3">
       <app-loader></app-loader>
     </div>
     <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-      <div>
-        <select class="input border mr-2" [(ngModel)]="selected_category">
-          <option value="all">All categories</option>
-          <option *ngFor="let item of categories; index as idx;" value="{{item}}">{{item}}</option>
-        </select> 
+      <div class="mr-2">
+        <ng-select2 
+          [(ngModel)]="selected_category"
+          [data]="categories"
+          [width]="200" 
+          [placeholder]="'Select category'">		
+        </ng-select2>
       </div>
       <button class="dropdown-toggle button px-2 box text-gray-700 flex mr-3" (click)="export_excel()">
         <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-feather="file" appFeatherIcon></i> </span><span>Export</span>
@@ -43,6 +46,8 @@
               <th width="5%" class="text-center">Item No.</th>
               <th width="10%" class="text-center">Description</th>
               <th width="15%" class="text-center">Vendor description</th>
+              <th width="10%" class="text-center">Vendor name</th>
+              <th width="15%" class="text-center">Vendor item No.</th>
               <th width="7%" class="text-center">Packing info</th>
               <th width="3%" class="text-center">Price</th>
               <th width="3%" class="text-center">QTY</th>
@@ -57,7 +62,7 @@
           </thead>
           <tbody>
             <tr class="edit-item cursor-pointer" *ngFor="let item of globalService.items; index as idx;">
-              <ng-template [ngIf]="(selected_category == 'all') || (selected_category == item.category)">
+              <ng-template [ngIf]="(selected_category == 'All categories') || (selected_category == item.category)">
                 <td class="text-left border-b" (click)='editItem(item.id)'>
                   <div class="flex sm:justify-start">
                     <div class="w-10 h-10 image-fit">
@@ -77,9 +82,15 @@
                 <td class="border-b" (click)='editItem(item.id)'>
                   <div class="text-center font-medium">{{item.vendor_description}}</div>
                 </td>
+                <td class="border-b" (click)='editItem(item.id)'>
+                  <div class="text-center font-medium">{{item.vendor_name}}</div>
+                </td>
+                <td class="border-b" (click)='editItem(item.id)'>
+                  <div class="text-center font-medium">{{item.vendor_item_num}}</div>
+                </td>
                 <td class="text-center border-b" (click)='editItem(item.id)'>{{item.packing_info}}</td>
                 <td class="text-center border-b" (click)='editItem(item.id)'>{{item.price != 'Market Price' ? ('$' + parse_float(item.price)) : item.price}}</td>
-                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.qty_display=='true' ? item.qty : '-'}}</td>
+                <td class="text-center border-b" (click)='editItem(item.id)'>{{item.qty_display=='true' ? (item.qty_enabled == 'true' ? item.qty : 'Unlimited') : '-'}}</td>
                 <td class="text-center border-b" (click)='editItem(item.id)'>{{item.cbf}}</td>
                 <td class="text-center border-b" (click)='editItem(item.id)'>{{item.unit}}</td>
                 <td class="text-center border-b" (click)='editItem(item.id)'>{{item.gross_weight}}</td>
@@ -110,6 +121,8 @@
       <td width="10%">Item No.</td>
       <td width="15%">品名</td>
       <td width="20%">Name</td>
+      <td width="20%">Vendor name</td>
+      <td width="20%">Vendor item No.</td>
       <td width="20%">Model</td>
       <td width="3%">Price</td>
       <td width="3%">Sales Price</td>
@@ -128,6 +141,8 @@
       <td>{{item['inventory_id']}}</td>
       <td>{{item['vendor_description']}}</td>
       <td>{{item['description']}}</td>
+      <td>{{item['vendor_name']}}</td>
+      <td>{{item['vendor_item_num']}}</td>
       <td>{{item['packing_info']}}</td>
       <td>{{item['price']}}</td>
       <td>{{item['sales_price']}}</td>
